@@ -22,10 +22,10 @@ $factory->define(App\Karina\User::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Karina\Event::class, function (Faker\Generator $faker) {
     return [
-        'title' => $faker->words(3),
+        'title' => $faker->word,
         'description' => $faker->sentence,
         'place' => $faker->city,
-        'start_at' => $faker->date,
-        'end_at' => $faker->date,
+        'start_at' => $faker->dateTime->format('Y-m-d H:i:s'),
+        'end_at' => $faker->dateTime->format('Y-m-d H:i:s'),
     ];
 });

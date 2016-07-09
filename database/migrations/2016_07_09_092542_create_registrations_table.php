@@ -25,7 +25,7 @@ class CreateRegistrationsTable extends Migration
             $table->foreign('event_id')->references('id')->on('events');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('registration_type_id')->references('id')->on('registration_types');
-            $table->unique(['event_id', 'participant_id']);
+            $table->unique(['event_id', 'user_id']);
         });
     }
 
