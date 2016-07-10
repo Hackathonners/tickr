@@ -64,8 +64,8 @@ class CreateEventRequest extends Request
     public function attributes()
     {
         return [
-            'registration.*.type' => 'name of registration types',
-            'registration.*.price' => 'price of registration types',
+            'registration.*.type' => 'name of registration type',
+            'registration.*.price' => 'price',
         ];
     }
 }
