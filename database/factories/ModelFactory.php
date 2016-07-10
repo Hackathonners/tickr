@@ -20,6 +20,14 @@ $factory->define(App\Karina\User::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\Karina\RegistrationType::class, function (Faker\Generator $faker) {
+    return [
+        'type' => $faker->numerify('Type ##'),
+        'price' => $faker->randomFloat(2, 0.95, 1.95),
+        'fine' => $faker->randomFloat(2, 0, 1.25)
+    ];
+});
+
 $factory->define(App\Karina\Event::class, function (Faker\Generator $faker) {
     return [
         'title' => $faker->word,

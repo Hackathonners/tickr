@@ -8,9 +8,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Http\Requests\Event\CreateEventRequest;
+
 use App\Karina\Event;
+use App\Karina\RegistrationType;
 
 class EventsController extends Controller
 {
@@ -32,13 +33,22 @@ class EventsController extends Controller
      */
     public function store(CreateEventRequest $request)
     {
-        $event = DB::transaction(function() use ($request) {
-            $event = new Event;
-            $event->fill($request->all());
-            $event->user()->associate(Auth::user());
-            $event->save();
+        $event = new Event;
+        $event->fill($request->all());
+        $event->user()->associate(Auth::user());
 
-            return $event;
+        $registrationTypes = [];
+        foreach ($request->input('registration') as $data) {
+            $registrationType = new RegistrationType;
+            $registrationType->fill($data);
+            $registrationTypes[] = $registrationType;
+        }
+
+        $event = DB::transaction(function() use ($event, $registrationTypes) {
+            $event->save();
+            $event->registrationTypes()->saveMany($registrationTypes);
+
+            return $event->fresh();
         });
 
         return $event;

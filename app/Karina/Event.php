@@ -25,6 +25,13 @@ class Event extends Model
     ];
 
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = ['registrationTypes'];
+
+    /**
      * Get user that owns this event.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -32,5 +39,15 @@ class Event extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get registration types for this event.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function registrationTypes()
+    {
+        return $this->hasMany(RegistrationType::class);
     }
 }

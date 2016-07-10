@@ -29,13 +29,16 @@ class CreateEventRequest extends Request
             'title' => 'required|min:3',
             'description' => 'sometimes|min:3',
             'place' => 'required|min:3',
-            // 'prices' => 'required|array|min:1|max:3',
-            // 'prices.0.name' => 'required|min:3',
-            // 'prices.0.price' => 'required|numeric|min:0.00',
-            // 'prices.*.name' => 'required_with:prices.*.price|min:3',
-            // 'prices.*.price' => 'required_with:prices.*.name|numeric|min:0.00',
             'start_at' => 'required|date_format:Y-m-d H:i:s|after:now',
             'end_at' => 'required|date_format:Y-m-d H:i:s|after:start_at',
+
+            'registration' => 'required|array|min:1',
+            'registration.0.type' => 'required|min:3',
+            'registration.0.price' => 'required|numeric|min:0.00',
+            'registration.0.fine' => 'numeric|min:0.00',
+            'registration.*.type' => 'required_with:registration.*.price|min:3',
+            'registration.*.price' => 'required_with:registration.*.type|numeric|min:0.00',
+            'registration.*.fine' => 'numeric|min:0.00',
         ];
     }
 }

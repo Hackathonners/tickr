@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use App\Karina\User;
 use App\Karina\Event;
+use App\Karina\RegistrationType;
 
 class EventsTest extends TestCase
 {
@@ -26,6 +27,7 @@ class EventsTest extends TestCase
                 'place' => 'Place',
                 'start_at' => $start_at->format('Y-m-d H:i:s'),
                 'end_at' => $end_at->format('Y-m-d H:i:s'),
+                'registration' => factory(RegistrationType::class, 3)->make()->toArray()
             ]);
 
         // Perform task
@@ -35,6 +37,7 @@ class EventsTest extends TestCase
         // Assertions
         $this->assertResponseOk();
         $this->assertEquals(1, Event::count(), 'Event was not stored in database.');
+        $this->assertEquals(3, RegistrationType::count(), 'Registration types were not stored in database.');
         $this->seeJson(Event::first()->toArray());
     }
 
@@ -59,6 +62,31 @@ class EventsTest extends TestCase
         $this->assertEquals(0, Event::count(), 'Event was stored in database.');
         $this->seeJsonStructure([
                 'end_at'
+            ]);
+    }
+
+    public function testCreateEventWithNoRegistrationTypes()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+
+        $start_at = (new DateTime())->modify('+1 day');
+        $end_at = (new DateTime())->modify('+2 day');
+        $event = factory(Event::class)->make([
+                'start_at' => $start_at->format('Y-m-d H:i:s'),
+                'end_at' => $end_at->format('Y-m-d H:i:s'),
+                'registration' => [],
+            ]);
+
+        // Perform task
+        $this->actingAs($user)
+             ->json('POST', '/events', $event->toArray());
+
+        // Assertions
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals(0, Event::count(), 'Event was stored in database.');
+        $this->seeJsonStructure([
+                'registration'
             ]);
     }
 }
