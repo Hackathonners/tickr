@@ -4,6 +4,8 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+use Symfony\Component\HttpFoundation\Response;
+
 use App\Karina\User;
 use App\Karina\Event;
 
@@ -11,24 +13,52 @@ class EventsTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testCreateEventByOrganizer()
+    public function testCreateEvent()
     {
         // Prepare data
         $user = factory(User::class)->create();
-        $event = factory(Event::class)->make();
+
+        $start_at = (new DateTime())->modify('+1 day');
+        $end_at = (new DateTime())->modify('+5 day');
+        $event = factory(Event::class)->make([
+                'title' => 'Event name',
+                'description' => 'Event description',
+                'place' => 'Place',
+                'start_at' => $start_at->format('Y-m-d H:i:s'),
+                'end_at' => $end_at->format('Y-m-d H:i:s'),
+            ]);
 
         // Perform task
         $this->actingAs($user)
-             ->post('/events', $event->toArray());
+             ->json('POST', '/events', $event->toArray());
 
         // Assertions
         $this->assertResponseOk();
         $this->assertEquals(1, Event::count(), 'Event was not stored in database.');
         $this->seeJson(Event::first()->toArray());
+    }
+
+    public function testCreateEventWithInvalidTimePeriod()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+
+        $start_at = (new DateTime())->modify('+1 day');
+        $end_at = (new DateTime());
+        $event = factory(Event::class)->make([
+                'start_at' => $start_at->format('Y-m-d H:i:s'),
+                'end_at' => $end_at->format('Y-m-d H:i:s'),
+            ]);
+
+        // Perform task
+        $this->actingAs($user)
+             ->json('POST', '/events', $event->toArray());
+
+        // Assertions
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertEquals(0, Event::count(), 'Event was stored in database.');
+        $this->seeJsonStructure([
+                'end_at'
+            ]);
     }
 }
