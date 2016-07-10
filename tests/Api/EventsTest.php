@@ -83,10 +83,11 @@ class EventsTest extends TestCase
              ->json('POST', '/events', $event->toArray());
 
         // Assertions
+        dd($this->response->getContent());
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertEquals(0, Event::count(), 'Event was stored in database.');
         $this->seeJsonStructure([
-                'registration'
+                'registration.0'
             ]);
     }
 }

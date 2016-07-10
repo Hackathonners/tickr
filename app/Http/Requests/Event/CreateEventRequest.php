@@ -32,13 +32,40 @@ class CreateEventRequest extends Request
             'start_at' => 'required|date_format:Y-m-d H:i:s|after:now',
             'end_at' => 'required|date_format:Y-m-d H:i:s|after:start_at',
 
-            'registration' => 'required|array|min:1',
+            'registration.0' => 'required',
             'registration.0.type' => 'required|min:3',
             'registration.0.price' => 'required|numeric|min:0.00',
             'registration.0.fine' => 'numeric|min:0.00',
             'registration.*.type' => 'required_with:registration.*.price|min:3',
             'registration.*.price' => 'required_with:registration.*.type|numeric|min:0.00',
             'registration.*.fine' => 'numeric|min:0.00',
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'registration.0.required' => 'The event requires at least one registration type.',
+            'registration.*.type.required' => 'The registration types require a name.',
+            'registration.*.price.required' => 'The registration types require a price.',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'registration.*.type' => 'name of registration types',
+            'registration.*.price' => 'price of registration types',
         ];
     }
 }

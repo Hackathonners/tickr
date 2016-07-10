@@ -30,7 +30,7 @@ $factory->define(App\Karina\RegistrationType::class, function (Faker\Generator $
 
 $factory->define(App\Karina\Event::class, function (Faker\Generator $faker) {
     return [
-        'title' => $faker->word,
+        'title' => 'Event Title',
         'description' => $faker->sentence,
         'place' => $faker->city,
         'start_at' => $faker->dateTime->format('Y-m-d H:i:s'),
