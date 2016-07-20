@@ -24,7 +24,7 @@ $factory->define(App\Karina\RegistrationType::class, function (Faker\Generator $
     return [
         'type' => $faker->numerify('Type ##'),
         'price' => $faker->randomFloat(2, 0.95, 1.95),
-        'fine' => $faker->randomFloat(2, 0, 1.25)
+        'fine' => $faker->randomFloat(2, 0, 1.25),
     ];
 });
 

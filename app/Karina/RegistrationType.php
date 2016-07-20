@@ -12,7 +12,7 @@ class RegistrationType extends Model
      * @var array
      */
     protected $fillable = [
-        'type', 'price', 'fine'
+        'type', 'price', 'fine',
     ];
 
     /**
@@ -21,7 +21,7 @@ class RegistrationType extends Model
      * @var array
      */
     protected $hidden = [
-        'event'
+        'event',
     ];
 
     /**

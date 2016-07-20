@@ -1,15 +1,10 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-
 use Symfony\Component\HttpFoundation\Response;
-
 use App\Karina\User;
 use App\Karina\Event;
 use App\Karina\RegistrationType;
-
 use App\Transformers\EventTransformer;
 
 class EventsTest extends TestCase
@@ -29,7 +24,7 @@ class EventsTest extends TestCase
                 'place' => 'Place',
                 'start_at' => $start_at->format('Y-m-d H:i:s'),
                 'end_at' => $end_at->format('Y-m-d H:i:s'),
-                'registration' => factory(RegistrationType::class, 3)->make()->toArray()
+                'registration' => factory(RegistrationType::class, 3)->make()->toArray(),
             ]);
 
         // Perform task
@@ -63,7 +58,7 @@ class EventsTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertEquals(0, Event::count(), 'Event was stored in database.');
         $this->seeJsonStructure([
-                'end_at'
+                'end_at',
             ]);
     }
 
@@ -88,7 +83,7 @@ class EventsTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertEquals(0, Event::count(), 'Event was stored in database.');
         $this->seeJsonStructure([
-                'registration.0'
+                'registration.0',
             ]);
     }
 }

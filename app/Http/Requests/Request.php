@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
 use App\Support\Arr;
 
 abstract class Request extends FormRequest

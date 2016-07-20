@@ -6,11 +6,8 @@ use DB;
 use Auth;
 use Fractal;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Event\CreateEventRequest;
-
 use App\Karina\Event;
 use App\Karina\RegistrationType;
 use App\Transformers\EventTransformer;
@@ -46,7 +43,7 @@ class EventsController extends Controller
             $registrationTypes[] = $registrationType;
         }
 
-        $event = DB::transaction(function() use ($event, $registrationTypes) {
+        $event = DB::transaction(function () use ($event, $registrationTypes) {
             $event->save();
             $event->registrationTypes()->saveMany($registrationTypes);
 

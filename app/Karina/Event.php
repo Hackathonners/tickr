@@ -12,7 +12,7 @@ class Event extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'description', 'place', 'start_at', 'end_at'
+        'title', 'description', 'place', 'start_at', 'end_at',
     ];
 
     /**
@@ -21,7 +21,7 @@ class Event extends Model
      * @var array
      */
     protected $hidden = [
-        'user'
+        'user',
     ];
 
     /**

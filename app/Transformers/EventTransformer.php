@@ -1,31 +1,29 @@
 <?php
+
 namespace App\Transformers;
 
-use League\Fractal;
 use League\Fractal\TransformerAbstract;
 use League\Fractal\Resource\Collection;
-use League\Fractal\Resource\Item;
-
 use App\Karina\Event;
 
 class EventTransformer extends TransformerAbstract
 {
     /**
-     * List of resources possible to include
+     * List of resources possible to include.
      *
      * @var  array
      */
     protected $availableIncludes = ['registration_types'];
 
     /**
-     * List of resources to automatically include
+     * List of resources to automatically include.
      *
      * @var  array
      */
     protected $defaultIncludes = ['registration_types'];
 
     /**
-     * Transform an event into a generic array
+     * Transform an event into a generic array.
      *
      * @param  \App\Karina\Event
      * @return array
@@ -44,7 +42,8 @@ class EventTransformer extends TransformerAbstract
         ];
     }
 
-    public function includeRegistrationTypes(Event $event){
+    public function includeRegistrationTypes(Event $event)
+    {
         return $this->collection($event->registrationTypes, new RegistrationTypeTransformer);
     }
 }
