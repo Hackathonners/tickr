@@ -32,6 +32,13 @@ class Event extends Model
     protected $with = ['registrationTypes'];
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['start_at', 'end_at'];
+
+    /**
      * Get user that owns this event.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

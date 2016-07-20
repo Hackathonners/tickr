@@ -10,6 +10,8 @@ use App\Karina\User;
 use App\Karina\Event;
 use App\Karina\RegistrationType;
 
+use App\Transformers\EventTransformer;
+
 class EventsTest extends TestCase
 {
     use DatabaseTransactions;
@@ -38,7 +40,7 @@ class EventsTest extends TestCase
         $this->assertResponseOk();
         $this->assertEquals(1, Event::count(), 'Event was not stored in database.');
         $this->assertEquals(3, RegistrationType::count(), 'Registration types were not stored in database.');
-        $this->seeJson(Event::first()->toArray());
+        $this->seeJsonEquals(Fractal::item(Event::first(), new EventTransformer)->toArray());
     }
 
     public function testCreateEventWithInvalidTimePeriod()

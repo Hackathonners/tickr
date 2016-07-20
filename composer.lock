@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "76ac4bf4a956f0d9bdbb3834dc13bb88",
-    "content-hash": "c23cb9e937012386c35b9efe08de326a",
+    "hash": "90daf8ce8febace0f1ad9df96f9c88de",
+    "content-hash": "56b77ed710aff161f8975f929902dd31",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -958,6 +958,61 @@
                 "shell"
             ],
             "time": "2016-03-09 05:03:14"
+        },
+        {
+            "name": "spatie/laravel-fractal",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-fractal.git",
+                "reference": "6d31a188acb1b67b7e22f7849577e77be5e8430d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-fractal/zipball/6d31a188acb1b67b7e22f7849577e77be5e8430d",
+                "reference": "6d31a188acb1b67b7e22f7849577e77be5e8430d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.1",
+                "league/fractal": "^0.13.0",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^3.0",
+                "phpunit/phpunit": "^4.0",
+                "scrutinizer/ocular": "^1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Fractal\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Fractal service provider for Laravel 5",
+            "homepage": "https://github.com/spatie/laravel-fractal",
+            "keywords": [
+                "api",
+                "fractal",
+                "laravel",
+                "laravel-fractal",
+                "lumen",
+                "spatie",
+                "transform"
+            ],
+            "time": "2016-03-30 20:55:15"
         },
         {
             "name": "swiftmailer/swiftmailer",
