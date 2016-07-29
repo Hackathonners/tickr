@@ -21,13 +21,18 @@ class EventsController extends Controller
      */
     public function index()
     {
-        //
+        $events = DB::transaction(function () {
+            $user = Auth::user();
+            return $user->events()->paginate();
+        });
+
+        return Fractal::collection($events, new EventTransformer)->toJson();
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param CreateEventRequest|Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(CreateEventRequest $request)

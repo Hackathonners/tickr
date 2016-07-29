@@ -11,19 +11,48 @@ class EventsTest extends TestCase
 {
     use DatabaseTransactions;
 
+    public function testGetUserEvents()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+
+        $startAt = (new DateTime())->modify('+1 day');
+        $endAt = (new DateTime())->modify('+5 day');
+        factory(Event::class, 20)->create([
+            'user_id' => $user->id,
+            'title' => 'Event name',
+            'description' => 'Event description',
+            'place' => 'Place',
+            'start_at' => $startAt->format('Y-m-d H:i:s'),
+            'end_at' => $endAt->format('Y-m-d H:i:s'),
+        ])->each(function($event){
+            factory(RegistrationType::class, 2)->create([
+                'event_id' => $event->id,
+            ]);
+        });
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('GET', '/events');
+
+        // Assertions
+        $this->assertResponseOk();
+        $this->seeJsonEquals(Fractal::collection($user->events()->paginate(), new EventTransformer)->toArray());
+    }
+
     public function testCreateEvent()
     {
         // Prepare data
         $user = factory(User::class)->create();
 
-        $start_at = (new DateTime())->modify('+1 day');
-        $end_at = (new DateTime())->modify('+5 day');
+        $startAt = (new DateTime())->modify('+1 day');
+        $endAt = (new DateTime())->modify('+5 day');
         $event = factory(Event::class)->make([
                 'title' => 'Event name',
                 'description' => 'Event description',
                 'place' => 'Place',
-                'start_at' => $start_at->format('Y-m-d H:i:s'),
-                'end_at' => $end_at->format('Y-m-d H:i:s'),
+                'start_at' => $startAt->format('Y-m-d H:i:s'),
+                'end_at' => $endAt->format('Y-m-d H:i:s'),
                 'registration' => factory(RegistrationType::class, 3)->make()->toArray(),
             ]);
 
@@ -43,11 +72,11 @@ class EventsTest extends TestCase
         // Prepare data
         $user = factory(User::class)->create();
 
-        $start_at = (new DateTime())->modify('+1 day');
-        $end_at = (new DateTime());
+        $startAt = (new DateTime())->modify('+1 day');
+        $endAt = (new DateTime());
         $event = factory(Event::class)->make([
-                'start_at' => $start_at->format('Y-m-d H:i:s'),
-                'end_at' => $end_at->format('Y-m-d H:i:s'),
+                'start_at' => $startAt->format('Y-m-d H:i:s'),
+                'end_at' => $endAt->format('Y-m-d H:i:s'),
             ]);
 
         // Perform task
@@ -67,11 +96,11 @@ class EventsTest extends TestCase
         // Prepare data
         $user = factory(User::class)->create();
 
-        $start_at = (new DateTime())->modify('+1 day');
-        $end_at = (new DateTime())->modify('+2 day');
+        $startAt = (new DateTime())->modify('+1 day');
+        $endAt = (new DateTime())->modify('+2 day');
         $event = factory(Event::class)->make([
-                'start_at' => $start_at->format('Y-m-d H:i:s'),
-                'end_at' => $end_at->format('Y-m-d H:i:s'),
+                'start_at' => $startAt->format('Y-m-d H:i:s'),
+                'end_at' => $endAt->format('Y-m-d H:i:s'),
                 'registration' => [],
             ]);
 
