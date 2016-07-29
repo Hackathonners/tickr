@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Karina\User;
 use DB;
 use Auth;
 use Fractal;
@@ -11,6 +12,7 @@ use App\Http\Requests\Event\CreateEventRequest;
 use App\Karina\Event;
 use App\Karina\RegistrationType;
 use App\Transformers\EventTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class EventsController extends Controller
 {
@@ -20,13 +22,14 @@ class EventsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    { Auth::login(User::first());
         $events = DB::transaction(function () {
             $user = Auth::user();
             return $user->events()->paginate();
         });
 
-        return Fractal::collection($events, new EventTransformer)->toJson();
+        return Fractal::collection($events, new EventTransformer)
+                ->paginateWith(new IlluminatePaginatorAdapter($events))->toJson();
     }
 
     /**

@@ -30,6 +30,7 @@ class EventsTest extends TestCase
                 'event_id' => $event->id,
             ]);
         });
+        $events = $user->events()->paginate();
 
         // Perform task
         $this->actingAs($user)
@@ -37,7 +38,7 @@ class EventsTest extends TestCase
 
         // Assertions
         $this->assertResponseOk();
-        $this->seeJsonEquals(Fractal::collection($user->events()->paginate(), new EventTransformer)->toArray());
+        $this->seeJsonEquals(Fractal::collection($events, new EventTransformer)->toArray());
     }
 
     public function testCreateEvent()
