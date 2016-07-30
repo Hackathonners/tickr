@@ -2,10 +2,15 @@
 
 namespace App\Karina;
 
+use App\Exceptions\Event\CannotUpdateEventException;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Event extends Model
 {
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -36,7 +41,42 @@ class Event extends Model
      *
      * @var array
      */
-    protected $dates = ['start_at', 'end_at'];
+    protected $dates = ['start_at', 'end_at', 'deleted_at'];
+
+    /**
+     * Check if this event has sold tickets.
+     *
+     * @return bool
+     */
+    public function hasTickets()
+    {
+        return false;
+    }
+
+    /**
+     * Check if this event is already started.
+     *
+     * @return bool
+     */
+    public function isStarted()
+    {
+        return $this->isPastDate($this->$start_at);
+    }
+
+    /**
+     * Check if this event is already started.
+     *
+     * @param Carbon $date
+     * @return bool
+     */
+    private function isPastDate($date)
+    {
+        if (!($date instanceof Carbon)) {
+            $date = Carbon::parse($date);
+        }
+
+        return $date->isPast();
+    }
 
     /**
      * Get user that owns this event.
@@ -56,5 +96,25 @@ class Event extends Model
     public function registrationTypes()
     {
         return $this->hasMany(RegistrationType::class);
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @throws \Exception
+     */
+    public function save(array $options = [])
+    {
+        if ($this->exists) {
+            //if ($this->isDirty('title') && $this->hasRegistrations()) {
+            //    throw new CannotUpdateEventException('Cannot update an event that already has registrations.');
+            //}
+
+            if ($this->isDirty('start_at') && $this->isPastDate($this->getOriginal('start_at'))) {
+                throw new CannotUpdateEventException('Cannot update start date an event that is already started.');
+            }
+        }
+
+        return parent::save($options);
     }
 }

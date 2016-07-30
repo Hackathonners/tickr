@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\Event\CannotUpdateEventException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
 use App\Karina\User;
@@ -25,7 +26,7 @@ class EventsTest extends TestCase
             'place' => 'Place',
             'start_at' => $startAt->format('Y-m-d H:i:s'),
             'end_at' => $endAt->format('Y-m-d H:i:s'),
-        ])->each(function($event){
+        ])->each(function ($event) {
             factory(RegistrationType::class, 2)->create([
                 'event_id' => $event->id,
             ]);
@@ -115,5 +116,171 @@ class EventsTest extends TestCase
         $this->seeJsonStructure([
                 'registration.0',
             ]);
+    }
+
+    public function testUpdateEvent()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+
+        $startAt = (new DateTime())->modify('+5 day');
+        $endAt = (new DateTime())->modify('+8 day');
+        $event = factory(Event::class, 1)->create([
+            'user_id' => $user->id,
+            'title' => 'Event name',
+            'description' => 'Event description',
+            'place' => 'Place',
+            'start_at' => $startAt->format('Y-m-d H:i:s'),
+            'end_at' => $endAt->format('Y-m-d H:i:s'),
+        ]);
+
+        // Perform task
+        $newStartAt = (new DateTime())->modify('+2 day');
+        $data = [
+            'title' => 'New Title',
+            'start_at' => $newStartAt->format('Y-m-d H:i:s'),
+        ];
+        $this->actingAs($user)
+            ->json('PUT', '/events/'.$event->id, $data);
+
+        // Assertions
+        $this->assertResponseStatus(Response::HTTP_OK);
+        $this->seeJson($data);
+    }
+
+    public function testShowEvent()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+
+        $startAt = (new DateTime())->modify('+5 day');
+        $endAt = (new DateTime())->modify('+8 day');
+        $event = factory(Event::class, 1)->create([
+            'user_id' => $user->id,
+            'title' => 'Event name',
+            'description' => 'Event description',
+            'place' => 'Place',
+            'start_at' => $startAt->format('Y-m-d H:i:s'),
+            'end_at' => $endAt->format('Y-m-d H:i:s'),
+        ]);
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('GET', '/events/'.$event->id);
+
+        // Assertions
+        $this->assertResponseStatus(Response::HTTP_OK);
+        $this->seeJson(Fractal::item(Event::first(), new EventTransformer)->toArray());
+    }
+
+    public function testUpdateAlreadyStartedEvent()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+
+        $startAt = (new DateTime())->modify('-1 year');
+        $endAt = (new DateTime())->modify('+8 day');
+        $event = factory(Event::class, 1)->create([
+            'user_id' => $user->id,
+            'title' => 'Event name',
+            'description' => 'Event description',
+            'place' => 'Place',
+            'start_at' => $startAt->format('Y-m-d H:i:s'),
+            'end_at' => $endAt->format('Y-m-d H:i:s'),
+        ]);
+
+        // Perform task
+        $newStartAt = (new DateTime())->modify('+2 day');
+        $data = [
+            'title' => 'New Title',
+            'start_at' => $newStartAt->format('Y-m-d H:i:s'),
+        ];
+        $this->actingAs($user)
+            ->json('PUT', '/events/'.$event->id, $data);
+
+        // Assertions
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJson([
+            'success' => false,
+        ]);
+    }
+
+    public function testDeleteEvent()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+
+        $startAt = (new DateTime())->modify('+1 day');
+        $endAt = (new DateTime())->modify('+5 day');
+        $event = factory(Event::class, 1)->create([
+            'user_id' => $user->id,
+            'title' => 'Event name',
+            'description' => 'Event description',
+            'place' => 'Place',
+            'start_at' => $startAt->format('Y-m-d H:i:s'),
+            'end_at' => $endAt->format('Y-m-d H:i:s'),
+        ]);
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('DELETE', '/events/'.$event->id);
+
+        // Assertions
+        $this->assertResponseOk();
+        $this->assertEquals(0, Event::count(), 'Event was not soft-deleted from database.');
+        $this->assertEquals(1, Event::withTrashed()->count(), 'Event was not even created in database.');
+    }
+
+    public function testUnauthorizedActions()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+        $dummy = factory(User::class)->create();
+
+        $startAt = (new DateTime())->modify('+1 day');
+        $endAt = (new DateTime())->modify('+5 day');
+        $event = factory(Event::class, 1)->create([
+            'user_id' => $dummy->id,
+            'title' => 'Event name',
+            'description' => 'Event description',
+            'place' => 'Place',
+            'start_at' => $startAt->format('Y-m-d H:i:s'),
+            'end_at' => $endAt->format('Y-m-d H:i:s'),
+        ]);
+
+        ////
+        // DELETE
+        ////
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('DELETE', '/events/'.$event->id);
+
+        // Assertions
+        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
+        $this->assertEquals(1, Event::count(), 'Unauthorized delete of event was performed.');
+        $this->assertEquals(1, Event::withTrashed()->count(), 'Event was not even created in database.');
+
+        ////
+        // SHOW
+        ////
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('GET', '/events/'.$event->id);
+
+        // Assertions
+        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
+
+        ////
+        // UPDATE
+        ////
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('PATCH', '/events/'.$event->id, []);
+
+        // Assertions
+        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
 }

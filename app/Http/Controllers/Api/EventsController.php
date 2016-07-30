@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Karina\User;
+use App\Exceptions\Event\CannotUpdateEventException;
+use App\Http\Requests\Event\UpdateEventRequest;
 use DB;
 use Auth;
 use Fractal;
@@ -13,18 +14,20 @@ use App\Karina\Event;
 use App\Karina\RegistrationType;
 use App\Transformers\EventTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use Symfony\Component\HttpFoundation\Response;
 
 class EventsController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the event.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    { Auth::login(User::first());
+    {
         $events = DB::transaction(function () {
             $user = Auth::user();
+
             return $user->events()->paginate();
         });
 
@@ -33,7 +36,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created event in storage.
      *
      * @param CreateEventRequest|Request $request
      * @return \Illuminate\Http\Response
@@ -62,47 +65,68 @@ class EventsController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified event.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $event = DB::transaction(function () use ($id) {
+            $event = Event::findOrFail($id);
+            $this->authorize('handle', $event);
+
+            return $event;
+        });
+
+        return Fractal::item($event, new EventTransformer)->toJson();
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified event in storage.
      *
+     * @param  \App\Http\Requests\Event\UpdateEventRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function update(UpdateEventRequest $request, $id)
     {
-        //
+        try {
+            $event = DB::transaction(function () use ($id, $request) {
+                $event = Event::findOrFail($id);
+                $this->authorize('handle', $event);
+                $event->fill($request->all());
+                $event->save();
+
+                return $event;
+            });
+
+            return Fractal::item($event, new EventTransformer)->toJson();
+        } catch (CannotUpdateEventException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
+     * Remove the specified event from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        DB::transaction(function () use ($id) {
+            $event = Event::findOrFail($id);
+            $this->authorize('handle', $event);
+            $event->delete();
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully deleted event.',
+        ], Response::HTTP_OK);
     }
 }

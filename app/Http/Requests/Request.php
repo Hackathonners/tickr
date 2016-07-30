@@ -10,7 +10,7 @@ abstract class Request extends FormRequest
     /**
      * Sanitize the input of this request.
      *
-     * @return void
+     * @param bool $trim
      */
     public function sanitize($trim = true)
     {
