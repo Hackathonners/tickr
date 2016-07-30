@@ -44,13 +44,13 @@ class Event extends Model
     protected $dates = ['start_at', 'end_at', 'deleted_at'];
 
     /**
-     * Check if this event has sold tickets.
+     * Check if this event has registrations.
      *
      * @return bool
      */
-    public function hasTickets()
+    public function hasRegistrations()
     {
-        return false;
+        return $this->registrations()->count() > 0;
     }
 
     /**
@@ -89,6 +89,16 @@ class Event extends Model
     }
 
     /**
+     * Get registrations of this event.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function registrations()
+    {
+        return $this->hasMany(Registration::class);
+    }
+
+    /**
      * Get registration types for this event.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -106,9 +116,9 @@ class Event extends Model
     public function save(array $options = [])
     {
         if ($this->exists) {
-            //if ($this->isDirty('title') && $this->hasRegistrations()) {
-            //    throw new CannotUpdateEventException('Cannot update an event that already has registrations.');
-            //}
+            if ($this->isDirty(['title', 'start_at']) && $this->hasRegistrations()) {
+                throw new CannotUpdateEventException('Cannot update an event that already has registrations.');
+            }
 
             if ($this->isDirty('start_at') && $this->isPastDate($this->getOriginal('start_at'))) {
                 throw new CannotUpdateEventException('Cannot update start date an event that is already started.');
