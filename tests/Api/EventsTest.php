@@ -198,9 +198,11 @@ class EventsTest extends TestCase
             ->json('PUT', '/events/'.$event->id, $data);
 
         // Assertions
-        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-        $this->seeJson([
-            'success' => false,
+        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
+        $this->seeJsonStructure([
+            'error' => [
+                'code', 'http_code', 'message',
+            ]
         ]);
     }
 

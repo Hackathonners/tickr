@@ -16,7 +16,7 @@ use App\Transformers\EventTransformer;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Symfony\Component\HttpFoundation\Response;
 
-class EventsController extends Controller
+class EventsController extends ApiController
 {
     /**
      * Display a listing of the event.
@@ -31,8 +31,7 @@ class EventsController extends Controller
             return $user->events()->paginate();
         });
 
-        return Fractal::collection($events, new EventTransformer)
-                ->paginateWith(new IlluminatePaginatorAdapter($events))->toJson();
+        return $this->respondWith($events, new EventTransformer);
     }
 
     /**
@@ -61,7 +60,7 @@ class EventsController extends Controller
             return $event->fresh();
         });
 
-        return Fractal::item($event, new EventTransformer)->toJson();
+        return $this->respondWith($event, new EventTransformer);
     }
 
     /**
@@ -79,7 +78,7 @@ class EventsController extends Controller
             return $event;
         });
 
-        return Fractal::item($event, new EventTransformer)->toJson();
+        return $this->respondWith($event, new EventTransformer);
     }
 
     /**
@@ -97,16 +96,14 @@ class EventsController extends Controller
                 $this->authorize('handle', $event);
                 $event->fill($request->all());
                 $event->save();
+                $event->fresh();
 
                 return $event;
             });
 
-            return Fractal::item($event, new EventTransformer)->toJson();
+            return $this->respondWith($event, new EventTransformer());
         } catch (CannotUpdateEventException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->errorForbidden($e->getMessage());
         }
     }
 
@@ -124,9 +121,9 @@ class EventsController extends Controller
             $event->delete();
         });
 
-        return response()->json([
+        return $this->respondWithArray([
             'success' => true,
             'message' => 'Successfully deleted event.',
-        ], Response::HTTP_OK);
+        ]);
     }
 }
