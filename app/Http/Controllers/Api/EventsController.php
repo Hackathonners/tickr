@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\Event\CannotUpdateEventException;
-use App\Http\Requests\Event\UpdateEventRequest;
+use App\Http\Requests\Event\UpdateRequest;
 use DB;
 use Auth;
-use Illuminate\Http\Request;
-use App\Http\Requests\Event\CreateEventRequest;
+use App\Http\Requests\Event\CreateRequest;
 use App\Karina\Event;
 use App\Karina\RegistrationType;
 use App\Transformers\EventTransformer;
@@ -33,10 +32,10 @@ class EventsController extends ApiController
     /**
      * Store a newly created event in storage.
      *
-     * @param CreateEventRequest|Request $request
+     * @param CreateRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateEventRequest $request)
+    public function store(CreateRequest $request)
     {
         $event = new Event;
         $event->fill($request->all());
@@ -80,11 +79,11 @@ class EventsController extends ApiController
     /**
      * Update the specified event in storage.
      *
-     * @param  \App\Http\Requests\Event\UpdateEventRequest  $request
-     * @param  int  $id
+     * @param UpdateRequest $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateEventRequest $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
         try {
             $event = DB::transaction(function () use ($id, $request) {

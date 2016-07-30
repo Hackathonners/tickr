@@ -10,7 +10,7 @@ class RegistrationTypeTransformer extends TransformerAbstract
     /**
      * Transform a registration type into a generic array.
      *
-     * @param  \App\Karina\Event
+     * @param RegistrationType $registrationType
      * @return array
      */
     public function transform(RegistrationType $registrationType)

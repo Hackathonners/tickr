@@ -3,7 +3,6 @@
 namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
-use League\Fractal\Resource\Collection;
 use App\Karina\Event;
 
 class EventTransformer extends TransformerAbstract
@@ -25,7 +24,7 @@ class EventTransformer extends TransformerAbstract
     /**
      * Transform an event into a generic array.
      *
-     * @param  \App\Karina\Event
+     * @param Event $event
      * @return array
      */
     public function transform(Event $event)
