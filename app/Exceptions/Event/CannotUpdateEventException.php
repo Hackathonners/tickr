@@ -11,7 +11,8 @@ class CannotUpdateEventException extends \LogicException
      *
      * @param string $message
      */
-    public function __construct($message) {
+    public function __construct($message)
+    {
         parent::__construct($message, self::CODE);
     }
 }

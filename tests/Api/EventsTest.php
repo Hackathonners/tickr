@@ -1,6 +1,5 @@
 <?php
 
-use App\Exceptions\Event\CannotUpdateEventException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
 use App\Karina\User;
