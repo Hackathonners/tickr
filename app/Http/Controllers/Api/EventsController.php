@@ -6,15 +6,11 @@ use App\Exceptions\Event\CannotUpdateEventException;
 use App\Http\Requests\Event\UpdateEventRequest;
 use DB;
 use Auth;
-use Fractal;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Event\CreateEventRequest;
 use App\Karina\Event;
 use App\Karina\RegistrationType;
 use App\Transformers\EventTransformer;
-use League\Fractal\Pagination\IlluminatePaginatorAdapter;
-use Symfony\Component\HttpFoundation\Response;
 
 class EventsController extends ApiController
 {

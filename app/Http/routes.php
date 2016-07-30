@@ -11,4 +11,6 @@
 |
 */
 
-Route::resource('events', 'Api\EventsController');
+Route::group(['prefix' => 'api/v1'], function(){
+    Route::resource('events', 'Api\EventsController');
+});

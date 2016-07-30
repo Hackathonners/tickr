@@ -7,7 +7,7 @@ use App\Karina\Event;
 use App\Karina\RegistrationType;
 use App\Transformers\EventTransformer;
 
-class EventsTest extends TestCase
+class EventsTest extends ApiTestCase
 {
     use DatabaseTransactions;
 
@@ -202,7 +202,7 @@ class EventsTest extends TestCase
         $this->seeJsonStructure([
             'error' => [
                 'code', 'http_code', 'message',
-            ]
+            ],
         ]);
     }
 
