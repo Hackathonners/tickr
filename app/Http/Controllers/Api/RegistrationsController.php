@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
+use Vinkla\Hashids\Facades\Hashids;
 
 class RegistrationsController extends ApiController
 {
@@ -65,6 +66,9 @@ class RegistrationsController extends ApiController
      */
     public function activate($id)
     {
+        $idDecoded = Hashids::decode($id);
+        $id = count($idDecoded) > 0 ? $idDecoded[0] : $id;
+
         $token = Input::get('token');
 
         if (!$token) {

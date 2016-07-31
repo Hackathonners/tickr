@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use App\Karina\Registration;
 use League\Fractal\TransformerAbstract;
+use Vinkla\Hashids\Facades\Hashids;
 
 class RegistrationTransformer extends TransformerAbstract
 {
@@ -30,7 +31,7 @@ class RegistrationTransformer extends TransformerAbstract
     public function transform(Registration $registration)
     {
         return [
-            'id' => $registration->id,
+            'id' => Hashids::encode($registration->id),
             'event_id' => $registration->event_id,
             'user_id' => $registration->user_id,
             'fined' => (bool) $registration->fined,

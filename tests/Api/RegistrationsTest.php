@@ -8,6 +8,7 @@ use App\Transformers\RegistrationTransformer;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
+use Vinkla\Hashids\Facades\Hashids;
 
 class RegistrationsTest extends ApiTestCase
 {
@@ -126,7 +127,7 @@ class RegistrationsTest extends ApiTestCase
 
         // Perform task
         $this->actingAs($user)
-            ->json('POST', '/registrations/'.$registration->id.'/activate', $data);
+            ->json('POST', '/registrations/'.Hashids::encode($registration->id).'/activate', $data);
 
         // Assertions
         $this->assertResponseOk();
@@ -165,7 +166,7 @@ class RegistrationsTest extends ApiTestCase
 
         // Perform task
         $this->actingAs($user)
-            ->json('POST', '/registrations/'.$registration->id.'/activate', $data);
+            ->json('POST', '/registrations/'.Hashids::encode($registration->id).'/activate', $data);
 
         // Assertions
         $this->assertResponseOk();
@@ -202,7 +203,7 @@ class RegistrationsTest extends ApiTestCase
 
         // Perform task
         $this->actingAs($user)
-            ->json('POST', '/registrations/'.$registration->id.'/activate', $data);
+            ->json('POST', '/registrations/'. Hashids::encode($registration->id).'/activate', $data);
 
         // Assertions
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);

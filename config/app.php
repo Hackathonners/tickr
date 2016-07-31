@@ -162,6 +162,7 @@ return [
          * Packages Providers...
          */
         Spatie\Fractal\FractalServiceProvider::class,
+        Vinkla\Hashids\HashidsServiceProvider::class,
 
     ],
 
@@ -213,6 +214,7 @@ return [
          * Packages Aliases...
          */
         'Fractal' => Spatie\Fractal\FractalFacade::class,
+        'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
     ],
 
 ];
