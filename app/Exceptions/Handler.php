@@ -48,7 +48,7 @@ class Handler extends ExceptionHandler
     {
         if ($e instanceof ModelNotFoundException) {
             if ($request->segment(1) == 'api') {
-                return (new ApiController())->errorNotFound($e->getMessage());
+                return (new ApiController())->errorNotFound('Sorry, the resource you are looking for could not be found.');
             }
         }
         if ($e instanceof AuthorizationException) {

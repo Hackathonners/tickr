@@ -40,10 +40,53 @@ class GuestListsTest extends ApiTestCase
         $this->assertEquals(1, GuestList::count());
         $this->seeJson(Fractal::item(GuestList::first(), new GuestListTransformer)->toArray());
         $this->seeJson([
-            'name' => 'Dummy',
-            'description' => 'Things',
-            'email' => 'a@a.com', // See user that already existed before guestlist.
-            'email' => 'a@b.com', // See user that is new.
+            'name' => $data['name'],
+            'description' => $data['description'],
+            'email' => $data['guest'][0]['email'], // See user that already existed before guestlist.
+            'email' => $data['guest'][1]['email'], // See user that is new.
+        ]);
+    }
+
+    public function testUpdateGuestList()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+        $guests = factory(User::class, 3)->create();
+        $guestList = factory(GuestList::class)->create([
+            'user_id' => $user->id,
+            'name' => 'Old title',
+        ]);
+        $guestList->users()->sync($guests);
+
+        $newGuest = factory(User::class)->make([
+            'email' => 'a@b.com',
+        ]);
+
+        $data = [
+            'name' => 'Dummy XPTO',
+            'description' => 'Things XPTO',
+            'guest' => [
+                $newGuest->toArray(),
+            ],
+        ];
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('PUT', '/guestlists/'.$guestList->id, $data);
+
+        // Assertions
+        $this->assertResponseOk();
+        $this->assertEquals(1, GuestList::first()->users()->count(), 'There are more guests than expected.');
+        $this->seeJson(Fractal::item(GuestList::first(), new GuestListTransformer)->toArray());
+        $this->seeJson([
+            'name' => $data['name'],
+            'description' => $data['description'],
+            'email' => $data['guest'][0]['email'], // See user that is new.
+        ]);
+        $this->dontSeeJson([
+            'email' => $guests[0]['email'], // Do not see old users.
+            'email' => $guests[1]['email'],
+            'email' => $guests[2]['email'],
         ]);
     }
 

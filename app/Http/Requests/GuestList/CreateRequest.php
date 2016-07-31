@@ -32,8 +32,8 @@ class CreateRequest extends Request
             'guest.0' => 'required',
             'guest.0.name' => 'required|min:3',
             'guest.0.email' => 'required|email',
-            'guest.*.name' => 'required_with:guest.*.name|min:3',
-            'guest.*.email' => 'required_with:guest.*.email|email',
+            'guest.*.name' => 'required_with:guest.*.email|min:3',
+            'guest.*.email' => 'required_with:guest.*.name|email',
         ];
     }
 
