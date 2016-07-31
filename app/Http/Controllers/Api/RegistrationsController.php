@@ -10,6 +10,7 @@ use App\Karina\User;
 use App\Transformers\RegistrationTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 
 class RegistrationsController extends ApiController
@@ -54,5 +55,33 @@ class RegistrationsController extends ApiController
         } catch (UserIsAlreadyRegisteredOnEventException $e) {
             return $this->errorForbidden($e->getMessage());
         }
+    }
+
+    /**
+     * Activate a registration.
+     *
+     * @param $id
+     * @return \Illuminate\Http\Response
+     */
+    public function activate($id)
+    {
+        $token = Input::get('token');
+
+        if (!$token) {
+            return $this->errorWrongArgs('Activation code was not provided.');
+        }
+
+        DB::transaction(function () use ($id, $token) {
+            $registration = Registration::where(['activation_code' => $token])
+                                ->with('event')
+                                ->findOrFail($id);
+            $this->authorize('handle', $registration->event);
+            $registration->activate();
+        });
+
+        return $this->respondWithArray([
+            'success' => true,
+            'message' => 'Successfully activated registration.',
+        ]);
     }
 }

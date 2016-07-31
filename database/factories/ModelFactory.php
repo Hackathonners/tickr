@@ -33,8 +33,8 @@ $factory->define(App\Karina\Event::class, function (Faker\Generator $faker) {
         'title' => 'Event Title',
         'description' => $faker->sentence,
         'place' => $faker->city,
-        'start_at' => $faker->dateTime->format('Y-m-d H:i:s'),
-        'end_at' => $faker->dateTime->format('Y-m-d H:i:s'),
+        'start_at' => (new DateTime())->modify('+1 day')->format('Y-m-d H:i:s'),
+        'end_at' => (new DateTime())->modify('+5 day')->format('Y-m-d H:i:s'),
     ];
 });
 
@@ -42,5 +42,13 @@ $factory->define(App\Karina\GuestList::class, function (Faker\Generator $faker) 
     return [
         'name' => 'Guest Title',
         'description' => $faker->sentence,
+    ];
+});
+
+$factory->define(App\Karina\Registration::class, function (Faker\Generator $faker) {
+    return [
+        'fined' => false,
+        'activated' => false,
+        'activation_code' => str_random(10),
     ];
 });

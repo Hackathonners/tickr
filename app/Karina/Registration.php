@@ -3,6 +3,7 @@
 namespace App\Karina;
 
 use App\Exceptions\Event\UserIsAlreadyRegisteredOnEventException;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -35,7 +36,7 @@ class Registration extends Model
     ];
 
     /**
-     * Create a registration on a given event.
+     * Associate information to this registration.
      *
      * @param Event $event
      * @param User $user
@@ -64,6 +65,23 @@ class Registration extends Model
         $this->user()->associate($user);
 
         return $this;
+    }
+
+    /**
+     * Activate this registration.
+     *
+     * @return $this
+     */
+    public function activate()
+    {
+        if ($this->activated) {
+            return $this;
+        }
+
+        $this->activated = true;
+        $this->activated_at = Carbon::now();
+
+        return $this->save();
     }
 
     /**
