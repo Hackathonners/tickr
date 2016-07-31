@@ -230,6 +230,13 @@ class EventsTest extends ApiTestCase
         $this->assertResponseOk();
         $this->assertEquals(0, Event::count(), 'Event was not soft-deleted from database.');
         $this->assertEquals(1, Event::withTrashed()->count(), 'Event was not even created in database.');
+        $this->seeJson([
+            'success' => true,
+        ]);
+        $this->seeJsonStructure([
+            'success',
+            'message',
+        ]);
     }
 
     public function testUnauthorizedActions()

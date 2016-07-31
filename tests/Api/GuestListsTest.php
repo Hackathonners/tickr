@@ -64,5 +64,12 @@ class GuestListsTest extends ApiTestCase
         $this->assertResponseOk();
         $this->assertEquals(0, GuestList::count(), 'Guest list was not soft-deleted from database.');
         $this->assertEquals(1, GuestList::withTrashed()->count(), 'Guest list was not even created in database.');
+        $this->seeJson([
+            'success' => true,
+        ]);
+        $this->seeJsonStructure([
+            'success',
+            'message',
+        ]);
     }
 }
