@@ -14,11 +14,11 @@ class GuestListsTest extends ApiTestCase
         // Prepare data
         $user = factory(User::class)->create();
         $guestUser = factory(User::class)->create([
-            'email' => 'a@a.com'
+            'email' => 'a@a.com',
         ]);
 
         $guest = factory(User::class)->make([
-            'email' => 'a@b.com'
+            'email' => 'a@b.com',
         ]);
 
         $data = [

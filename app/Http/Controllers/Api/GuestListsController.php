@@ -28,7 +28,7 @@ class GuestListsController extends ApiController
             $users = new Collection();
             foreach ($request->input('guest') as $data) {
                 $user = User::where('email', $data['email'])->first();
-                if(!$user) {
+                if (!$user) {
                     $user = new User;
                     $user->fill($data);
                     $user->save();
