@@ -79,7 +79,7 @@ class Registration extends Model
         }
 
         $this->activated = true;
-        $this->activated_at = Carbon::now();
+        $this->activated_at = Carbon::now(config('app.timezone'));
 
         return $this->save();
     }
