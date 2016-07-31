@@ -286,7 +286,9 @@ class EventsTest extends ApiTestCase
 
         // Perform task
         $this->actingAs($user)
-            ->json('PATCH', '/events/'.$event->id, []);
+            ->json('PATCH', '/events/'.$event->id, [
+                'title' => 'New name',
+            ]);
 
         // Assertions
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);

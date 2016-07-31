@@ -4,6 +4,7 @@ use App\Karina\GuestList;
 use App\Karina\User;
 use App\Transformers\GuestListTransformer;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Symfony\Component\HttpFoundation\Response;
 
 class GuestListsTest extends ApiTestCase
 {
@@ -54,7 +55,6 @@ class GuestListsTest extends ApiTestCase
         $guests = factory(User::class, 3)->create();
         $guestList = factory(GuestList::class)->create([
             'user_id' => $user->id,
-            'name' => 'Old title',
         ]);
         $guestList->users()->sync($guests);
 
@@ -134,5 +134,54 @@ class GuestListsTest extends ApiTestCase
             'success',
             'message',
         ]);
+    }
+
+    public function testUnauthorizedActions()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+        $dummy = factory(User::class)->create();
+        $guests = factory(User::class, 3)->create();
+        $guestList = factory(GuestList::class)->create([
+            'user_id' => $dummy->id,
+        ]);
+        $guestList->users()->sync($guests);
+
+        ////
+        // DELETE
+        ////
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('DELETE', '/guestlists/'.$guestList->id);
+
+        // Assertions
+        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
+        $this->assertEquals(1, GuestList::count(), 'Unauthorized delete of guest list was performed.');
+        $this->assertEquals(1, GuestList::withTrashed()->count(), 'Guest list was not even created in database.');
+
+        ////
+        // SHOW
+        ////
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('GET', '/guestlists/'.$guestList->id);
+
+        // Assertions
+        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
+
+        ////
+        // UPDATE
+        ////
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('PATCH', '/guestlists/'.$guestList->id, [
+                'name' => 'New',
+            ]);
+
+        // Assertions
+        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
     }
 }

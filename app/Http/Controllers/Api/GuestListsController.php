@@ -92,7 +92,9 @@ class GuestListsController extends ApiController
             }
 
             $guestList->save();
-            $guestList->users()->sync($users->pluck('id')->toArray());
+            if ($user->count() > 0) {
+                $guestList->users()->sync($users->pluck('id')->toArray());
+            }
 
             return $guestList->fresh();
         });

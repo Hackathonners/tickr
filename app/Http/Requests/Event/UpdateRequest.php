@@ -26,7 +26,7 @@ class UpdateRequest extends Request
         $this->sanitize();
 
         return [
-            'title' => 'sometimes|min:3',
+            'title' => 'required|min:3',
             'description' => 'sometimes|min:3',
             'place' => 'sometimes|min:3',
             'start_at' => 'sometimes|date_format:Y-m-d H:i:s|after:now',
