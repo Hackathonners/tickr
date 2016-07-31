@@ -47,6 +47,26 @@ class GuestListsTest extends ApiTestCase
         ]);
     }
 
+    public function testShowEvent()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+        $guests = factory(User::class, 3)->create();
+        $guestList = factory(GuestList::class)->create([
+            'user_id' => $user->id,
+            'name' => 'Old title',
+        ]);
+        $guestList->users()->sync($guests);
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('GET', '/guestlists/'.$guestList->id);
+
+        // Assertions
+        $this->assertResponseOk();
+        $this->seeJson(Fractal::item(GuestList::first(), new GuestListTransformer)->toArray());
+    }
+
     public function testUpdateGuestList()
     {
         // Prepare data

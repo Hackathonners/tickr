@@ -48,7 +48,25 @@ class GuestListsController extends ApiController
     }
 
     /**
-     * Update the specified event in storage.
+     * Display the specified guest list.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $guestList = DB::transaction(function () use ($id) {
+            $guestList = GuestList::findOrFail($id);
+            $this->authorize('handle', $guestList);
+
+            return $guestList;
+        });
+
+        return $this->respondWith($guestList, new GuestListTransformer);
+    }
+
+    /**
+     * Update the specified guest list in storage.
      *
      * @param UpdateRequest $request
      * @param  int $id

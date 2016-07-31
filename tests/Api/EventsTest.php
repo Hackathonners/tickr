@@ -143,7 +143,7 @@ class EventsTest extends ApiTestCase
             ->json('PUT', '/events/'.$event->id, $data);
 
         // Assertions
-        $this->assertResponseStatus(Response::HTTP_OK);
+        $this->assertResponseOk();
         $this->seeJson($data);
     }
 
@@ -168,7 +168,7 @@ class EventsTest extends ApiTestCase
             ->json('GET', '/events/'.$event->id);
 
         // Assertions
-        $this->assertResponseStatus(Response::HTTP_OK);
+        $this->assertResponseOk();
         $this->seeJson(Fractal::item(Event::first(), new EventTransformer)->toArray());
     }
 
