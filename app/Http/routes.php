@@ -14,4 +14,5 @@
 Route::group(['prefix' => 'api/v1'], function () {
     Route::resource('events', 'Api\EventsController');
     Route::resource('guestlists', 'Api\GuestListsController');
+    Route::post('events/{eventId}/registrations', 'Api\RegistrationsController@store');
 });
