@@ -2,36 +2,40 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\Event\CannotUpdateEventException;
+use App\Http\Requests\Event\UpdateRequest;
 use DB;
 use Auth;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Event\CreateEventRequest;
-
+use App\Http\Requests\Event\CreateRequest;
 use App\Karina\Event;
 use App\Karina\RegistrationType;
+use App\Transformers\EventTransformer;
 
-class EventsController extends Controller
+class EventsController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the event.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        $events = DB::transaction(function () {
+            $user = Auth::user();
+
+            return $user->events()->paginate();
+        });
+
+        return $this->respondWith($events, new EventTransformer);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created event in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param CreateRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateEventRequest $request)
+    public function store(CreateRequest $request)
     {
         $event = new Event;
         $event->fill($request->all());
@@ -44,58 +48,77 @@ class EventsController extends Controller
             $registrationTypes[] = $registrationType;
         }
 
-        $event = DB::transaction(function() use ($event, $registrationTypes) {
+        $event = DB::transaction(function () use ($event, $registrationTypes) {
             $event->save();
             $event->registrationTypes()->saveMany($registrationTypes);
 
             return $event->fresh();
         });
 
-        return $event;
+        return $this->respondWith($event, new EventTransformer);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified event.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $event = DB::transaction(function () use ($id) {
+            $event = Event::findOrFail($id);
+            $this->authorize('handle', $event);
+
+            return $event;
+        });
+
+        return $this->respondWith($event, new EventTransformer);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified event in storage.
      *
-     * @param  int  $id
+     * @param UpdateRequest $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function update(UpdateRequest $request, $id)
     {
-        //
+        try {
+            $event = DB::transaction(function () use ($id, $request) {
+                $event = Event::findOrFail($id);
+                $this->authorize('handle', $event);
+                $event->fill($request->all());
+                $event->save();
+                $event->fresh();
+
+                return $event;
+            });
+
+            return $this->respondWith($event, new EventTransformer());
+        } catch (CannotUpdateEventException $e) {
+            return $this->errorForbidden($e->getMessage());
+        }
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
+     * Remove the specified event from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        DB::transaction(function () use ($id) {
+            $event = Event::findOrFail($id);
+            $this->authorize('handle', $event);
+            $event->delete();
+        });
+
+        return $this->respondWithArray([
+            'success' => true,
+            'message' => 'Successfully deleted event.',
+        ]);
     }
 }

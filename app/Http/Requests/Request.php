@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
 use App\Support\Arr;
 
 abstract class Request extends FormRequest
@@ -11,7 +10,7 @@ abstract class Request extends FormRequest
     /**
      * Sanitize the input of this request.
      *
-     * @return void
+     * @param bool $trim
      */
     public function sanitize($trim = true)
     {

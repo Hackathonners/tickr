@@ -12,7 +12,7 @@ class RegistrationType extends Model
      * @var array
      */
     protected $fillable = [
-        'type', 'price', 'fine'
+        'type', 'price', 'fine',
     ];
 
     /**
@@ -21,7 +21,7 @@ class RegistrationType extends Model
      * @var array
      */
     protected $hidden = [
-        'event'
+        'event',
     ];
 
     /**
@@ -30,4 +30,14 @@ class RegistrationType extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'price' => 'float',
+        'fine' => 'float',
+    ];
 }

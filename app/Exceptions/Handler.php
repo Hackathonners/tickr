@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Http\Controllers\Api\ApiController;
 use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -45,6 +46,23 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        if ($e instanceof ModelNotFoundException) {
+            if ($request->segment(1) == 'api') {
+                return (new ApiController())->errorNotFound('Sorry, the resource you are looking for could not be found.');
+            }
+        }
+        if ($e instanceof AuthorizationException) {
+            if ($request->segment(1) == 'api') {
+                if ($request->user()) {
+                    return (new ApiController())->errorForbidden('You need permission to perform this action.');
+                }
+
+                return (new ApiController())->errorUnauthorized('You are not logged in.');
+            } else {
+                return redirect('login');
+            }
+        }
+
         return parent::render($request, $e);
     }
 }

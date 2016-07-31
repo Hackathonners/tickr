@@ -7,8 +7,9 @@ class Arr extends \Illuminate\Support\Arr
     /**
      * Recursively remove empty keys from array.
      *
-     * @param  mixed  $array
-     * @return $array
+     * @param  mixed $array
+     * @param bool $trim
+     * @return mixed $array
      */
     public static function clean($array, $trim = false)
     {

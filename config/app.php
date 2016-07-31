@@ -158,6 +158,12 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Packages Providers...
+         */
+        Spatie\Fractal\FractalServiceProvider::class,
+        Vinkla\Hashids\HashidsServiceProvider::class,
+
     ],
 
     /*
@@ -204,6 +210,11 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        /*
+         * Packages Aliases...
+         */
+        'Fractal' => Spatie\Fractal\FractalFacade::class,
+        'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
     ],
 
 ];

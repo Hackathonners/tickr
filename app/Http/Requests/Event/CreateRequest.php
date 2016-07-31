@@ -4,7 +4,7 @@ namespace App\Http\Requests\Event;
 
 use App\Http\Requests\Request;
 
-class CreateEventRequest extends Request
+class CreateRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

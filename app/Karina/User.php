@@ -23,4 +23,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Get events that this user owns.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMay
+     */
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }
