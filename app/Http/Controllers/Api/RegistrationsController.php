@@ -66,14 +66,14 @@ class RegistrationsController extends ApiController
      */
     public function activate($id)
     {
-        $idDecoded = Hashids::decode($id);
-        $id = count($idDecoded) > 0 ? $idDecoded[0] : $id;
-
         $token = Input::get('token');
 
         if (!$token) {
             return $this->errorWrongArgs('Activation code was not provided.');
         }
+
+        $idDecoded = Hashids::decode($id);
+        $id = count($idDecoded) > 0 ? $idDecoded[0] : $id;
 
         DB::transaction(function () use ($id, $token) {
             $registration = Registration::where(['activation_code' => $token])
