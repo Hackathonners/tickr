@@ -203,7 +203,7 @@ class RegistrationsTest extends ApiTestCase
 
         // Perform task
         $this->actingAs($user)
-            ->json('POST', '/registrations/'. Hashids::encode($registration->id).'/activate', $data);
+            ->json('POST', '/registrations/'.Hashids::encode($registration->id).'/activate', $data);
 
         // Assertions
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
