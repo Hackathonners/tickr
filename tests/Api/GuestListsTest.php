@@ -46,4 +46,23 @@ class GuestListsTest extends ApiTestCase
             'email' => 'a@b.com', // See user that is new.
         ]);
     }
+
+    public function testDeleteGuestList()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+
+        $guestList = factory(GuestList::class)->make();
+        $guestList->user()->associate($user);
+        $guestList->save();
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('DELETE', '/guestlists/'.$guestList->id);
+
+        // Assertions
+        $this->assertResponseOk();
+        $this->assertEquals(0, GuestList::count(), 'Guest list was not soft-deleted from database.');
+        $this->assertEquals(1, GuestList::withTrashed()->count(), 'Guest list was not even created in database.');
+    }
 }

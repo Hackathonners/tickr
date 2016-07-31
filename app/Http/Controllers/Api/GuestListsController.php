@@ -45,4 +45,24 @@ class GuestListsController extends ApiController
 
         return $this->respondWith($guestList, new GuestListTransformer);
     }
+
+    /**
+     * Remove the specified guest list from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        DB::transaction(function () use ($id) {
+            $guestList = GuestList::findOrFail($id);
+            $this->authorize('handle', $guestList);
+            $guestList->delete();
+        });
+
+        return $this->respondWithArray([
+            'success' => true,
+            'message' => 'Successfully deleted guest list.',
+        ]);
+    }
 }

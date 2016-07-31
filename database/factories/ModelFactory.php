@@ -37,3 +37,10 @@ $factory->define(App\Karina\Event::class, function (Faker\Generator $faker) {
         'end_at' => $faker->dateTime->format('Y-m-d H:i:s'),
     ];
 });
+
+$factory->define(App\Karina\GuestList::class, function (Faker\Generator $faker) {
+    return [
+        'name' => 'Guest Title',
+        'description' => $faker->sentence,
+    ];
+});
