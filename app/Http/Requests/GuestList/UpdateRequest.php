@@ -14,7 +14,7 @@ class UpdateRequest extends CreateRequest
         $this->sanitize();
 
         return [
-            'name' => 'required|min:3',
+            'name' => 'sometimes|min:3',
             'description' => 'sometimes|min:3',
 
             'guest.0' => 'sometimes',
