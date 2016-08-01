@@ -1,4 +1,7 @@
 <template>
+  <ul v-for="error in errors">
+    <li>{{ error }}</li>
+  </ul>
   <input type="text" name="title" v-model="event.title" placeholder="Title">
   <input type="text" name="description" v-model="event.description" placeholder="Description">
   <input type="text" name="place" v-model="event.place" placeholder="Place">
@@ -43,12 +46,15 @@
           ],
         },
         registrationType: this.resetRegistrationType(),
+        errors: [],
       }
     },
     methods: {
       postEvent () {
         this.$http.post('events', this.event).then(response => {
           console.log(response);
+        }).catch( response => {
+          this.errors = JSON.parse(response.body);
         })
       },
       addRegistrationType() {
