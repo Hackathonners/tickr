@@ -11,9 +11,6 @@
 |
 */
 Auth::login(\App\Karina\User::first());
-Route::get('/', function(){
-    return view('welcome');
-});
 
 Route::group(['prefix' => 'api/v1'], function () {
     Route::resource('events', 'Api\EventsController');
@@ -22,3 +19,7 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::post('events/{eventId}/registrations', 'Api\RegistrationsController@store');
     Route::post('registrations/{id}/activate', 'Api\RegistrationsController@activate');
 });
+
+Route::get('{all}', function () {
+    return view('welcome');
+})->where('all', '(.*)');

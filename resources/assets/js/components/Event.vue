@@ -1,5 +1,6 @@
 <template>
   <div>{{ event.title }}</div>
+  <pre>{{ event | json }}</pre>
 </template>
 
 <script>

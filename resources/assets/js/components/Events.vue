@@ -3,6 +3,7 @@
     <li v-for="event in events">
       <div>
         <a v-link="{ name: 'events.show', params: { id: event.id }}">{{ event.title }}</a>
+        <pre>{{ event | json }}</pre>
       </div>
     </li>
   </ul>

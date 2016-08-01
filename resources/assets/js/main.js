@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import App from './components/App.vue';
+import App from './App.vue';
 import VueResource from 'vue-resource';
 import VueRouter from 'vue-router';
 
@@ -21,10 +21,18 @@ router.map({
         name: 'events',
         component: require('./components/Events.vue')
     },
+    '/events/create': {
+        name: 'events.create',
+        component: require('./components/Forms/CreateEvent.vue'),
+    },
     '/events/:id': {
         name: 'events.show',
         component: require('./components/Event.vue'),
-    }
+    },
 });
+
+router.alias({
+  '/events': '/'
+})
 
 router.start(App, 'body')
