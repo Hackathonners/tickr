@@ -6,10 +6,10 @@
   <input type="text" v-model="event.description" placeholder="Description">
   <input type="text" v-model="event.place" placeholder="Place">
 
-  <input type="text" v-datepicker="dates.start_date" class="js-datepicker-input">
+  <input type="text" v-datepicker="dates.start_date" class="js-datepicker-input" readonly="readonly">
   <input type="time" v-model="dates.start_time">
 
-  <input type="text" v-datepicker="dates.end_date" class="js-datepicker-input">
+  <input type="text" v-datepicker="dates.end_date" class="js-datepicker-input" readonly="readonly">
   <input type="time" v-model="dates.end_time">
   <ul>
     <li v-for="registration in event.registration" track-by="$index">
