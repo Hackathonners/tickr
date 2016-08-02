@@ -2,11 +2,11 @@
   <ul v-for="error in errors">
     <li>{{ error }}</li>
   </ul>
-  <input type="text" name="title" v-model="event.title" placeholder="Title">
-  <input type="text" name="description" v-model="event.description" placeholder="Description">
-  <input type="text" name="place" v-model="event.place" placeholder="Place">
-  <input type="datetime" name="start_at" v-model="event.start_at">
-  <input type="datetime" name="end_at" v-model="event.end_at">
+  <input type="text" v-model="event.title" placeholder="Title">
+  <input type="text" v-model="event.description" placeholder="Description">
+  <input type="text" v-model="event.place" placeholder="Place">
+  <input type="datetime" v-datepicker="event.start_at" v-model="event.start_at">
+  <input type="datetime" v-datepicker="event.end_at" v-model="event.end_at">
   <ul>
     <li v-for="registration in event.registration" track-by="$index">
       <div>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+  import '../../directives/Datepicker';
   export default {
     data() {
       return {
