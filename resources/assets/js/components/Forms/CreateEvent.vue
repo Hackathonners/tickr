@@ -104,17 +104,17 @@
     watch: {
       'dates': {
         deep: true,
-        handler: function(val) {
+        handler: function(dates) {
           let format = 'YYYY-MM-DD HH:mm';
 
-          if(this.dates.start_date && this.dates.start_time) {
-            let date = `${this.dates.start_date} ${this.dates.start_time}`;
-            this.event.start_at = moment(date, format).format(this.dates.format);
+          if(dates.start_date && dates.start_time) {
+            let date = `${dates.start_date} ${dates.start_time}`;
+            this.event.start_at = moment(date, format).format(dates.format);
           }
 
-          if(this.dates.end_date && this.dates.end_time) {
-            let date = `${this.dates.end_date} ${this.dates.end_time}`;
-            this.event.end_at = moment(date, format).format(this.dates.format);
+          if(dates.end_date && dates.end_time) {
+            let date = `${dates.end_date} ${dates.end_time}`;
+            this.event.end_at = moment(date, format).format(dates.format);
           }
         }
       }
