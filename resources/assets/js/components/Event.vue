@@ -17,7 +17,7 @@
       getEvent (id) {
         this.$http.get('events/' + id).then(response => {
           this.$set('event', response.json().data)
-        })
+        });
       },
     }
   };

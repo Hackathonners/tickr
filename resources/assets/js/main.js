@@ -29,6 +29,9 @@ router.map({
         name: 'events.show',
         component: require('./components/Event.vue'),
     },
+    '*' : {
+        component: require('./components/Errors/404.vue'),
+    }
 });
 
 router.alias({

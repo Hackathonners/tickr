@@ -5,7 +5,7 @@ Vue.directive('datepicker', {
     var vm = this.vm;
     var key = this.expression;
     $(this.el).datepicker({
-      altFormat: "yy-mm-dd",
+      dateFormat: "yy-mm-dd",
       firstDay: 1,
       defaultDate: +1,
       minDate: 1,
@@ -13,7 +13,6 @@ Vue.directive('datepicker', {
       dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
       prevText: '<i class="fa fa-angle-left"></i>',
       nextText: '<i class="fa fa-angle-right"></i>',
-      altField: '.js-datepicker-input',
       onSelect: function (date) {
         vm.$set(key, date);
       }

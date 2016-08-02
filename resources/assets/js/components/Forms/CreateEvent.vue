@@ -5,30 +5,37 @@
   <input type="text" v-model="event.title" placeholder="Title">
   <input type="text" v-model="event.description" placeholder="Description">
   <input type="text" v-model="event.place" placeholder="Place">
-  <input type="datetime" v-datepicker="event.start_at" v-model="event.start_at">
-  <input type="datetime" v-datepicker="event.end_at" v-model="event.end_at">
+
+  <input type="text" v-datepicker="dates.start_date" class="js-datepicker-input">
+  <input type="time" v-model="dates.start_time">
+
+  <input type="text" v-datepicker="dates.end_date" class="js-datepicker-input">
+  <input type="time" v-model="dates.end_time">
   <ul>
     <li v-for="registration in event.registration" track-by="$index">
       <div>
         <span type="text">{{ registration.type }}</span>
-        <span type="number">{{ registration.price | currency '€' }}</span>
-        <span type="number">{{ registration.fine | currency '€' }}</span>
+        <span type="number">{{ registration.price | price }}</span>
+        <span type="number">{{ registration.fine | price }}</span>
+        <button @click="removeRegistrationType($index)" v-show="this.canRemoveRegistrationType()">X</button>
       </div>
     </li>
     <li>
       <div>
         <input type="text" v-model="registrationType.type" placeholder="Name">
-        <input type="number" v-model="registrationType.price" step="0.01" min="0,00" placeholder="0,00">
-        <input type="number" v-model="registrationType.fine" step="0.01" min="0,00" placeholder="0,00">
+        <input type="number" v-model="registrationType.price" step="0.01" min="0,00" placeholder="0,00" number>
+        <input type="number" v-model="registrationType.fine" step="0.01" min="0,00" placeholder="0,00" number>
       </div>
-      <button @click="addRegistrationType" :disabled="!validRegistrationType">Adicionar</button>
+      <button @click="addRegistrationType" :disabled="!this.validRegistrationType()">Adicionar</button>
     </li>
   </ul>
-  <button @click="postEvent">Criar Evento</button>
+  <button @click="save">Criar Evento</button>
 </template>
 
 <script>
+  import moment from 'moment';
   import '../../directives/Datepicker';
+  import '../../filters/Price';
   export default {
     data() {
       return {
@@ -41,36 +48,30 @@
           registration: [
             {
               type: 'Normal',
-              price: 0.00.toFixed(2),
-              fine: 0.00.toFixed(2),
+              price: 0.00,
+              fine: 0.00,
             },
           ],
         },
         registrationType: this.resetRegistrationType(),
         errors: [],
+        dates: {
+          format: 'YYYY-MM-DD HH:mm:ss',
+          start_date: '',
+          end_date: '',
+          start_time: '',
+          end_time: '',
+        }
       }
     },
     methods: {
-      postEvent () {
+      save() {
         this.$http.post('events', this.event).then(response => {
           console.log(response);
         }).catch( response => {
           this.errors = JSON.parse(response.body);
         })
       },
-      addRegistrationType() {
-        this.event.registration.push(this.registrationType);
-        this.resetRegistrationType();
-      },
-      resetRegistrationType() {
-        return this.registrationType = {
-          type: '',
-          price: 0.00.toFixed(2),
-          fine: 0.00.toFixed(2),
-        };
-      },
-    },
-    computed: {
       validRegistrationType() {
         let type = this.registrationType.type.trim();
         let price = parseFloat(this.registrationType.price);
@@ -82,6 +83,41 @@
 
         return false;
       },
+      canRemoveRegistrationType() {
+        return this.event.registration.length > 1;
+      },
+      addRegistrationType() {
+        this.event.registration.push(this.registrationType);
+        this.resetRegistrationType();
+      },
+      removeRegistrationType(index) {
+        this.event.registration.splice(index, 1);
+      },
+      resetRegistrationType() {
+        return this.registrationType = {
+          type: '',
+          price: 0.00.toFixed(2),
+          fine: 0.00.toFixed(2),
+        };
+      },
+    },
+    watch: {
+      'dates': {
+        deep: true,
+        handler: function(val) {
+          let format = 'YYYY-MM-DD HH:mm';
+
+          if(this.dates.start_date && this.dates.start_time) {
+            let date = `${this.dates.start_date} ${this.dates.start_time}`;
+            this.event.start_at = moment(date, format).format(this.dates.format);
+          }
+
+          if(this.dates.end_date && this.dates.end_time) {
+            let date = `${this.dates.end_date} ${this.dates.end_time}`;
+            this.event.end_at = moment(date, format).format(this.dates.format);
+          }
+        }
+      }
     },
   };
 </script>
