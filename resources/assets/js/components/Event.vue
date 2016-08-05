@@ -1,8 +1,7 @@
 <template>
   <div>{{ event.title }}</div>
-  <pre>{{ event | json }}</pre>
-
-  <create-registration :event-id="event.id" :registration-types="event.registration_types.data"></create-registration>
+  {{ event |json }}
+  <create-registration :registrations.sync="registrations" :event="event" :registration-types="event.registration_types.data"></create-registration>
 </template>
 
 <script>

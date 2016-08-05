@@ -2,39 +2,43 @@
   <ul v-for="error in errors">
     <li>{{ error }}</li>
   </ul>
+
+  <p>
+  <input type="text" v-model="registration.email">
+  <input type="checkbox" value="1" v-model="registration.fined">
+  <select v-model="registration.registration_type">
+    <option v-for="registrationType in registrationTypes" :value="registrationType.id">
+      {{ registrationType.type }}
+    </option>
+  </select>
   {{ registrationTypes | json }}
+  </p>
   <button @click="save">Inscrever</button>
 </template>
 
 <script>
   import '../../filters/Price';
   export default {
-    props: ['event-id', 'registration-types'],
+    props: ['event', 'registration-types', 'registrations'],
     data() {
       return {
         registration: this.resetRegistrationState(),
       }
     },
-    ready() {
-      //this.getAndNewRegistration();
-    },
     methods: {
       resetRegistrationState() {
         return this.registration = {
-          email: 'fntneves@gmail.com',
+          email: '',
           fined: false,
-          registration_type: 1,
+          registration_type: null,
         };
       },
       save() {
-        console.log(JSON.stringify(this.registration));
-        this.$http.post('events/' + this.eventId + '/registrations', this.registration).then(response => {
+        this.$http.post('events/' + this.event.id + '/registrations', this.registration).then(response => {
           this.registrations.push(this.registration);
           this.resetRegistrationState();
-          console.log(response);
-
         }).catch( response => {
-          this.errors = JSON.parse(response.body);
+          console.log(response);
         })
       },
     },
