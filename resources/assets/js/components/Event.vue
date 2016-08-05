@@ -1,13 +1,20 @@
 <template>
   <div>{{ event.title }}</div>
   <pre>{{ event | json }}</pre>
+
+  <create-registration :event-id="event.id" :registration-types="event.registration_types.data"></create-registration>
 </template>
 
 <script>
+  import CreateRegistration from './Forms/CreateRegistration.vue';
   export default {
     data() {
       return {
-        event: {}
+        // Event data
+        event: {},
+
+        // Registrations of this event
+        registrations: [],
       }
     },
     ready () {
@@ -17,8 +24,13 @@
       getEvent (id) {
         this.$http.get('events/' + id).then(response => {
           this.$set('event', response.json().data)
+        }).catch(response => {
+          this.$router.replace('/404');
         });
       },
-    }
+    },
+    components: {
+      CreateRegistration,
+    },
   };
 </script>
