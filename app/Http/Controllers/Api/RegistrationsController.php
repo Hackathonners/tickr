@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Karina\Event;
 use App\Exceptions\Event\UserIsAlreadyRegisteredOnEventException;
+use App\Http\Requests\Registration\CreateRegistrationRequest;
 use App\Karina\Registration;
 use App\Karina\RegistrationType;
 use App\Karina\User;
@@ -19,11 +20,11 @@ class RegistrationsController extends ApiController
     /**
      * Store a newly created registration in storage.
      *
-     * @param Request $request
+     * @param CreateRegistrationRequest $request
      * @param $eventId
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $eventId)
+    public function store(CreateRegistrationRequest $request, $eventId)
     {
         try {
             $registration = DB::transaction(function () use ($request, $eventId) {
