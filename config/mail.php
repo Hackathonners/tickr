@@ -55,7 +55,10 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => [
+        'address' => env('MAIL_FROM_EMAIL', 'hackathonners@gmail.com'),
+        'name' => env('MAIL_FROM_NAME', 'Hackathonners'),
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -108,18 +111,4 @@ return [
     */
 
     'sendmail' => '/usr/sbin/sendmail -bs',
-
-    /*
-    |--------------------------------------------------------------------------
-    | From Email
-    |--------------------------------------------------------------------------
-    |
-    | Here you set the application email to be used as from in sent emails.
-    |
-    */
-
-    'from' => [
-        'name' => env('MAIL_FROM_NAME', 'Hackathonners'),
-        'address' => env('MAIL_FROM_EMAIL', 'hackathonners@gmail.com'),
-    ],
 ];

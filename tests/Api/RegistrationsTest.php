@@ -212,7 +212,7 @@ class RegistrationsTest extends ApiTestCase
 
     private function assertTicketEmail($event, $data)
     {
-        Mail::shouldReceive('queue')->once()
+        Mail::shouldReceive('send')->once()
             ->with('emails.ticket', Mockery::on(function ($data) {
                 $this->assertArrayHasKey('registration', $data);
 

@@ -9,7 +9,8 @@
         "laravel/framework": "5.2.*",
         "league/fractal": "^0.13.0",
         "spatie/laravel-fractal": "^1.9",
-        "vinkla/hashids": "^2.4"
+        "vinkla/hashids": "^2.4",
+        "guzzlehttp/guzzle": "^6.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

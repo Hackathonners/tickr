@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Karina\Event;
 use App\Exceptions\Event\UserIsAlreadyRegisteredOnEventException;
+use App\Http\Requests\Registration\CreateRegistrationRequest;
 use App\Karina\Registration;
 use App\Karina\RegistrationType;
 use App\Karina\User;
@@ -19,11 +20,11 @@ class RegistrationsController extends ApiController
     /**
      * Store a newly created registration in storage.
      *
-     * @param Request $request
+     * @param CreateRegistrationRequest $request
      * @param $eventId
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $eventId)
+    public function store(CreateRegistrationRequest $request, $eventId)
     {
         try {
             $registration = DB::transaction(function () use ($request, $eventId) {
@@ -46,7 +47,7 @@ class RegistrationsController extends ApiController
                 return Registration::with(['user', 'event', 'registrationType'])->find($registration->id);
             });
 
-            Mail::queue('emails.ticket', compact('registration'), function ($m) use ($registration) {
+            Mail::send('emails.ticket', compact('registration'), function ($m) use ($registration) {
                 $m->from(config('mail.from.address'), config('mail.from.name'))
                   ->to($registration->user->email, $registration->user->name)
                   ->subject('Ticket for '.$registration->event->title);

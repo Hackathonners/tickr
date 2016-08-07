@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Fractal;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Exception\HttpResponseException;
@@ -114,7 +115,13 @@ class ApiController extends Controller
      */
     protected function respondWithCollection($collection, $callback, $includes = [])
     {
-        return Fractal::includes($includes)->collection($collection, $callback)->toJson();
+        $result = Fractal::includes($includes)->collection($collection, $callback);
+
+        if ($collection instanceof LengthAwarePaginator) {
+            $result->paginateWith(new IlluminatePaginatorAdapter($collection));
+        }
+
+        return $result->toJson();
     }
 
     /**
