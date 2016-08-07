@@ -27,6 +27,8 @@ class CreateRegistrationRequest extends Request
 
         return [
             'email' => 'required|email',
+            'fined' => 'required',
+            'registration_type' => 'required',
         ];
     }
 }

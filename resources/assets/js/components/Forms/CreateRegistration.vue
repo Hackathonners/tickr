@@ -23,6 +23,7 @@
     data() {
       return {
         registration: this.resetRegistrationState(),
+        errors: [],
       }
     },
     methods: {
@@ -38,7 +39,7 @@
           this.registrations.push(this.registration);
           this.resetRegistrationState();
         }).catch( response => {
-          console.log(response);
+          this.errors = JSON.parse(response.body);
         })
       },
     },
