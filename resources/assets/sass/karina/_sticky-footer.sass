@@ -1,0 +1,14 @@
+$sticky-footer-height: 60px;
+
+.with-sticky-footer
+  position: relative;
+  min-height: 100%;
+
+.sticky-footer-wrapper
+  margin-bottom: ($sticky-footer-height + 32px);
+
+  .sticky-footer
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: $sticky-footer-height;

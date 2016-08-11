@@ -1,4 +1,9 @@
 <template>
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="page-title">Novo Evento</h3>
+    </div>
+  </div>
   <ul v-for="error in errors">
     <li>{{ error }}</li>
   </ul>

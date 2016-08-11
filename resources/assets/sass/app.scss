@@ -1,2 +1,16 @@
-// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "vendor/bootstrap-sass/variables";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+@import "components/navbar";
+@import "components/tabs";
+@import "components/table";
+@import "components/label";
+
+@import "karina/typography";
+@import "karina/button";
+@import "karina/table";
+@import "karina/sticky-footer";
+
+body {
+	font-weight: 300
+}

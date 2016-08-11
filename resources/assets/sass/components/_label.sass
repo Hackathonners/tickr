@@ -1,0 +1,35 @@
+// Labels
+.label
+	font-weight: normal
+	padding-top: .4em
+
+@mixin label-outline-variant($color)
+  border: 1px solid $color
+  color: $color
+
+  &[href]
+    &:hover,
+    &:focus
+    	color: darken($color, 10%)
+      border: 1px solid darken($color, 10%)
+
+.label-outline
+	background-color: transparent
+
+	&.label-default
+	  @include label-outline-variant($label-default-bg)
+
+	&.label-primary
+	  @include label-outline-variant($label-primary-bg)
+
+	&.label-success
+	  @include label-outline-variant($label-success-bg)
+
+	&.label-info
+	  @include label-outline-variant($label-info-bg)
+
+	&.label-warning
+	  @include label-outline-variant($label-warning-bg)
+
+	&.label-danger
+	  @include label-outline-variant($label-danger-bg)

@@ -1,6 +1,11 @@
 <template>
-  <div>{{ event.title }}</div>
-  {{ event |json }}
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="page-title">{{ event.title }}</h3>
+    </div>
+  </div>
+
+  <pre>{{ event |json }}</pre>
   <create-registration :registrations.sync="registrations" :event="event" :registration-types="event.registration_types.data"></create-registration>
 </template>
 
