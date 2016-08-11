@@ -10,9 +10,9 @@
   <div class="row">
     <div class="col-md-12">
       <ul class="nav nav-tabs">
-        <li :class="{ 'active': tabActive }"><a href="#" @click.prevent="getActiveEvents()">Eventos ativos</a></li>
-        <li :class="{ 'active': tabOld }"><a href="#" @click.prevent="getOldEvents()">Eventos passados</a></li>
-        <li :class="{ 'active': tabCanceled }"><a href="#" @click.prevent="getCanceledEvents()">Cancelados</a></li>
+        <li :class="{ 'active': showActive }"><a href="#" @click.prevent="showActiveEvents()">Eventos ativos</a></li>
+        <li :class="{ 'active': showOld }"><a href="#" @click.prevent="showOldEvents()">Eventos passados</a></li>
+        <li :class="{ 'active': showCanceled }"><a href="#" @click.prevent="showCanceledEvents()">Cancelados</a></li>
       </ul>
       <table class="table table--events">
         <tbody>
@@ -49,9 +49,9 @@
 </template>
 
 <script>
-  import { PulseLoader } from 'vue-spinner/dist/vue-spinner.min'
   import moment from 'moment';
   import Loading from './Util/Loading.vue';
+  import Events from '../services/EventService.js';
   import '../filters/Date';
   export default {
     data() {
@@ -61,39 +61,37 @@
         events: [],
       }
     },
+    ready() {
+      this.showActiveEvents();
+    },
     methods: {
-      getActiveEvents () {
-        if(this.tabActive)
-          return;
+      showActiveEvents () {
+        if(this.showActive) return;
 
-        this.$set('visibility', 'active')
+        this.$set('visibility', 'active');
         this.$loadingRouteData = true;
-        return this.$http.get('events').then(response => {
-          let events = response.json().data;
-          this.$set('events', events)
+        Events.getActive().then(events => {
+          this.$set('events', events);
           this.$loadingRouteData = false;
-          return events;
         })
       },
-      getOldEvents () {
-        if(this.tabOld)
-          return;
+      showOldEvents () {
+        if(this.showOld) return;
 
         this.$set('visibility', 'old')
         this.$loadingRouteData = true;
-        return this.$http.get('events/1').then(response => {
-          this.$set('events', [response.json().data])
+        Events.getActive().then(events => {
+          this.$set('events', events)
           this.$loadingRouteData = false;
         })
       },
-      getCanceledEvents () {
-        if(this.tabCanceled)
-          return;
+      showCanceledEvents () {
+        if(this.showCanceled) return;
 
         this.$set('visibility', 'canceled')
         this.$loadingRouteData = true;
-        return this.$http.get('events/1').then(response => {
-          this.$set('events', [response.json().data])
+        Events.getActive().then(events => {
+          this.$set('events', events)
           this.$loadingRouteData = false;
         })
       },
@@ -102,22 +100,15 @@
       }
     },
     computed: {
-      tabActive() {
+      showActive() {
         return this.visibility == 'active'
       },
-      tabOld() {
+      showOld() {
         return this.visibility == 'old'
       },
-      tabCanceled() {
+      showCanceled() {
         return this.visibility == 'canceled'
       },
-    },
-    route: {
-      data: function () {
-        return {
-          events: this.getActiveEvents()
-        }
-      }
     },
     components: {
       Loading
