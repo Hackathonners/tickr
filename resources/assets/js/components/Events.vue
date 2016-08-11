@@ -43,6 +43,7 @@
           </tr>
         </tbody>
       </table>
+      <loading :loading="$loadingRouteData"></loading>
       <pulse-loader v-show="$loadingRouteData"></pulse-loader>
     </div>
   </div>
@@ -51,6 +52,7 @@
 <script>
   import { PulseLoader } from 'vue-spinner/dist/vue-spinner.min'
   import moment from 'moment';
+  import Loading from './Util/Loading.vue';
   import '../filters/Date';
   export default {
     data() {
@@ -119,7 +121,7 @@
       }
     },
     components: {
-      PulseLoader,
+      Loading
     }
   };
 </script>
