@@ -44,7 +44,6 @@
         </tbody>
       </table>
       <loading :loading="$loadingRouteData"></loading>
-      <pulse-loader v-show="$loadingRouteData"></pulse-loader>
     </div>
   </div>
 </template>
