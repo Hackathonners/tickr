@@ -1,0 +1,37 @@
+.form-control
+	&, &:focus
+		@include box-shadow(none);
+
+
+label
+	font-size: 14px
+	font-weight: 100
+
+//** Input Group
+.input-group-addon,
+.input-group-btn,
+.input-group .form-control
+  display: table-cell
+
+  &:not(:first-child):not(:last-child)
+  	border-left: none
+  	border-right: none
+    border-radius: 0
+
+.input-group-addon
+	background-color: lighten($gray-base, 80%)
+
+
+.fieldset
+	margin-bottom: 20px
+	font-size: 14px
+
+	&:not(:first-child)
+		margin-top: 20px
+
+	.step
+		padding-left: 6px
+		padding-right: 6px
+
+	.title
+		color: $brand-primary

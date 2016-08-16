@@ -5,12 +5,18 @@
 @import "components/tabs";
 @import "components/table";
 @import "components/label";
+@import "components/forms";
 
 @import "karina/typography";
 @import "karina/button";
 @import "karina/table";
 @import "karina/sticky-footer";
+@import "vendor/ui-datepicker/style";
 
 body {
 	font-weight: 300
+}
+
+.container {
+	max-width: 980px;
 }

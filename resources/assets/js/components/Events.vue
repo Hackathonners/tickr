@@ -27,7 +27,10 @@
             </td>
             <td class="col-md-3 event-info">
               <div v-if="isRunning(event)" class="event-info__status event-info__status--running">
-                <span class="label label-primary label-outline">A decorrer ({{ event.end_at | human_diff true }} remaining)</span>
+                <span class="status__title text-primary">A decorrer</span>
+                <div class="status__details text-muted">
+                  Ends in {{ event.end_at | human_diff true }}
+                </div>
               </div>
               <div v-else class="event-info__status event-info__status--waiting">
                 <span class="status__title">Starts {{ event.start_at | human_diff }}</span>
