@@ -10,6 +10,7 @@
     "bootstrap-sass": "^3.3.0"
   },
   "dependencies": {
+    "chart.js": "^2.2.1",
     "laravel-elixir-vueify": "^1.0.3",
     "moment": "^2.14.1",
     "retinajs": "^2.1.0",

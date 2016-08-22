@@ -71,7 +71,7 @@
       <label>Preço</label>
     </div>
     <div class="col-sm-3">
-      <label>Multa</label> <span class="text-muted" data-toggle="tooltip" title="Aplicada quando o bilhete é adquirido no dia em que o evento inicia.">?</span>
+      <label>Multa</label> <i class="fa fa-info-circle text-muted" data-toggle="tooltip" title="Aplicada quando o bilhete é adquirido no dia em que o evento inicia." aria-hidden="true"></i>
     </div>
   </div>
 

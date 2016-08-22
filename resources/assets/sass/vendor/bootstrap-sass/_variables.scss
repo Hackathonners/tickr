@@ -110,7 +110,7 @@ $headings-font-weight:    300;
 
 // $border-radius-base:        4px !default;
 // $border-radius-large:       6px !default;
-// $border-radius-small:       3px !default;
+$border-radius-small:       3px !default;
 
 //** Global color for active items (e.g., navs or dropdowns).
 // $component-active-color:    #fff !default;
@@ -656,7 +656,7 @@ $label-default-bg:            $gray-lighten;
 //** Progress bar text color
 // $progress-bar-color:          #fff !default;
 //** Variable for setting rounded corners on progress bar.
-// $progress-border-radius:      $border-radius-base !default;
+$progress-border-radius:      $border-radius-small !default;
 
 //** Default progress bar color
 // $progress-bar-bg:             $brand-primary !default;

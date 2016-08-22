@@ -1,0 +1,16 @@
+.progress {
+  box-shadow: none;
+
+  .progress-bar {
+    box-shadow: none;
+    border-right: 1px solid $body-bg;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+}
+
+.list-group-item > .progress {
+  margin-bottom: 0;
+}
