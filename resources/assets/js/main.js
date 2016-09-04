@@ -1,7 +1,13 @@
+import moment from 'moment';
+import 'moment/locale/pt';
+
 import Vue from 'vue';
 import App from './App.vue';
 import VueResource from 'vue-resource';
 import VueRouter from 'vue-router';
+
+// Set moment language
+moment.locale("pt");
 
 Vue.use(VueRouter)
 Vue.use(VueResource)

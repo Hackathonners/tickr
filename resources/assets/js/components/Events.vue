@@ -1,9 +1,9 @@
 <template>
-  <div class="row">
-    <div class="col-md-6">
-      <h3 class="page-title">Eventos</h3>
+  <div class="row page-header">
+    <div class="col-md-8">
+      <span class="page-title">Eventos</span>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <a class="page-action btn btn-primary pull-right" v-link="{ name: 'events.create' }">Novo evento</a>
     </div>
   </div>
@@ -17,7 +17,8 @@
       <table class="table table--events">
         <tbody>
           <tr v-show="!$loadingRouteData" v-for="event in events">
-            <td class="col-md-7 event-info">
+            <td class="col-md-6 event-info">
+              <!-- Event details -->
               <div class="event-info__name">
                 <a v-link="{ name: 'events.show', params: { id: event.id }}">{{ event.title }}</a>
               </div>
@@ -26,22 +27,30 @@
               </div>
             </td>
             <td class="col-md-3 event-info">
+              <!-- Event status -->
               <div v-if="isRunning(event)" class="event-info__status event-info__status--running">
                 <span class="status__title text-primary">A decorrer</span>
                 <div class="status__details text-muted">
-                  Ends in {{ event.end_at | human_diff true }}
+                  Termina em {{ event.end_at | human_diff true }}
                 </div>
               </div>
-              <div v-else class="event-info__status event-info__status--waiting">
-                <span class="status__title">Starts {{ event.start_at | human_diff }}</span>
+              <div v-if="isPast(event)" class="event-info__status event-info__status--waiting">
+                <span class="status__title">Terminou {{ event.start_at | human_diff }}</span>
                 <div class="status__details text-muted">
-                  {{ event.start_at | date 'dddd' }}, {{ event.start_at | date 'D MMMM YYYY' }}
+                  {{ event.start_at | date 'dddd' }}, {{ event.start_at | date 'D MMMM YYYY, HH:mm' }}
+                </div>
+              </div>
+              <div v-if="isFuture(event)" class="event-info__status event-info__status--waiting">
+                <span class="status__title">Inicia em {{ event.start_at | human_diff true }}</span>
+                <div class="status__details text-muted">
+                  {{ event.start_at | date 'dddd' }}, {{ event.start_at | date 'D MMMM YYYY, HH:mm' }}
                 </div>
               </div>
             </td>
-            <td class="col-md-2 event-info">
-              <span v-if="event.registrations">{{ event.registrations}}</span>
-              <span v-else>No tickets sold</span>
+            <td class="col-md-3 event-info">
+              <!-- Event ticket status -->
+              <span v-if="event.registrations">{{ event.registrations }}</span>
+              <span v-else>Sem bilhetes vendidos</span>
             </td>
           </tr>
         </tbody>
@@ -100,6 +109,12 @@
       },
       isRunning(event) {
         return moment().isBetween(event.start_at, event.end_at);
+      },
+      isPast(event) {
+        return moment().isAfter(event.end_at);
+      },
+      isFuture(event) {
+        return moment().isBefore(event.start_at);
       }
     },
     computed: {

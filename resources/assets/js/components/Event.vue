@@ -1,12 +1,21 @@
 <template>
-  <div class="row">
-    <div class="col-md-6">
-      <h3 class="page-title">{{ event.title }}</h3>
-      <div class="text-muted">{{ event.place }}</div>
+  <div class="row page-header">
+    <div class="col-md-8">
+      <span class="page-title">{{ event.title }}</span>
       <div class="text-muted">{{ event.start_at | date_range event.end_at }}</div>
+      <div class="text-muted"><i class="fa fa-map-marker fa-fw"></i> {{ event.place }}</div>
     </div>
-    <div class="col-md-6">
-      <a class="page-action btn btn-primary pull-right" v-link="{ name: 'events.create' }">Novo evento</a>
+    <div class="col-md-4">
+      <a class="page-action btn btn-primary pull-right" v-link="{ name: 'events.create' }">Nova inscrição</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="nav nav-tabs">
+        <li :class="{ 'active': showStats }"><a href="#" @click.prevent="showEventStats()">Estatísticas</a></li>
+        <li :class="{ 'active': showRegistrations }"><a href="#" @click.prevent="showEventRegistrations()">Inscritos</a></li>
+      </ul>
     </div>
   </div>
 
@@ -112,22 +121,8 @@
     </div>
   </div>
 
-  <!-- <div class="row">
-    <div class="col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <h4>Sumário de vendas nos últimos 10 dias</h4>
-          <graph :labels="['08/10','08/11','08/12','08/13','08/14','08/15','08/16','08/17','08/18','08/19','08/20']"
-          :values="values"
-           ></graph>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
-
-  <!-- <pre>{{ event | json }}</pre> -->
-  <!-- <create-registration :registrations.sync="registrations" :event="event" :registration-types="event.registration_types.data"></create-registration> -->
+  <pre>{{ event | json }}</pre>
+  <create-registration v-if="event.registration_types" :registrations.sync="registrations" :event="event" :registration-types="event.registration_types.data"></create-registration>
 </template>
 
 <script>

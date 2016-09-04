@@ -1,7 +1,7 @@
 <template>
-  <div class="row">
+  <div class="row page-header">
     <div class="col-md-12">
-      <h3 class="page-title">Novo Evento</h3>
+      <span class="page-title">Novo Evento</span>
     </div>
   </div>
 
