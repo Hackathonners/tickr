@@ -3,7 +3,6 @@
 namespace App\Karina;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Guest extends Model
 {

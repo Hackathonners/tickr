@@ -9,7 +9,6 @@ use App\Karina\Registration;
 use App\Karina\RegistrationType;
 use App\Karina\User;
 use App\Transformers\RegistrationTransformer;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;

@@ -46,7 +46,7 @@ class Registration extends Model
      *
      * @throws UserIsAlreadyRegisteredOnEventException
      */
-    public function register(Event $event, User $user, RegistrationType $registrationType, $fined = false, $notes = "")
+    public function register(Event $event, User $user, RegistrationType $registrationType, $fined = false, $notes = '')
     {
         $alreadyRegistered = self::where([
             'event_id' => $event->id,
