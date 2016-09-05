@@ -46,7 +46,7 @@ class Registration extends Model
      *
      * @throws UserIsAlreadyRegisteredOnEventException
      */
-    public function register(Event $event, User $user, RegistrationType $registrationType, $fined = false)
+    public function register(Event $event, User $user, RegistrationType $registrationType, $fined = false, $notes = "")
     {
         $alreadyRegistered = self::where([
             'event_id' => $event->id,
@@ -58,6 +58,7 @@ class Registration extends Model
         }
 
         $this->fined = $fined;
+        $this->notes = $notes;
         $this->activated = false;
         $this->activation_code = str_random(10);
         $this->event()->associate($event);

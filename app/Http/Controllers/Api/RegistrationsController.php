@@ -41,7 +41,13 @@ class RegistrationsController extends ApiController
                 }
 
                 $registration = new Registration();
-                $registration->register($event, $user, $registrationType, !!$request->input('fined', false));
+                $registration->register(
+                    $event,
+                    $user,
+                    $registrationType,
+                    !!$request->input('fined', false),
+                    $request->input('notes')
+                );
                 $registration->save();
 
                 return Registration::with(['user', 'event', 'registrationType'])->find($registration->id);

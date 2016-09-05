@@ -36,6 +36,7 @@ class RegistrationTransformer extends TransformerAbstract
             'user_id' => $registration->user_id,
             'fined' => (bool) $registration->fined,
             'activated' => (bool) $registration->activated,
+            'notes' => $registration->notes,
         ];
     }
 

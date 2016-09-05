@@ -40,6 +40,7 @@ class RegistrationsTest extends ApiTestCase
             'email' => 'a@a.com',
             'registration_type' => $event->registrationTypes()->first()->id,
             'fined' => false,
+            'notes' => 'Dummy User',
         ];
 
         // Assert Emails
@@ -57,6 +58,7 @@ class RegistrationsTest extends ApiTestCase
         $this->seeJson([
             'fined' => false,
             'activated' => false,
+            'notes' => 'Dummy User',
         ]);
     }
 

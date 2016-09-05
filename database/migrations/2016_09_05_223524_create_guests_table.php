@@ -29,6 +29,6 @@ class CreateGuestsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('guests');
     }
 }

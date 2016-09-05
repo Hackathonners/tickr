@@ -18,6 +18,7 @@ class CreateRegistrationsTable extends Migration
             $table->integer('registration_type_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->boolean('fined')->default(false);
+            $table->text('notes')->nullable();
             $table->boolean('activated')->default(false);
             $table->string('activation_code', 10)->nullable();
             $table->timestamp('activated_at')->nullable();
