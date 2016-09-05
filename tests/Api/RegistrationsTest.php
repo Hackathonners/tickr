@@ -17,7 +17,9 @@ class RegistrationsTest extends ApiTestCase
     public function testCreateRegistration()
     {
         // Prepare data
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->create([
+                'email' => 'test@test.com',
+            ]);
 
         $startAt = (new DateTime())->modify('+1 day');
         $endAt = (new DateTime())->modify('+5 day');
