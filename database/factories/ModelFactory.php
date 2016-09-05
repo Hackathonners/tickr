@@ -45,6 +45,13 @@ $factory->define(App\Karina\GuestList::class, function (Faker\Generator $faker) 
     ];
 });
 
+$factory->define(App\Karina\Guest::class, function (Faker\Generator $faker) {
+    return [
+        'name' => 'Guest Name',
+        'notes' => $faker->sentence,
+    ];
+});
+
 $factory->define(App\Karina\Registration::class, function (Faker\Generator $faker) {
     return [
         'fined' => false,

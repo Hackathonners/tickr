@@ -20,8 +20,8 @@ class CreateEventsTable extends Migration
             $table->string('place');
             $table->timestamp('start_at');
             $table->timestamp('end_at');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')->references('id')->on('users');
         });

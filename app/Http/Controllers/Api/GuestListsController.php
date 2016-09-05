@@ -6,6 +6,7 @@ use App\Http\Requests\GuestList\CreateRequest;
 use App\Http\Requests\GuestList\UpdateRequest;
 use App\Karina\GuestList;
 use App\Karina\User;
+use App\Karina\Guest;
 use App\Transformers\GuestListTransformer;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -26,20 +27,15 @@ class GuestListsController extends ApiController
         $guestList->user()->associate(Auth::user());
 
         $guestList = DB::transaction(function () use ($guestList, $request) {
-            $users = new Collection();
+            $guests = new Collection;
             foreach ($request->input('guest') as $data) {
-                $user = User::where('email', $data['email'])->first();
-                if (!$user) {
-                    $user = new User;
-                    $user->fill($data);
-                    $user->save();
-                }
-
-                $users->add($user);
+                $guest = new Guest;
+                $guest->fill($data);
+                $guests->add($guest);
             }
 
             $guestList->save();
-            $guestList->users()->sync($users->pluck('id')->toArray());
+            $guestList->guests()->saveMany($guests);
 
             return $guestList->fresh();
         });
@@ -79,21 +75,17 @@ class GuestListsController extends ApiController
             $this->authorize('handle', $guestList);
             $guestList->fill($request->all());
 
-            $users = new Collection();
+            $guests = new Collection;
             foreach ($request->input('guest') as $data) {
-                $user = User::where('email', $data['email'])->first();
-                if (!$user) {
-                    $user = new User;
-                    $user->fill($data);
-                    $user->save();
-                }
-
-                $users->add($user);
+                $guest = new Guest;
+                $guest->fill($data);
+                $guests->add($guest);
             }
 
             $guestList->save();
-            if ($user->count() > 0) {
-                $guestList->users()->sync($users->pluck('id')->toArray());
+            if ($guests->count() > 0) {
+                $guestList->guests()->delete();
+                $guestList->guests()->saveMany($guests);
             }
 
             return $guestList->fresh();

@@ -12,14 +12,14 @@ class GuestListTransformer extends TransformerAbstract
      *
      * @var  array
      */
-    protected $availableIncludes = ['users'];
+    protected $availableIncludes = ['guests'];
 
     /**
      * List of resources to automatically include.
      *
      * @var  array
      */
-    protected $defaultIncludes = ['users'];
+    protected $defaultIncludes = ['guests'];
 
     /**
      * Transform a guest list into a generic array.
@@ -36,8 +36,8 @@ class GuestListTransformer extends TransformerAbstract
         ];
     }
 
-    public function includeUsers(GuestList $guestList)
+    public function includeGuests(GuestList $guestList)
     {
-        return $this->collection($guestList->users, new UserTransformer);
+        return $this->collection($guestList->guests, new GuestTransformer);
     }
 }

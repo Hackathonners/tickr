@@ -31,10 +31,10 @@ class GuestList extends Model
     /**
      * Get users that belong to this guest list.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function users()
+    public function guests()
     {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(Guest::class);
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Karina\GuestList;
 use App\Karina\User;
+use App\Karina\Guest;
 use App\Transformers\GuestListTransformer;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,21 +15,12 @@ class GuestListsTest extends ApiTestCase
     {
         // Prepare data
         $user = factory(User::class)->create();
-        $guestUser = factory(User::class)->create([
-            'email' => 'a@a.com',
-        ]);
-
-        $guest = factory(User::class)->make([
-            'email' => 'a@b.com',
-        ]);
+        $guests = factory(Guest::class, 2)->make();
 
         $data = [
             'name' => 'Dummy',
             'description' => 'Things',
-            'guest' => [
-                $guestUser->toArray(),
-                $guest->toArray(),
-            ],
+            'guest' => $guests->toArray(),
         ];
 
         // Perform task
@@ -37,26 +29,27 @@ class GuestListsTest extends ApiTestCase
 
         // Assertions
         $this->assertResponseOk();
-        $this->assertEquals(3, User::count());
+        $this->assertEquals(2, Guest::count());
         $this->assertEquals(1, GuestList::count());
         $this->seeJson(Fractal::item(GuestList::first(), new GuestListTransformer)->toArray());
         $this->seeJson([
             'name' => $data['name'],
             'description' => $data['description'],
-            'email' => $data['guest'][0]['email'], // See user that already existed before guestlist.
-            'email' => $data['guest'][1]['email'], // See user that is new.
+            'name' => $data['guest'][0]['name'],
+            'name' => $data['guest'][1]['name'],
+            'notes' => $data['guest'][1]['notes'],
         ]);
     }
 
-    public function testShowEvent()
+    public function testShowGuestList()
     {
         // Prepare data
         $user = factory(User::class)->create();
-        $guests = factory(User::class, 3)->create();
         $guestList = factory(GuestList::class)->create([
             'user_id' => $user->id,
         ]);
-        $guestList->users()->sync($guests);
+        $guests = factory(Guest::class, 2)->make();
+        $guestList->guests()->saveMany($guests);
 
         // Perform task
         $this->actingAs($user)
@@ -71,15 +64,16 @@ class GuestListsTest extends ApiTestCase
     {
         // Prepare data
         $user = factory(User::class)->create();
-        $guests = factory(User::class, 3)->create();
         $guestList = factory(GuestList::class)->create([
             'user_id' => $user->id,
             'name' => 'Old title',
         ]);
-        $guestList->users()->sync($guests);
+        $guests = factory(Guest::class, 3)->make();
+        $guestList->guests()->saveMany($guests);
 
         $newGuest = factory(User::class)->make([
-            'email' => 'a@b.com',
+            'name' => 'New Dummy Name',
+            'notes' => 'New Dummy Notes',
         ]);
 
         $data = [
@@ -96,17 +90,18 @@ class GuestListsTest extends ApiTestCase
 
         // Assertions
         $this->assertResponseOk();
-        $this->assertEquals(1, GuestList::first()->users()->count(), 'There are more guests than expected.');
+        $this->assertEquals(1, GuestList::first()->guests()->count(), 'There are more guests than expected.');
         $this->seeJson(Fractal::item(GuestList::first(), new GuestListTransformer)->toArray());
         $this->seeJson([
             'name' => $data['name'],
             'description' => $data['description'],
-            'email' => $data['guest'][0]['email'], // See user that is new.
+            'name' => $data['guest'][0]['name'], // See guest that is new.
+            'notes' => $data['guest'][0]['notes'], // See guest that is new.
         ]);
         $this->dontSeeJson([
-            'email' => $guests[0]['email'], // Do not see old users.
-            'email' => $guests[1]['email'],
-            'email' => $guests[2]['email'],
+            'name' => $guests[0]['name'], // Do not see old users.
+            'name' => $guests[1]['name'],
+            'name' => $guests[2]['name'],
         ]);
     }
 
@@ -141,11 +136,11 @@ class GuestListsTest extends ApiTestCase
         // Prepare data
         $user = factory(User::class)->create();
         $dummy = factory(User::class)->create();
-        $guests = factory(User::class, 3)->create();
         $guestList = factory(GuestList::class)->create([
             'user_id' => $dummy->id,
         ]);
-        $guestList->users()->sync($guests);
+        $guests = factory(Guest::class, 3)->make();
+        $guestList->guests()->saveMany($guests);
 
         ////
         // DELETE

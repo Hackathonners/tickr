@@ -21,8 +21,8 @@ class CreateRegistrationsTable extends Migration
             $table->boolean('activated')->default(false);
             $table->string('activation_code', 10)->nullable();
             $table->timestamp('activated_at')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('event_id')->references('id')->on('events');
             $table->foreign('registration_type_id')->references('id')->on('registration_types');
