@@ -12,6 +12,15 @@ class Registration extends Model
     use SoftDeletes;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'fined', 'notes',
+    ];
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -46,7 +55,7 @@ class Registration extends Model
      *
      * @throws UserIsAlreadyRegisteredOnEventException
      */
-    public function register(Event $event, User $user, RegistrationType $registrationType, $fined = false, $notes = '')
+    public function register(Event $event, User $user, RegistrationType $registrationType)
     {
         $alreadyRegistered = self::where([
             'event_id' => $event->id,
@@ -57,8 +66,6 @@ class Registration extends Model
             throw new UserIsAlreadyRegisteredOnEventException('Email '.$user->email.' is already registered on event '.$event->title.'.');
         }
 
-        $this->fined = $fined;
-        $this->notes = $notes;
         $this->activated = false;
         $this->activation_code = str_random(10);
         $this->event()->associate($event);
