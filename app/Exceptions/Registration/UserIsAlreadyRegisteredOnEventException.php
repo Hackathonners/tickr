@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions\Event;
+namespace App\Exceptions\Registration;
 
 class UserIsAlreadyRegisteredOnEventException extends \LogicException
 {

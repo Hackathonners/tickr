@@ -2,7 +2,7 @@
 
 namespace App\Karina;
 
-use App\Exceptions\Event\UserIsAlreadyRegisteredOnEventException;
+use App\Exceptions\Registration\UserIsAlreadyRegisteredOnEventException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

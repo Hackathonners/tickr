@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Karina\Event;
-use App\Exceptions\Event\UserIsAlreadyRegisteredOnEventException;
+use App\Exceptions\Registration\UserIsAlreadyRegisteredOnEventException;
 use App\Http\Requests\Registration\CreateRegistrationRequest;
 use App\Karina\Registration;
 use App\Karina\RegistrationType;
