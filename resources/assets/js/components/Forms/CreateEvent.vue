@@ -6,10 +6,10 @@
   </div>
 
   <!-- Form Errors -->
-  <div v-show="errors" class="alert alert-danger alert-disposable">
+  <div v-show="error" class="alert alert-danger alert-disposable">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <ul>
-      <li v-for="error in errors">{{ error }}</li>
+      <li v-for="message in error.message">{{ message }}</li>
     </ul>
   </div>
 
@@ -148,7 +148,7 @@
           ],
         },
         registrationType: this.resetRegistrationType(),
-        errors: null,
+        error: null,
         dates: {
           format: 'YYYY-MM-DD HH:mm:ss',
           start_date: '',
@@ -163,7 +163,7 @@
         this.$http.post('events', this.event).then(response => {
           console.log(response);
         }).catch( response => {
-          this.errors = JSON.parse(response.body);
+          this.error = JSON.parse(response.body).error;
         })
       },
       validRegistrationType() {
