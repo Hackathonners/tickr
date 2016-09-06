@@ -11,6 +11,7 @@
       {{ registrationType.type }}
     </option>
   </select>
+  <input type="text" v-model="registration.notes">
   {{ registrationTypes | json }}
   </p>
   <button @click="save">Inscrever</button>
@@ -29,9 +30,10 @@
     methods: {
       resetRegistrationState() {
         return this.registration = {
-          email: '',
+          email: null,
           fined: false,
           registration_type: null,
+          notes: null,
         };
       },
       save() {
