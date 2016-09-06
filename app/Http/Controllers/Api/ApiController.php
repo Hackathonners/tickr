@@ -208,7 +208,7 @@ class ApiController extends Controller
      */
     public function errorWrongArgs($message = 'Wrong Arguments')
     {
-        return $this->setStatusCode(HttpResponse::HTTP_BAD_REQUEST)
+        return $this->setStatusCode(HttpResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->respondWithError($message, self::CODE_WRONG_ARGS);
     }
 
