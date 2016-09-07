@@ -41,6 +41,53 @@ class EventsTest extends ApiTestCase
         $this->seeJsonEquals(Fractal::collection($events, new EventTransformer)->toArray());
     }
 
+    public function testGetUserEventsWithPastFilter()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+
+        $startAt = (new DateTime())->modify('-1 day');
+        $endAt = (new DateTime())->modify('+12 day');
+        factory(Event::class)->create([
+            'user_id' => $user->id,
+            'title' => 'Event name',
+            'description' => 'Event description',
+            'place' => 'Place',
+            'start_at' => $startAt->format('Y-m-d H:i:s'),
+            'end_at' => $endAt->format('Y-m-d H:i:s'),
+        ])->each(function ($event) {
+            factory(RegistrationType::class, 2)->create([
+                'event_id' => $event->id,
+            ]);
+        });
+
+        $startAt = (new DateTime())->modify('-10 day');
+        $endAt = (new DateTime())->modify('-11 day');
+        factory(Event::class)->create([
+            'user_id' => $user->id,
+            'title' => 'Past event',
+            'description' => 'Event description',
+            'place' => 'Place',
+            'start_at' => $startAt->format('Y-m-d H:i:s'),
+            'end_at' => $endAt->format('Y-m-d H:i:s'),
+        ])->each(function ($event) {
+            factory(RegistrationType::class, 2)->create([
+                'event_id' => $event->id,
+            ]);
+        });
+
+        $events = $user->events()->past()->paginate();
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('GET', '/events?filter=past');
+
+        // Assertions
+        $this->assertResponseOk();
+        $this->assertEquals(1, Event::past()->count());
+        $this->seeJsonEquals(Fractal::collection($events, new EventTransformer)->toArray());
+    }
+
     public function testCreateEvent()
     {
         // Prepare data
@@ -88,8 +135,12 @@ class EventsTest extends ApiTestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertEquals(0, Event::count(), 'Event was stored in database.');
         $this->seeJsonStructure([
-                'end_at',
-            ]);
+            'error' => [
+                'messages' => [
+                    'end_at'
+                ]
+            ]
+        ]);
     }
 
     public function testCreateEventWithNoRegistrationTypes()
@@ -113,8 +164,12 @@ class EventsTest extends ApiTestCase
         $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertEquals(0, Event::count(), 'Event was stored in database.');
         $this->seeJsonStructure([
-                'registration.0',
-            ]);
+            'error' => [
+                'messages' => [
+                    'registration.0'
+                ]
+            ]
+        ]);
     }
 
     public function testUpdateEvent()
@@ -201,7 +256,7 @@ class EventsTest extends ApiTestCase
         $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
         $this->seeJsonStructure([
             'error' => [
-                'code', 'http_code', 'message',
+                'code', 'http_code', 'messages',
             ],
         ]);
     }

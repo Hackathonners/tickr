@@ -143,11 +143,15 @@ class ApiController extends Controller
      */
     public function respondWithError($message, $errorCode)
     {
+        if (!is_array($message)) {
+            $message = [$message];
+        }
+
         return $this->respondWithArray([
             'error' => [
                 'code' => $errorCode,
                 'http_code' => $this->statusCode,
-                'message' => $message,
+                'messages' => $message,
             ],
         ]);
     }
@@ -155,7 +159,7 @@ class ApiController extends Controller
     /**
      * Generates a Response with a 403 HTTP header and a given message.
      *
-     * @param string $message
+     * @param string|array $message
      * @return Response
      */
     public function errorForbidden($message = 'Forbidden')
@@ -167,7 +171,7 @@ class ApiController extends Controller
     /**
      * Generates a Response with a 500 HTTP header and a given message.
      *
-     * @param string $message
+     * @param string|array $message
      * @return Response
      */
     public function errorInternalError($message = 'Internal Error')
@@ -179,7 +183,7 @@ class ApiController extends Controller
     /**
      * Generates a Response with a 404 HTTP header and a given message.
      *
-     * @param string $message
+     * @param string|array $message
      * @return Response
      */
     public function errorNotFound($message = 'Resource Not Found')
@@ -191,7 +195,7 @@ class ApiController extends Controller
     /**
      * Generates a Response with a 401 HTTP header and a given message.
      *
-     * @param string $message
+     * @param string|array $message
      * @return Response
      */
     public function errorUnauthorized($message = 'Unauthorized')
@@ -203,7 +207,7 @@ class ApiController extends Controller
     /**
      * Generates a Response with a 400 HTTP header and a given message.
      *
-     * @param string $message
+     * @param string|array $message
      * @return Response
      */
     public function errorWrongArgs($message = 'Wrong Arguments')
@@ -218,7 +222,7 @@ class ApiController extends Controller
 
         if ($validator->fails()) {
             throw new HttpResponseException(
-                $this->errorWrongArgs($validator->errors()->first())
+                $this->errorWrongArgs($validator->errors())
             );
         }
     }

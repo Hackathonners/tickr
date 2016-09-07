@@ -89,6 +89,16 @@ class Event extends Model
     }
 
     /**
+     * Scope a query to only include past events.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePast($query)
+    {
+        return $query->where('end_at', '<', Carbon::now()->toDateString());
+    }
+
+    /**
      * Get registrations of this event.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

@@ -6,6 +6,7 @@ use App\Exceptions\Event\CannotUpdateEventException;
 use App\Http\Requests\Event\UpdateRequest;
 use DB;
 use Auth;
+use Request;
 use App\Http\Requests\Event\CreateRequest;
 use App\Karina\Event;
 use App\Karina\RegistrationType;
@@ -20,10 +21,19 @@ class EventsController extends ApiController
      */
     public function index()
     {
-        $events = DB::transaction(function () {
+        $filter = Request::get('filter');
+
+        $events = DB::transaction(function () use ($filter) {
             $user = Auth::user();
 
-            return $user->events()->paginate();
+            $events = $user->events();
+
+            // Apply filter to events if valid
+            if (in_array($filter, ['past'], true)) {
+                $events = $events->$filter();
+            }
+
+            return $events->paginate();
         });
 
         return $this->respondWith($events, new EventTransformer);
