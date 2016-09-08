@@ -52,4 +52,24 @@ class GuestTest extends ApiTestCase
         // Only see match associated to my guestlist
         $this->seeJsonEquals(Fractal::collection([$guests[0]], new GuestTransformer)->toArray());
     }
+
+    public function testGuestsSearchByNameRequiresMinLength()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('GET', '/guests?search=ed');
+
+        // Assertions
+        $this->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->seeJsonStructure([
+            'error' => [
+                'messages' => [
+                    'search'
+                ]
+            ]
+        ]);
+    }
 }

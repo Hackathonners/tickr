@@ -222,7 +222,7 @@ class ApiController extends Controller
 
         if ($validator->fails()) {
             throw new HttpResponseException(
-                $this->errorWrongArgs($validator->errors())
+                $this->errorWrongArgs($validator->errors()->toArray())
             );
         }
     }
