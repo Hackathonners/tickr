@@ -33,4 +33,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Event::class);
     }
+
+    /**
+     * Get guestlists that this user owns.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function guests()
+    {
+        return $this->hasManyThrough(Guest::class, GuestList::class);
+    }
 }

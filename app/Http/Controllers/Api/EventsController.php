@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
 use App\Exceptions\Event\CannotUpdateEventException;
 use App\Http\Requests\Event\UpdateRequest;
 use DB;
 use Auth;
-use Request;
 use App\Http\Requests\Event\CreateRequest;
 use App\Karina\Event;
 use App\Karina\RegistrationType;
@@ -19,9 +19,9 @@ class EventsController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $filter = Request::get('filter');
+        $filter = $request->get('filter');
 
         $events = DB::transaction(function () use ($filter) {
             $user = Auth::user();

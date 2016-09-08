@@ -16,6 +16,7 @@ class CreateGuestsTable extends Migration
             $table->increments('id');
             $table->integer('guest_list_id')->unsigned();
             $table->string('name');
+            $table->string('name_search');
             $table->text('notes')->nullable();
 
             $table->foreign('guest_list_id')->references('id')->on('guest_lists');
