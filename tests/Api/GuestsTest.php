@@ -45,7 +45,7 @@ class GuestTest extends ApiTestCase
 
         // Perform task
         $this->actingAs($user)
-            ->json('GET', '/guests?search=nam');
+            ->json('GET', '/guests?search=ed nam');
 
         // Assertions
         $this->assertResponseOk();
