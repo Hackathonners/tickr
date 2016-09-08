@@ -35,7 +35,7 @@ class GuestTest extends ApiTestCase
         $user2 = factory(User::class)->create();
 
         $guests2 = factory(Guest::class)->make([
-            'name' => 'A fancy name',
+            'name' => 'A fancy completed name',
         ]);
 
         $guestList2 = factory(GuestList::class)->create([
