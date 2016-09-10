@@ -84,7 +84,10 @@ class EventsController extends ApiController
 
             if ($stats) {
                 $stats = [];
-                $stats['registration_types'] = $event->getRegistrationTypeStats();
+                $stats['registration_types'] = $event->getRegistrationTypeStats()->toArray();
+                $stats['registrations'] = array_sum(array_column($stats['registration_types'], 'registrations'));
+                $stats['participations'] = array_sum(array_column($stats['registration_types'], 'participations'));
+                $stats['income'] = array_sum(array_column($stats['registration_types'], 'income'));
                 $event->stats = $stats;
             }
 

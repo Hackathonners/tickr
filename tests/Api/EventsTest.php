@@ -279,6 +279,9 @@ class EventsTest extends ApiTestCase
         // Assertions
         $this->assertResponseOk();
         $this->seeJson([
+            'income' => 8.8,
+            'registrations' => 3,
+            'participations' => 2,
             'registration_types' => [
                 [
                     'id' => $registrationTypes[0]->id,
