@@ -14,6 +14,8 @@
 
 Route::group(['prefix' => 'api/v1'], function () {
     Route::resource('events', 'Api\EventsController');
+    Route::get('events/{eventId}/stats', 'Api\EventsController@showStats');
+
     Route::resource('guestlists', 'Api\GuestListsController');
     Route::resource('guests', 'Api\GuestsController', [
             'only' => ['index'],

@@ -4,6 +4,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
 use App\Karina\User;
 use App\Karina\Event;
+use App\Karina\Registration;
 use App\Karina\RegistrationType;
 use App\Transformers\EventTransformer;
 
@@ -137,9 +138,9 @@ class EventsTest extends ApiTestCase
         $this->seeJsonStructure([
             'error' => [
                 'messages' => [
-                    'end_at'
-                ]
-            ]
+                    'end_at',
+                ],
+            ],
         ]);
     }
 
@@ -166,9 +167,9 @@ class EventsTest extends ApiTestCase
         $this->seeJsonStructure([
             'error' => [
                 'messages' => [
-                    'registration.0'
-                ]
-            ]
+                    'registration.0',
+                ],
+            ],
         ]);
     }
 
@@ -225,6 +226,74 @@ class EventsTest extends ApiTestCase
         // Assertions
         $this->assertResponseOk();
         $this->seeJson(Fractal::item(Event::first(), new EventTransformer)->toArray());
+    }
+
+    public function testShowEventWithStats()
+    {
+        // Prepare data
+        $owner = factory(User::class)->create();
+
+        $participant1 = factory(User::class)->create();
+        $participant2 = factory(User::class)->create();
+        $participant3 = factory(User::class)->create();
+
+        $event = factory(Event::class, 1)->create([
+            'user_id' => $owner->id,
+        ]);
+        $registrationTypes = [];
+        $registrationTypes[] = factory(RegistrationType::class)->create([
+            'event_id' => $event->id,
+            'price' => 2,
+            'fine' => 1.3,
+        ]);
+        $registrationTypes[] = factory(RegistrationType::class)->create([
+            'event_id' => $event->id,
+            'price' => 2.5,
+            'fine' => 1,
+        ]);
+        $registrations = [];
+        $registrations[] = factory(Registration::class)->create([
+            'event_id' => $event->id,
+            'user_id' => $participant1->id,
+            'registration_type_id' => $registrationTypes[0]->id,
+        ]);
+        $registrations[] = factory(Registration::class)->create([
+            'event_id' => $event->id,
+            'user_id' => $participant2->id,
+            'registration_type_id' => $registrationTypes[0]->id,
+            'fined' => true,
+            'activated' => true,
+        ]);
+        $registrations[] = factory(Registration::class)->create([
+            'event_id' => $event->id,
+            'user_id' => $participant3->id,
+            'registration_type_id' => $registrationTypes[1]->id,
+            'fined' => true,
+            'activated' => true,
+        ]);
+
+        // Perform task
+        $this->actingAs($owner)
+            ->json('GET', '/events/'.$event->id.'?stats=1');
+
+        // Assertions
+        $this->assertResponseOk();
+        $this->seeJson([
+            'registration_types' => [
+                [
+                    'id' => $registrationTypes[0]->id,
+                    'income' => (2) + (2 + 1.3),
+                    'registrations' => 2,
+                    'participations' => 1,
+                ],
+                [
+                    'id' => $registrationTypes[1]->id,
+                    'income' => (2.5 + 1),
+                    'registrations' => 1,
+                    'participations' => 1,
+                ],
+            ],
+        ]);
     }
 
     public function testUpdateAlreadyStartedEvent()

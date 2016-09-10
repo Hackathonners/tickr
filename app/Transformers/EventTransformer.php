@@ -29,7 +29,7 @@ class EventTransformer extends TransformerAbstract
      */
     public function transform(Event $event)
     {
-        return [
+        $data = [
             'id' => $event->id,
             'title' => $event->title,
             'description' => $event->description,
@@ -39,6 +39,12 @@ class EventTransformer extends TransformerAbstract
             'created_at' => $event->created_at->toDateTimeString(),
             'updated_at' => $event->updated_at->toDateTimeString(),
         ];
+
+        if ($event->stats) {
+            $data['stats'] = $event->stats;
+        }
+
+        return $data;
     }
 
     public function includeRegistrationTypes(Event $event)

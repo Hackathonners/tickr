@@ -39,5 +39,6 @@ class RegistrationType extends Model
     protected $casts = [
         'price' => 'float',
         'fine' => 'float',
+        'income' => 'float',
     ];
 }

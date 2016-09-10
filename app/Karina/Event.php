@@ -64,6 +64,29 @@ class Event extends Model
     }
 
     /**
+     * Get statistics of registration types of this event.
+     *
+     * @return array
+     */
+    public function getRegistrationTypeStats()
+    {
+        $statistics = $this->registrationTypes()
+                        ->rightJoin(
+                            'registrations',
+                            'registrations.registration_type_id',
+                            '=',
+                            'registration_types.id'
+                        )
+                        ->select('registration_types.id')
+                        ->selectRaw('count(*) as registrations')
+                        ->selectRaw('sum(case when fined=1 then (price + fine) else (price) end) as income')
+                        ->selectRaw('count(case when activated=1 then 1 end) as participations')
+                        ->groupBy('registration_types.id');
+
+        return $statistics->get();
+    }
+
+    /**
      * Check if this event is already started.
      *
      * @param Carbon $date

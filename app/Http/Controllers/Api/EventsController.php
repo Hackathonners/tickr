@@ -74,11 +74,19 @@ class EventsController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $event = DB::transaction(function () use ($id) {
+        $stats = !!$request->get('stats', false);
+
+        $event = DB::transaction(function () use ($id, $stats) {
             $event = Event::findOrFail($id);
             $this->authorize('handle', $event);
+
+            if ($stats) {
+                $stats = [];
+                $stats['registration_types'] = $event->getRegistrationTypeStats();
+                $event->stats = $stats;
+            }
 
             return $event;
         });

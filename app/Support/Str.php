@@ -17,12 +17,12 @@ class Str extends \Illuminate\Support\Str
         $string = preg_replace('/\s+/', ' ', self::lower(self::ascii(trim($string))));
         $splitString = explode(' ', $string);
 
-        $terms = array_filter($splitString, function($term) use ($min) {
+        $terms = array_filter($splitString, function ($term) use ($min) {
             return strlen($term) >= $min;
         });
 
         // There are terms with 3 chars, concatenate them and use it as search string.
-        if(count($terms) > 0) {
+        if (count($terms) > 0) {
             return implode($replace ? $charReplace : ' ', $terms);
         }
 

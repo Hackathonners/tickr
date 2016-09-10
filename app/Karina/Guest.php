@@ -61,6 +61,7 @@ class Guest extends Model
     public function scopeFilterByName($query, $name)
     {
         $name = Str::searchable($name, true);
-        return $query->where('name_search', 'LIKE', '%' . $name . '%');
+
+        return $query->where('name_search', 'LIKE', '%'.$name.'%');
     }
 }

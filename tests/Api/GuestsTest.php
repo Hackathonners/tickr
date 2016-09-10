@@ -3,7 +3,6 @@
 use App\Karina\GuestList;
 use App\Karina\User;
 use App\Karina\Guest;
-use App\Transformers\GuestListTransformer;
 use App\Transformers\GuestTransformer;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,10 +19,10 @@ class GuestTest extends ApiTestCase
 
         $guests = [];
         $guests[0] = factory(Guest::class)->make([
-            'name' => 'A very çomplicatéd nãmè'
+            'name' => 'A very çomplicatéd nãmè',
         ]);
         $guests[1] = factory(Guest::class)->make([
-            'name' => 'Chuck Norris'
+            'name' => 'Chuck Norris',
         ]);
 
         $guestList = factory(GuestList::class)->create([
@@ -67,9 +66,9 @@ class GuestTest extends ApiTestCase
         $this->seeJsonStructure([
             'error' => [
                 'messages' => [
-                    'search'
-                ]
-            ]
+                    'search',
+                ],
+            ],
         ]);
     }
 }

@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use DB;
 use Auth;
 use App\Support\Str;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\Transformers\GuestTransformer;
 
 class GuestsController extends ApiController
@@ -21,11 +19,11 @@ class GuestsController extends ApiController
     public function index(Request $request)
     {
         $request->replace([
-            'search' => Str::searchable($request->get('search', ''))
+            'search' => Str::searchable($request->get('search', '')),
         ]);
 
         $this->validate($request, [
-            'search' => 'sometimes|min:3'
+            'search' => 'sometimes|min:3',
         ]);
 
         $searchName = $request->get('search');
