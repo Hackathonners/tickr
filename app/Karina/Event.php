@@ -79,8 +79,8 @@ class Event extends Model
                         )
                         ->select('registration_types.id')
                         ->selectRaw('count(*) as registrations')
-                        ->selectRaw('sum(case when fined=1 then (price + fine) else (price) end) as income')
-                        ->selectRaw('count(case when activated=1 then 1 end) as participations')
+                        ->selectRaw('sum(case when fined=true then (price + fine) else (price) end) as income')
+                        ->selectRaw('count(case when activated=true then 1 end) as participations')
                         ->groupBy('registration_types.id');
 
         return $statistics->get();

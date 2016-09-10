@@ -93,16 +93,6 @@ class Registration extends Model
     }
 
     /**
-     * Scope a query to only include activated registrations.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeActivated($query)
-    {
-        return $query->where('activated', true);
-    }
-
-    /**
      * Get event of this registration.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

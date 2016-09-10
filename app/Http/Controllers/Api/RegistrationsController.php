@@ -36,6 +36,7 @@ class RegistrationsController extends ApiController
                 if (!$user) {
                     $user = new User;
                     $user->fill($request->all());
+                    $user->password = bcrypt(str_random(10));
                     $user->save();
                 }
 
