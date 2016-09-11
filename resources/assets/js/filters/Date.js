@@ -30,11 +30,11 @@ Vue.filter('date_range', (dateFrom, dateTo, format = "YYYY-MM-DD HH:mm:ss") => {
       to.format('HH:mm');
 
  return from.format('dddd, D MMMM YYYY') +
-      ' às ' +
+      ', ' +
       from.format('HH:mm') +
       ' — ' +
       to.format('dddd, D MMMM YYYY') +
-      ' às ' +
+      ', ' +
       to.format('HH:mm');
 
   return moment(date, inFormat).fromNow(suffix);

@@ -8,7 +8,7 @@
       <div class="col-md-8">
         <span class="page-title">{{ event.title }}</span>
         <div class="text-muted">{{ event.start_at | date_range event.end_at }}</div>
-        <div class="text-muted"><i class="fa fa-map-marker fa-fw"></i> {{ event.place }}</div>
+        <div class="text-muted">{{ event.place }}</div>
       </div>
       <div class="col-md-4">
         <a class="page-action btn btn-primary pull-right" v-link="{ name: 'events.create' }">Nova inscrição</a>
@@ -33,8 +33,7 @@
         <div class="panel panel-default">
           <div class="panel-body">
             <h4>Taxa de participação</h4>
-            <h2 v-if="this.event.stats.registrations == 0">0.00%</h2>
-            <h2 v-else>{{ ((this.event.stats.participations / this.event.stats.registrations) * 100).toFixed(2) }}%</h2>
+            <h2>{{ (event.stats.participations / event.stats.registrations) | ratio }}</h2>
           </div>
           <ul class="list-group">
             <li class="list-group-item">
@@ -70,7 +69,9 @@
                     {{ getRegistrationTypeStats(registrationType.id, 'income') | currency '€' }}
                   </td>
                   <td class="col-md-3">
-                    {{ getRegistrationTypeParticipationRate(registrationType.id) }}% <span class="text-muted">({{ getRegistrationTypeStats(registrationType.id, 'participations')}} participantes)</span>
+                    {{ (getRegistrationTypeStats(registrationType.id, 'participations') / getRegistrationTypeStats(registrationType.id, 'registrations')) | ratio }}
+
+                    <span class="text-muted">({{ getRegistrationTypeStats(registrationType.id, 'participations')}} participantes)</span>
                   </td>
                 </tr>
               </tbody>
@@ -88,6 +89,7 @@
   import Loading from './Util/Loading.vue';
   import CreateRegistration from './Forms/CreateRegistration.vue';
   import '../filters/Date';
+  import '../filters/Ratio';
   export default {
     data() {
       return {

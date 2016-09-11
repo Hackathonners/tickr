@@ -13,8 +13,6 @@
     </option>
   </select>
   <input type="text" v-model="registration.notes">
-  {{ registrationTypes | json }}
-  </p>
   <button @click="save">Inscrever</button>
 </template>
 
