@@ -23,7 +23,8 @@
                 <a v-link="{ name: 'events.show', params: { id: event.id }}">{{ event.title }}</a>
               </div>
               <div class="event-info__place text-muted">
-                {{ event.place }} · Criado {{ event.created_at | human_diff }} · Editado {{ event.updated_at | human_diff }}
+                {{ event.place }} · Criado {{ event.created_at | human_diff }}
+                <span v-show="isEdited(event)"> · Editado {{ event.updated_at | human_diff }}</span>
               </div>
             </td>
             <td class="col-md-3 event-info">
@@ -115,6 +116,9 @@
       },
       isFuture(event) {
         return moment().isBefore(event.start_at);
+      },
+      isEdited(event) {
+        return !moment(event.updated_at).isSame(event.created_at);
       }
     },
     computed: {
