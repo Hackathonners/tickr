@@ -35,6 +35,10 @@ router.map({
         name: 'events.show',
         component: require('./components/Event.vue'),
     },
+    '/events/:id/registrations/create': {
+        name: 'registrations.create',
+        component: require('./components/Forms/CreateRegistration.vue'),
+    },
     '*' : {
         component: require('./components/Errors/404.vue'),
     }

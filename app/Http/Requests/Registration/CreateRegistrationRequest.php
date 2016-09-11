@@ -26,6 +26,7 @@ class CreateRegistrationRequest extends Request
         $this->sanitize();
 
         return [
+            'name' => 'required|min:3',
             'email' => 'required|email',
             'fined' => 'required',
             'registration_type' => 'required',

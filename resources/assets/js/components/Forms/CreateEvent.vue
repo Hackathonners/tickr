@@ -1,17 +1,12 @@
 <template>
   <div class="row page-header">
     <div class="col-md-12">
-      <span class="page-title">Novo Evento</span>
+      <span class="page-title">Novo evento</span>
     </div>
   </div>
 
   <!-- Form Errors -->
-  <div v-show="error" class="alert alert-danger alert-disposable">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <ul>
-      <li v-for="message in error.message">{{ message }}</li>
-    </ul>
-  </div>
+  <errors :error="error"></errors>
 
   <!-- New Event Form -->
   <!-- Event details -->
@@ -130,6 +125,7 @@
   import moment from 'moment';
   import '../../directives/Datepicker';
   import '../../filters/Price';
+  import Errors from '../Layout/Errors.vue';
   export default {
     data() {
       return {
@@ -213,6 +209,9 @@
           }
         }
       }
+    },
+    components: {
+      Errors
     },
   };
 </script>

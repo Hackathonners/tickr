@@ -11,7 +11,7 @@
         <div class="text-muted">{{ event.place }}</div>
       </div>
       <div class="col-md-4">
-        <a class="page-action btn btn-primary pull-right" v-link="{ name: 'events.create' }">Nova inscrição</a>
+        <a class="page-action btn btn-primary pull-right" v-link="{ name: 'registrations.create', params: { id: event.id } }">Nova inscrição</a>
       </div>
     </div>
 
@@ -20,7 +20,7 @@
         <div class="panel panel-default">
           <div class="panel-body">
             <h4>Receita total</h4>
-            <h2>{{ event.stats.income | currency '€' }}</h2>
+            <h2 class="text-primary">{{ event.stats.income | currency '€' }}</h2>
           </div>
           <ul class="list-group">
             <li class="list-group-item">
@@ -33,7 +33,7 @@
         <div class="panel panel-default">
           <div class="panel-body">
             <h4>Taxa de participação</h4>
-            <h2>{{ (event.stats.participations / event.stats.registrations) | ratio }}</h2>
+            <h2 class="text-primary">{{ (event.stats.participations / event.stats.registrations) | ratio }}</h2>
           </div>
           <ul class="list-group">
             <li class="list-group-item">
@@ -53,7 +53,7 @@
             <table class="table">
               <thead>
                 <th>Tipo de bilhete</th>
-                <th>Vendas</th>
+                <th class="text-center">Vendas</th>
                 <th>Receita</th>
                 <th>Taxa de participação</th>
               </thead>
@@ -62,7 +62,7 @@
                   <td class="col-md-4">
                     {{ registrationType.type }}
                   </td>
-                  <td class="col-md-2">
+                  <td class="col-md-2 text-center">
                     {{ getRegistrationTypeStats(registrationType.id, 'registrations') }}
                   </td>
                   <td class="col-md-2">
@@ -80,14 +80,13 @@
         </div>
       </div>
     </div>
-
-    <create-registration v-if="event.registration_types" :registrations.sync="registrations" :event="event" :registration-types="event.registration_types.data"></create-registration>
   </div>
 </template>
 
 <script>
   import Loading from './Util/Loading.vue';
   import CreateRegistration from './Forms/CreateRegistration.vue';
+  import EventService from '../services/EventService.js';
   import '../filters/Date';
   import '../filters/Ratio';
   export default {
@@ -110,32 +109,17 @@
       }
     },
     ready () {
-      this.getEvent(this.$route.params.id)
+      this.$loadingRouteData = true;
+      EventService.get(this.$route.params.id, true).then(event => {
+        this.$set('event', event);
+        this.$loadingRouteData = false;
+      })
     },
     methods: {
-      getEvent (id) {
-        this.$loadingRouteData = true;
-        this.$http.get('events/' + id + '?stats=1').then(response => {
-          this.$set('event', response.json().data)
-          this.$loadingRouteData = false;
-        }).catch(response => {
-          this.$router.replace('/404');
-        });
-      },
       getRegistrationTypeStats (registrationTypeId, statsField) {
         let registrationTypeStats = this.event.stats.registration_types.find(r => r.id == registrationTypeId);
         return registrationTypeStats && statsField in registrationTypeStats ? registrationTypeStats[statsField] : 0;
       },
-      getRegistrationTypeParticipationRate(registrationTypeId) {
-        let participations = this.getRegistrationTypeStats(registrationTypeId, 'participations');
-        let registrations = this.getRegistrationTypeStats(registrationTypeId, 'registrations');
-
-        let rate = 0;
-        if(registrations > 0)
-          rate = ((participations / registrations) * 100);
-
-        return rate.toFixed(2);
-      }
     },
     components: {
       CreateRegistration, Loading

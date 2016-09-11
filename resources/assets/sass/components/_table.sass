@@ -1,5 +1,10 @@
-.table tbody
-	& > tr:first-child
-		& > td,
-		& > th
-			border: none
+.table
+	&.table--noheading
+		tbody, thead
+			& > tr:first-child
+				& > td,
+				& > th
+					border: none
+	& > thead
+		& > tr > th
+			border-color: $brand-primary

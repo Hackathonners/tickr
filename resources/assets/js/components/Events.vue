@@ -14,7 +14,7 @@
         <li :class="{ 'active': showPast }"><a href="#" @click.prevent="showPastEvents()">Eventos passados</a></li>
         <li :class="{ 'active': showCanceled }"><a href="#" @click.prevent="showCanceledEvents()">Cancelados</a></li>
       </ul>
-      <table class="table table--events">
+      <table class="table table--noheading table--events">
         <tbody>
           <tr v-show="!$loadingRouteData" v-for="event in events">
             <td class="col-md-6 event-info">
@@ -64,8 +64,9 @@
 <script>
   import moment from 'moment';
   import Loading from './Util/Loading.vue';
-  import Events from '../services/EventService.js';
+  import EventService from '../services/EventService.js';
   import '../filters/Date';
+
   export default {
     data() {
       return {
@@ -83,7 +84,7 @@
 
         this.$set('visibility', 'active');
         this.$loadingRouteData = true;
-        Events.getActive().then(events => {
+        EventService.getActive().then(events => {
           this.$set('events', events);
           this.$loadingRouteData = false;
         })
@@ -93,7 +94,7 @@
 
         this.$set('visibility', 'past')
         this.$loadingRouteData = true;
-        Events.getPast().then(events => {
+        EventService.getPast().then(events => {
           this.$set('events', events)
           this.$loadingRouteData = false;
         })
@@ -103,7 +104,7 @@
 
         this.$set('visibility', 'canceled')
         this.$loadingRouteData = true;
-        Events.getActive().then(events => {
+        EventService.getActive().then(events => {
           this.$set('events', events)
           this.$loadingRouteData = false;
         })

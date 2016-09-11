@@ -9,7 +9,7 @@ Vue.directive('select', {
   bind: function () {
     var self = this
     $(this.el)
-      .select2()
+      .select2(this.params.options)
       .on('change', function () {
         self.set(this.value)
       })
