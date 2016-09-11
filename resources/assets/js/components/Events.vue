@@ -1,9 +1,9 @@
 <template>
   <div class="row page-header">
-    <div class="col-md-8">
+    <div class="col-xs-8">
       <span class="page-title">Eventos</span>
     </div>
-    <div class="col-md-4">
+    <div class="col-xs-4">
       <a class="page-action btn btn-primary pull-right" v-link="{ name: 'events.create' }">Novo evento</a>
     </div>
   </div>

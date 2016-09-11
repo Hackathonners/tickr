@@ -5,12 +5,12 @@
 
   <div v-show="!$loadingRouteData" class="page-content">
     <div class="row page-header">
-      <div class="col-md-8">
+      <div class="col-xs-8">
         <span class="page-title">{{ event.title }}</span>
         <div class="text-muted">{{ event.start_at | date_range event.end_at }}</div>
         <div class="text-muted">{{ event.place }}</div>
       </div>
-      <div class="col-md-4">
+      <div class="col-xs-4">
         <a class="page-action btn btn-primary pull-right" v-link="{ name: 'registrations.create', params: { id: event.id } }">Nova inscrição</a>
       </div>
     </div>
@@ -53,22 +53,30 @@
             <table class="table">
               <thead>
                 <th>Tipo de bilhete</th>
-                <th class="text-center">Vendas</th>
+                <th>Preço</th>
+                <th>Multa</th>
+                <th>Vendas</th>
                 <th>Receita</th>
                 <th>Taxa de participação</th>
               </thead>
               <tbody>
                 <tr v-for="registrationType in event.registration_types.data">
-                  <td class="col-md-4">
+                  <td class="col-md-3">
                     {{ registrationType.type }}
                   </td>
-                  <td class="col-md-2 text-center">
+                  <td class="col-md-1">
+                    {{ registrationType.price | price }}
+                  </td>
+                  <td class="col-md-1">
+                    {{ registrationType.fine | price }}
+                  </td>
+                  <td class="col-md-1">
                     {{ getRegistrationTypeStats(registrationType.id, 'registrations') }}
                   </td>
-                  <td class="col-md-2">
+                  <td class="col-md-1">
                     {{ getRegistrationTypeStats(registrationType.id, 'income') | currency '€' }}
                   </td>
-                  <td class="col-md-3">
+                  <td class="col-md-2">
                     {{ (getRegistrationTypeStats(registrationType.id, 'participations') / getRegistrationTypeStats(registrationType.id, 'registrations')) | ratio }}
 
                     <span class="text-muted">({{ getRegistrationTypeStats(registrationType.id, 'participations')}} participantes)</span>
