@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "hackathonners/tickr",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": ["ticket", "event", "manager"],
     "license": "MIT",
     "type": "project",
     "require": {

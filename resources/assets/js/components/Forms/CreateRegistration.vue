@@ -6,7 +6,8 @@
   <p>
   <input type="text" v-model="registration.email">
   <input type="checkbox" value="1" v-model="registration.fined">
-  <select v-model="registration.registration_type">
+
+  <select v-select="registration.registration_type">
     <option v-for="registrationType in registrationTypes" :value="registrationType.id">
       {{ registrationType.type }}
     </option>
@@ -18,6 +19,7 @@
 </template>
 
 <script>
+  import '../../directives/Select';
   import '../../filters/Price';
   export default {
     props: ['event', 'registration-types', 'registrations'],

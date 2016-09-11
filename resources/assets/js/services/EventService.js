@@ -8,4 +8,9 @@ export default {
       .then((response) => Promise.resolve(response.json().data))
       .catch((error) => Promise.reject(error));
   },
+  getPast(request) {
+    return Vue.resource(url, {filter: 'past'}).get()
+      .then((response) => Promise.resolve(response.json().data))
+      .catch((error) => Promise.reject(error));
+  },
 }

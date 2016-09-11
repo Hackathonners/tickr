@@ -11,7 +11,7 @@
     <div class="col-md-12">
       <ul class="nav nav-tabs">
         <li :class="{ 'active': showActive }"><a href="#" @click.prevent="showActiveEvents()">Eventos ativos</a></li>
-        <li :class="{ 'active': showOld }"><a href="#" @click.prevent="showOldEvents()">Eventos passados</a></li>
+        <li :class="{ 'active': showPast }"><a href="#" @click.prevent="showPastEvents()">Eventos passados</a></li>
         <li :class="{ 'active': showCanceled }"><a href="#" @click.prevent="showCanceledEvents()">Cancelados</a></li>
       </ul>
       <table class="table table--events">
@@ -87,12 +87,12 @@
           this.$loadingRouteData = false;
         })
       },
-      showOldEvents () {
-        if(this.showOld) return;
+      showPastEvents () {
+        if(this.showPast) return;
 
-        this.$set('visibility', 'old')
+        this.$set('visibility', 'past')
         this.$loadingRouteData = true;
-        Events.getActive().then(events => {
+        Events.getPast().then(events => {
           this.$set('events', events)
           this.$loadingRouteData = false;
         })
@@ -121,8 +121,8 @@
       showActive() {
         return this.visibility == 'active'
       },
-      showOld() {
-        return this.visibility == 'old'
+      showPast() {
+        return this.visibility == 'past'
       },
       showCanceled() {
         return this.visibility == 'canceled'

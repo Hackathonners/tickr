@@ -1,150 +1,108 @@
 <template>
-  <div class="row page-header">
-    <div class="col-md-8">
-      <span class="page-title">{{ event.title }}</span>
-      <div class="text-muted">{{ event.start_at | date_range event.end_at }}</div>
-      <div class="text-muted"><i class="fa fa-map-marker fa-fw"></i> {{ event.place }}</div>
-    </div>
-    <div class="col-md-4">
-      <a class="page-action btn btn-primary pull-right" v-link="{ name: 'events.create' }">Nova inscrição</a>
-    </div>
+  <div v-show="$loadingRouteData" class="row page-header">
+    <loading :loading="$loadingRouteData" message="A carregar evento..."></loading>
   </div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <ul class="nav nav-tabs">
-        <li :class="{ 'active': showStats }"><a href="#" @click.prevent="showEventStats()">Estatísticas</a></li>
-        <li :class="{ 'active': showRegistrations }"><a href="#" @click.prevent="showEventRegistrations()">Inscritos</a></li>
-      </ul>
+  <div v-show="!$loadingRouteData" class="page-content">
+    <div class="row page-header">
+      <div class="col-md-8">
+        <span class="page-title">{{ event.title }}</span>
+        <div class="text-muted">{{ event.start_at | date_range event.end_at }}</div>
+        <div class="text-muted"><i class="fa fa-map-marker fa-fw"></i> {{ event.place }}</div>
+      </div>
+      <div class="col-md-4">
+        <a class="page-action btn btn-primary pull-right" v-link="{ name: 'events.create' }">Nova inscrição</a>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <h4>Receita total</h4>
-          <h2>{{ 76 | currency '€' }}</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h4>Receita total</h4>
+            <h2>{{ event.stats.income | currency '€' }}</h2>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="pull-right">{{ event.stats.registrations }}</span> Total de bilhetes vendidos
+            </li>
+          </ul>
         </div>
-        <ul class="list-group">
-          <li class="list-group-item">
-            <span class="pull-right">137</span> Total de bilhetes vendidos
-          </li>
-        </ul>
       </div>
-    </div>
-    <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <h4>Taxa de participação</h4>
-          <h2>83,23%</h2>
-        </div>
-        <ul class="list-group">
-          <li class="list-group-item">
-            <span class="pull-right">114<span class="text-muted"> / 137 inscritos</span></span>
-            Total de participantes
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <h4>Vendas nos últimos 5 dias</h4>
-          <graph :labels="['08/16','08/17','08/18','08/19','08/20']"
-          :values="values"
-           ></graph>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h4>Taxa de participação</h4>
+            <h2 v-if="this.event.stats.registrations == 0">0.00%</h2>
+            <h2 v-else>{{ ((this.event.stats.participations / this.event.stats.registrations) * 100).toFixed(2) }}%</h2>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="pull-right">{{ event.stats.participations }}<span class="text-muted"> / {{ event.stats.registrations }} inscritos</span></span>
+              Total de participantes
+            </li>
+          </ul>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <h4>Resumo dos bilhetes</h4>
-          <table class="table">
-            <thead>
-              <th>Tipo de bilhete</th>
-              <th>Vendas</th>
-              <th>Receita</th>
-              <th>Taxa de participação</th>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="col-md-4">
-                  Normal
-                </td>
-                <td class="col-md-2">
-                  38
-                </td>
-                <td class="col-md-2">
-                  {{ 25 | currency '€' }}
-                </td>
-                <td class="col-md-3">
-                  25% <span class="text-muted">(25 participantes)</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="col-md-4">
-                  Convidado
-                </td>
-                <td class="col-md-2">
-                  62
-                </td>
-                <td class="col-md-2">
-                  {{ 0 | currency '€' }}
-                </td>
-                <td class="col-md-3">
-                  72% <span class="text-muted">(46 participantes)</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="col-md-4">
-                  Externo
-                </td>
-                <td class="col-md-2">
-                  13
-                </td>
-                <td class="col-md-2">
-                  {{ 51 | currency '€' }}
-                </td>
-                <td class="col-md-3">
-                  90% <span class="text-muted">(13 participantes)</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h4>Resumo dos bilhetes</h4>
+            <table class="table">
+              <thead>
+                <th>Tipo de bilhete</th>
+                <th>Vendas</th>
+                <th>Receita</th>
+                <th>Taxa de participação</th>
+              </thead>
+              <tbody>
+                <tr v-for="registrationType in event.registration_types.data">
+                  <td class="col-md-4">
+                    {{ registrationType.type }}
+                  </td>
+                  <td class="col-md-2">
+                    {{ getRegistrationTypeStats(registrationType.id, 'registrations') }}
+                  </td>
+                  <td class="col-md-2">
+                    {{ getRegistrationTypeStats(registrationType.id, 'income') | currency '€' }}
+                  </td>
+                  <td class="col-md-3">
+                    {{ getRegistrationTypeParticipationRate(registrationType.id) }}% <span class="text-muted">({{ getRegistrationTypeStats(registrationType.id, 'participations')}} participantes)</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <pre>{{ event | json }}</pre>
-  <create-registration v-if="event.registration_types" :registrations.sync="registrations" :event="event" :registration-types="event.registration_types.data"></create-registration>
+    <create-registration v-if="event.registration_types" :registrations.sync="registrations" :event="event" :registration-types="event.registration_types.data"></create-registration>
+  </div>
 </template>
 
 <script>
+  import Loading from './Util/Loading.vue';
   import CreateRegistration from './Forms/CreateRegistration.vue';
-  import Graph from './Util/Graph.vue';
   import '../filters/Date';
   export default {
     data() {
       return {
         // Event data
-        event: {},
-
-        values: [{
-                type: 'bar',
-                  label: "Bilhetes vendidos",
-                    data: [5, 10, 3, 2, 10],
-                    fill: false,
-                    yAxisID: 'y-tickets',
-                    borderWidth: 0,
-                    backgroundColor: '#2bb074',
-            },],
-
+        event: {
+          stats: {
+            income: 0,
+            participations: 0,
+            registrations: 0,
+            registration_types: [],
+          },
+          registration_types: {
+            data: []
+          }
+        },
         // Registrations of this event
         registrations: [],
       }
@@ -154,15 +112,31 @@
     },
     methods: {
       getEvent (id) {
-        this.$http.get('events/' + id).then(response => {
+        this.$loadingRouteData = true;
+        this.$http.get('events/' + id + '?stats=1').then(response => {
           this.$set('event', response.json().data)
+          this.$loadingRouteData = false;
         }).catch(response => {
           this.$router.replace('/404');
         });
       },
+      getRegistrationTypeStats (registrationTypeId, statsField) {
+        let registrationTypeStats = this.event.stats.registration_types.find(r => r.id == registrationTypeId);
+        return registrationTypeStats && statsField in registrationTypeStats ? registrationTypeStats[statsField] : 0;
+      },
+      getRegistrationTypeParticipationRate(registrationTypeId) {
+        let participations = this.getRegistrationTypeStats(registrationTypeId, 'participations');
+        let registrations = this.getRegistrationTypeStats(registrationTypeId, 'registrations');
+
+        let rate = 0;
+        if(registrations > 0)
+          rate = ((participations / registrations) * 100);
+
+        return rate.toFixed(2);
+      }
     },
     components: {
-      CreateRegistration, Graph
+      CreateRegistration, Loading
     },
   };
 </script>
