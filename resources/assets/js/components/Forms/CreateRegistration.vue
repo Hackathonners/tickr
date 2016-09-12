@@ -43,7 +43,7 @@
     <div class="form-group">
       <label for="registration-type">Tipo de bilhete</label>
       <select class="form-control" v-model="registration.registration_type">
-        <option disabled selected>Selecionar o tipo de bilhete</option>
+        <option disabled selected value="">Selecionar o tipo de bilhete</option>
         <option v-for="registrationType in event.registration_types.data" :value="registrationType.id">
           {{ registrationType.type }}
         </option>
@@ -200,10 +200,13 @@
         return registrationType && field in registrationType ? registrationType[field] : 0;
       },
       getPaidValue() {
-        if(!this.registration.registration_type)
-          return 0;
+        let type = this.registration.registration_type;
 
-        let registrationType = this.event.registration_types.data.find(r => r.id == this.registration.registration_type);
+        if(typeof type === 'undefined' || !type){
+          return 0;
+        }
+
+        let registrationType = this.event.registration_types.data.find(r => r.id == type);
         let value = registrationType.price;
         value += this.registration.fined ? registrationType.fine : 0;
 
