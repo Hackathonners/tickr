@@ -67,7 +67,7 @@
       <tbody>
         <tr>
           <td class="col-md-4">
-            Bilhete do tipo "{{ getRegistrationTypeData(registration.registration_type, 'type') }}"
+            Bilhete "{{ getRegistrationTypeData(registration.registration_type, 'type') }}"
           </td>
           <td class="col-md-2 ">
             {{ getRegistrationTypeData(registration.registration_type, 'price') | price }}
