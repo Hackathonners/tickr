@@ -77,9 +77,10 @@ class RegistrationsTest extends ApiTestCase
             'User 1 is not registered in an event of owner 2'
         );
 
-        $this->seeJson(Fractal::item($registrationEvent1User1, new RegistrationTransformer)->toArray());
-        $this->dontSeeJson(Fractal::item($registrationEvent2User1, new RegistrationTransformer)->toArray());
-        $this->dontSeeJson(Fractal::item($registrationEvent1User2, new RegistrationTransformer)->toArray());
+        $this->seeJsonEquals(Fractal::collection(
+            Registration::find(['id' => $registrationEvent1User1->id]),
+            new RegistrationTransformer)
+        ->toArray());
 
         $this->seeJson([
             'total' => 1,

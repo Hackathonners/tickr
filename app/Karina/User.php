@@ -39,7 +39,9 @@ class User extends Authenticatable
                     '=',
                     'events.id'
                 )
-                ->where('events.user_id', $owner->id);
+                ->where('events.user_id', $owner->id)
+                // Force select registration data, otherwise it will have conflicts in "user_id" field.
+                ->select('registrations.*');
     }
 
     /**
