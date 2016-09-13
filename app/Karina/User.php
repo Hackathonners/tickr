@@ -25,6 +25,34 @@ class User extends Authenticatable
     ];
 
     /**
+     * Get registrations in events that is owned by given user.
+     *
+     * @param \App\Karina\User $owner
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function registrationsWithEventOwner(User $owner)
+    {
+        return $this->registrations()
+                ->leftJoin(
+                    'events',
+                    'registrations.event_id',
+                    '=',
+                    'events.id'
+                )
+                ->where('events.user_id', $owner->id);
+    }
+
+    /**
+     * Get registrations of this user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMay
+     */
+    public function registrations()
+    {
+        return $this->hasMany(Registration::class);
+    }
+
+    /**
      * Get events that this user owns.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMay

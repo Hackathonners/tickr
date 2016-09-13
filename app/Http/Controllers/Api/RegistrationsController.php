@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use Auth;
+use Illuminate\Http\Request;
 use App\Karina\Event;
 use App\Exceptions\Registration\UserIsAlreadyRegisteredOnEventException;
 use App\Http\Requests\Registration\CreateRegistrationRequest;
@@ -16,6 +18,28 @@ use Vinkla\Hashids\Facades\Hashids;
 
 class RegistrationsController extends ApiController
 {
+    /**
+     * Display a listing of the registration of user in events of authenticated owner.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index($user, Request $request)
+    {
+        $limit = $request->get('limit', 0);
+
+        $registrations = DB::transaction(function () use ($user, $limit) {
+            $owner = Auth::user();
+            $user = User::findOrFail($user);
+
+            $registrations = $user->registrationsWithEventOwner($owner);
+            $limit = $limit > 0 && $limit <= 20 ? $limit : null;
+
+            return $registrations->paginate($limit);
+        });
+
+        return $this->respondWith($registrations, new RegistrationTransformer);
+    }
+
     /**
      * Store a newly created registration in storage.
      *

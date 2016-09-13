@@ -23,8 +23,13 @@ Route::group(['prefix' => 'api/v1'], function () {
 
     Route::post('events/{eventId}/registrations', 'Api\RegistrationsController@store');
     Route::post('registrations/{id}/activate', 'Api\RegistrationsController@activate');
+
+    Route::get('users/{id}/registrations', 'Api\RegistrationsController@index');
 });
 
-Route::get('{all}', function () {
-    return view('welcome');
-})->where('all', '(.*)');
+// Route::get('users/{id}/registrations', 'Api\RegistrationsController@index');
+
+// Route::get('{all}', function () {
+//     return view('welcome');
+// })->where('all', '(.*)');
+

@@ -14,6 +14,80 @@ class RegistrationsTest extends ApiTestCase
 {
     use DatabaseTransactions;
 
+    public function testShowUserRegistrationsInEventsOfAuthenticatedOwner()
+    {
+        // Prepare data
+        $limit = 5;
+        $owner1 = factory(User::class)->create();
+        $owner2 = factory(User::class)->create();
+
+        $user1 = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
+
+        $eventOwner1 = factory(Event::class)->create([
+            'user_id' => $owner1->id,
+        ]);
+
+        $eventOwner2 = factory(Event::class)->create([
+            'user_id' => $owner2->id,
+        ]);
+
+        $registrationTypeEvent1 = factory(RegistrationType::class)->create([
+            'event_id' => $eventOwner1->id,
+        ]);
+
+        $registrationTypeEvent2 = factory(RegistrationType::class)->create([
+            'event_id' => $eventOwner2->id,
+        ]);
+
+        // Create registrations
+        $registrationEvent1User1 = factory(Registration::class)->create([
+            'user_id' => $user1->id,
+            'event_id' => $eventOwner1->id,
+            'registration_type_id' => $registrationTypeEvent1->id,
+        ]);
+
+        $registrationEvent2User1 = factory(Registration::class)->create([
+            'user_id' => $user1->id,
+            'event_id' => $eventOwner2->id,
+            'registration_type_id' => $registrationTypeEvent2->id,
+        ]);
+
+        $registrationEvent1User2 = factory(Registration::class)->create([
+            'user_id' => $user2->id,
+            'event_id' => $eventOwner1->id,
+            'registration_type_id' => $registrationTypeEvent1->id,
+        ]);
+
+        // Perform task
+        $this->actingAs($owner1)
+            ->json('GET', '/users/'.$user1->id.'/registrations/?limit=5');
+
+        // Assertions
+        $this->assertResponseOk();
+        $this->assertEquals(3, Registration::count(), 'Registrations were not stored in database');
+        $this->assertEquals(
+            1,
+            $user1->registrationsWithEventOwner($owner1)->count(),
+            'User 1 is not registered in an event of owner 1'
+        );
+        $this->assertEquals(
+            1,
+            $user1->registrationsWithEventOwner($owner2)->count(),
+            'User 1 is not registered in an event of owner 2'
+        );
+
+        $this->seeJson(Fractal::item($registrationEvent1User1, new RegistrationTransformer)->toArray());
+        $this->dontSeeJson(Fractal::item($registrationEvent2User1, new RegistrationTransformer)->toArray());
+        $this->dontSeeJson(Fractal::item($registrationEvent1User2, new RegistrationTransformer)->toArray());
+
+        $this->seeJson([
+            'total' => 1,
+            'count' => 1,
+            'per_page' => $limit,
+        ]);
+    }
+
     public function testCreateRegistration()
     {
         // Prepare data
