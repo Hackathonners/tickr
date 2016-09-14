@@ -3,7 +3,7 @@
 <head>
   <meta name="viewport" content="width=device-width" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>{{ trans('ticket.invoice') }}</title>
+  <title>trans('ticket.invoice')</title>
   <link href="styles.css" media="all" rel="stylesheet" type="text/css" />
 </head>
 <body itemscope itemtype="http://schema.org/EmailMessage">
@@ -31,7 +31,7 @@
                       <div class="ticket-container">
                         <img src="ticket.jpg">
                       </div>
-                      <!-- src="{{ $message->embedData(QrCode::format('png')->size(500)->generate($activationUrl), 'ticket.png') }}" -->
+                      <!-- src="$message->embedData(QrCode::format('png')->size(500)->generate($activationUrl), 'ticket.png')" -->
 
                     </td>
                   </tr>
@@ -62,17 +62,17 @@
                                   <tbody>
                                     <tr>
                                       <td>Ticket</td>
-                                      <td>{{ticket.value}} €</td>
+                                      <td>€ticket.value</td>
                                     </tr>
                                     <tr>
-                                      <!-- {{if (fined)}} -->
+                                      <!-- if (fined) -->
                                       <td>Fine</td>
-                                      <td>{{ticket.fine}} €</td>
-                                      <!-- {{endif}} -->
+                                      <td>€ticket.fine</td>
+                                      <!-- endif -->
                                     </tr>
                                     <tr>
                                       <td><strong>Total</strong></td>
-                                      <td><strong>{{ticket.total}} €</strong></td>
+                                      <td><strong>€ticket.total</strong></td>
                                     </tr>
                                   </tbody>
                                 </table>

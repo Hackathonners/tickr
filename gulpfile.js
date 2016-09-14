@@ -1,4 +1,7 @@
+var gulp = require('gulp');
+var inlineCss = require('gulp-inline-css');
 var elixir = require('laravel-elixir');
+var rename = require('gulp-rename');
 
 require('laravel-elixir-vueify');
 
@@ -13,7 +16,19 @@ require('laravel-elixir-vueify');
  |
  */
 
+gulp.task('emailify', function() {
+  return gulp.src('resources/templates/emails/*.html')
+    .pipe(inlineCss())
+    .pipe(rename(function(path){
+      path.extname = ".blade.php";
+      return path;
+    }))
+    .pipe(gulp.dest('resources/views/emails/'));
+});
+
 elixir(function(mix) {
-    mix.sass('app.scss');
-    mix.browserify('main.js');
+  mix.sass('app.scss');
+  mix.browserify('main.js');
+
+  mix.task('emailify');
 });
