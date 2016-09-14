@@ -76,6 +76,20 @@ class Registration extends Model
     }
 
     /**
+     * Get the registrations's total.
+     *
+     * @return string
+     */
+    public function getTotalAttribute($value)
+    {
+        $total = $this->registrationType->price;
+
+        $total += $this->fined ? $this->registrationType->fine : 0;
+
+        return $total;
+    }
+
+    /**
      * Activate this registration.
      *
      * @return $this

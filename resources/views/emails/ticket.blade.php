@@ -3,7 +3,7 @@
 <head style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
   <meta name="viewport" content="width=device-width" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
-  <title style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">trans('ticket.invoice')</title>
+  <title style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;"></title>
   
 </head>
 <body itemscope="" itemtype="http://schema.org/EmailMessage" style="-webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; background-color: #f6f6f6; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; height: 100%; line-height: 1.6em; margin: 0; width: 100% !important;">
@@ -22,8 +22,8 @@
 
                   <tr style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
                     <td class="content-block" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 0 0 20px; vertical-align: top;">
-                      <h1 class="aligncenter" style="box-sizing: border-box; color: #000; font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; font-size: 32px; font-weight: 500; line-height: 1.2em; margin: 40px 0 0; margin-bottom: 10px; text-align: center;">Jantar do Residente</h1>
-                      <h2 class="aligncenter" style="box-sizing: border-box; color: #000; font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; font-size: 24px; font-weight: 400; line-height: 1.2em; margin: 40px 0 0; margin-top: 10px; text-align: center;">25 de Maio de 2017 ás 19:00h</h2>
+                      <h2 class="aligncenter" style="box-sizing: border-box; color: #000; font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; font-size: 24px; font-weight: 400; line-height: 1.2em; margin: 40px 0 0; margin-bottom: 10px; text-align: center;">{{ $registration->event->title }}</h2>
+                      <p class="aligncenter" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 10px; margin-top: 10px; text-align: center;">Starts on {{ $registration->event->start_at->format('l, jS \\of F Y H:i') }}</p>
                     </td>
                   </tr>
                   <tr style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
@@ -46,7 +46,7 @@
                       <td class="content-block aligncenter" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 0 0 20px; text-align: center; vertical-align: top;">
                         <table class="invoice" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 30px auto; padding-top: 20px; text-align: left; width: 80%;">
                           <tr style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
-                            <td style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 5px 0; padding-bottom: 20px; vertical-align: top;"><strong style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">Name: </strong>Hugo Gonçalves
+                            <td style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 5px 0; padding-bottom: 20px; vertical-align: top;"><strong style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">Name: </strong>{{ $registration->user->name }}
                             </td></tr>
                             <tr style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
                               <td colspan="2" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 5px 0; vertical-align: top;">
@@ -61,18 +61,18 @@
                                   </thead>
                                   <tbody style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
                                     <tr style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
-                                      <td style="border-top: #eee 1px solid; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 5px 0; vertical-align: top;">Ticket</td>
-                                      <td style="border-top: #eee 1px solid; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 5px 0; vertical-align: top;">€ticket.value</td>
+                                      <td style="border-top: #eee 1px solid; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 5px 0; vertical-align: top;">Ticket "{{ $registration->registrationType->type }}"</td>
+                                      <td style="border-top: #eee 1px solid; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 5px 0; vertical-align: top;">€{{ $registration->registrationType->price }}</td>
                                     </tr>
+                                    @if($registration->fined)
                                     <tr style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
-                                      <!-- if (fined) -->
                                       <td style="border-top: #eee 1px solid; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 5px 0; vertical-align: top;">Fine</td>
-                                      <td style="border-top: #eee 1px solid; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 5px 0; vertical-align: top;">€ticket.fine</td>
-                                      <!-- endif -->
+                                      <td style="border-top: #eee 1px solid; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 5px 0; vertical-align: top;">€{{ $registration->registrationType->fine }}</td>
                                     </tr>
+                                    @endif
                                     <tr style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
                                       <td style="border-top: #eee 1px solid; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 5px 0; vertical-align: top;"><strong style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">Total</strong></td>
-                                      <td style="border-top: #eee 1px solid; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 5px 0; vertical-align: top;"><strong style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">€ticket.total</strong></td>
+                                      <td style="border-top: #eee 1px solid; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 5px 0; vertical-align: top;"><strong style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">€{{ $registration->total }}</strong></td>
                                     </tr>
                                   </tbody>
                                 </table>

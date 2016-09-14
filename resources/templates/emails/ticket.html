@@ -3,7 +3,7 @@
 <head>
   <meta name="viewport" content="width=device-width" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>trans('ticket.invoice')</title>
+  <title></title>
   <link href="styles.css" media="all" rel="stylesheet" type="text/css" />
 </head>
 <body itemscope itemtype="http://schema.org/EmailMessage">
@@ -22,8 +22,8 @@
 
                   <tr>
                     <td class="content-block">
-                      <h1 class="aligncenter" style="margin-bottom: 10px;">Jantar do Residente</h1>
-                      <h2 class="aligncenter" style="margin-top: 10px;">25 de Maio de 2017 ás 19:00h</h2>
+                      <h2 class="aligncenter" style="margin-bottom: 10px;">{{ $registration->event->title }}</h2>
+                      <p class="aligncenter" style="margin-top: 10px;">Starts on {{ $registration->event->start_at->format('l, jS \\of F Y H:i') }}</p>
                     </td>
                   </tr>
                   <tr>
@@ -46,7 +46,7 @@
                       <td class="content-block aligncenter">
                         <table class="invoice">
                           <tr>
-                            <td style="padding-bottom: 20px;"><strong>Name: </strong>Hugo Gonçalves
+                            <td style="padding-bottom: 20px;"><strong>Name: </strong>{{ $registration->user->name }}
                             </tr>
                             <tr>
                               <td colspan="2">
@@ -61,18 +61,18 @@
                                   </thead>
                                   <tbody>
                                     <tr>
-                                      <td>Ticket</td>
-                                      <td>€ticket.value</td>
+                                      <td>Ticket "{{ $registration->registrationType->type }}"</td>
+                                      <td>€{{ $registration->registrationType->price }}</td>
                                     </tr>
+                                    @if($registration->fined)
                                     <tr>
-                                      <!-- if (fined) -->
                                       <td>Fine</td>
-                                      <td>€ticket.fine</td>
-                                      <!-- endif -->
+                                      <td>€{{ $registration->registrationType->fine }}</td>
                                     </tr>
+                                    @endif
                                     <tr>
                                       <td><strong>Total</strong></td>
-                                      <td><strong>€ticket.total</strong></td>
+                                      <td><strong>€{{ $registration->total }}</strong></td>
                                     </tr>
                                   </tbody>
                                 </table>
