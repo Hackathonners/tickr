@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>{{ trans('ticket.invoice') }}</title>
+  <link href="styles.css" media="all" rel="stylesheet" type="text/css" />
+</head>
+<body itemscope itemtype="http://schema.org/EmailMessage">
+  <table class="body-wrap">
+    <tr>
+      <td class="content-wrap aligncenter logo">
+      </td>
+    </tr>
+    <tr>
+      <td class="container" width="600">
+        <div class="content">
+          <table class="main" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td class="content-wrap aligncenter">
+                <table width="100%" cellpadding="0" cellspacing="0">
+
+                  <tr>
+                    <td class="content-block">
+                      <h1 class="aligncenter" style="margin-bottom: 10px;">Jantar do Residente</h1>
+                      <h2 class="aligncenter" style="margin-top: 10px;">25 de Maio de 2017 ás 19:00h</h2>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="content-block aligncenter">
+                      <div class="ticket-container">
+                        <img src="ticket.jpg">
+                      </div>
+                      <!-- src="{{ $message->embedData(QrCode::format('png')->size(500)->generate($activationUrl), 'ticket.png') }}" -->
+
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="content-block aligncenter"  style="padding-bottom: 40px; border-bottom: #eee 1px solid;">
+                      <strong>Thank you for purchasing a ticket to this event.<br>
+                      Just show this e-mail at the entrance<br>
+                        and you're good to go!</strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="content-block aligncenter">
+                        <table class="invoice">
+                          <tr>
+                            <td style="padding-bottom: 20px;"><strong>Name: </strong>Hugo Gonçalves
+                            </tr>
+                            <tr>
+                              <td colspan="2">
+                                <table class="invoice-items" cellpadding="0" cellspacing="0">
+                                  <thead class="table-head">
+                                    <th>
+                                      Description
+                                    </th>
+                                    <th>
+                                      Value
+                                    </th>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td>Ticket</td>
+                                      <td>{{ticket.value}} €</td>
+                                    </tr>
+                                    <tr>
+                                      <!-- {{if (fined)}} -->
+                                      <td>Fine</td>
+                                      <td>{{ticket.fine}} €</td>
+                                      <!-- {{endif}} -->
+                                    </tr>
+                                    <tr>
+                                      <td><strong>Total</strong></td>
+                                      <td><strong>{{ticket.total}} €</strong></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              <div class="footer">
+                <table width="100%">
+                  <tr>
+                    <td class="aligncenter content-block">Built with &hearts; by <a href="http://hackathonners.org">Hackathonners</a></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
