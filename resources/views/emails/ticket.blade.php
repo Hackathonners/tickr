@@ -23,7 +23,7 @@
                   <tr style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
                     <td class="content-block" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 0 0 20px; vertical-align: top;">
                       <h2 class="aligncenter" style="box-sizing: border-box; color: #000; font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; font-size: 24px; font-weight: 400; line-height: 1.2em; margin: 40px 0 0; margin-bottom: 10px; text-align: center;">{{ $registration->event->title }}</h2>
-                      <p class="aligncenter" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 10px; margin-top: 10px; text-align: center;">Starts on {{ $registration->event->start_at->format('l, jS \\of F Y H:i') }}</p>
+                      <p class="aligncenter" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 10px; margin-top: 10px; text-align: center;">Starts on {{ $registration->event->start_at->format('l, jS \\of F Y \a\t H:i') }}</p>
                     </td>
                   </tr>
                   <tr style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">

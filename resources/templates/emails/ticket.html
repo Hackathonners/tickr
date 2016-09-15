@@ -23,7 +23,7 @@
                   <tr>
                     <td class="content-block">
                       <h2 class="aligncenter" style="margin-bottom: 10px;">{{ $registration->event->title }}</h2>
-                      <p class="aligncenter" style="margin-top: 10px;">Starts on {{ $registration->event->start_at->format('l, jS \\of F Y H:i') }}</p>
+                      <p class="aligncenter" style="margin-top: 10px;">Starts on {{ $registration->event->start_at->format('l, jS \\of F Y \a\t H:i') }}</p>
                     </td>
                   </tr>
                   <tr>
@@ -32,7 +32,6 @@
                         <img src="ticket.jpg">
                       </div>
                       <!-- src="$message->embedData(QrCode::format('png')->size(500)->generate($activationUrl), 'ticket.png')" -->
-
                     </td>
                   </tr>
                   <tr>
