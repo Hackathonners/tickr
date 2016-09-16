@@ -19,11 +19,33 @@ use Vinkla\Hashids\Facades\Hashids;
 class RegistrationsController extends ApiController
 {
     /**
-     * Display a listing of the registration of user in events of authenticated owner.
+     * Display a listing of the registrations of a given event.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($user, Request $request)
+    public function index($eventId, Request $request)
+    {
+        $limit = $request->get('limit', 0);
+
+       $registrations = DB::transaction(function () use ($eventId, $limit) {
+            $event = Event::findOrFail($eventId);
+            $this->authorize('handle', $event);
+
+            $registrations = $event->registrations();
+            $limit = $limit > 0 && $limit <= 20 ? $limit : null;
+
+            return $registrations->paginate($limit);
+        });
+
+        return $this->respondWith($registrations, new RegistrationTransformer);
+    }
+
+    /**
+     * Display history of the registration of user in events of authenticated owner.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function registry($user, Request $request)
     {
         $limit = $request->get('limit', 0);
 

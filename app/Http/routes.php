@@ -10,7 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-Auth::login(\App\Karina\User::first());
+// Auth::login(\App\Karina\User::first());
 
 Route::group(['prefix' => 'api/v1'], function () {
     Route::resource('events', 'Api\EventsController');
@@ -24,7 +24,8 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::post('events/{eventId}/registrations', 'Api\RegistrationsController@store');
     Route::post('registrations/{id}/activate', 'Api\RegistrationsController@activate');
 
-    Route::get('users/{id}/registrations', 'Api\RegistrationsController@index');
+    Route::get('users/{id}/registrations', 'Api\RegistrationsController@registry');
+    Route::get('events/{eventId}/registrations', 'Api\RegistrationsController@index');
 });
 
 Route::get('{all}', function () {

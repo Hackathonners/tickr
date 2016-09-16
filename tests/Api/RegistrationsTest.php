@@ -14,6 +14,43 @@ class RegistrationsTest extends ApiTestCase
 {
     use DatabaseTransactions;
 
+    public function testShowRegistrationsOfEvent()
+    {
+        // Prepare data
+        $limit = 5;
+        $user = factory(User::class)->create();
+
+        $event = factory(Event::class)->create([
+            'user_id' => $user->id,
+        ]);
+        $registrationType = factory(RegistrationType::class)->create([
+            'event_id' => $event->id,
+        ]);
+        $participants = factory(User::class, 10)->create()->each(function($user) use ($event, $registrationType) {
+            factory(Registration::class)->create([
+                'user_id' => $user->id,
+                'event_id' => $event->id,
+                'registration_type_id' => $registrationType->id,
+            ]);
+        });
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('GET', '/events/'.$event->id.'/registrations/?limit=5');
+
+        // Assertions
+        $this->assertResponseOk();
+        $this->assertEquals(10, Registration::count(), 'Registrations were not stored in database');
+
+        $this->seeJsonEquals(Fractal::collection(Registration::paginate($limit), new RegistrationTransformer)->toArray());
+
+        $this->seeJson([
+            'total' => 10,
+            'count' => 5,
+            'per_page' => $limit,
+        ]);
+    }
+
     public function testShowUserRegistrationsInEventsOfAuthenticatedOwner()
     {
         // Prepare data
