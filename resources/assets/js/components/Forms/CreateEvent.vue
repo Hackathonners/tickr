@@ -123,12 +123,15 @@
 
 <script>
   import moment from 'moment';
+  import EventService from '../../services/EventService.js';
+  import Errors from '../Layout/Errors.vue';
   import '../../directives/Datepicker';
   import '../../filters/Price';
-  import Errors from '../Layout/Errors.vue';
+
   export default {
     data() {
       return {
+        // Form data
         event: {
           title: '',
           description: '',
@@ -143,7 +146,11 @@
             }
           ],
         },
+
+        // Registration type data
         registrationType: this.resetRegistrationType(),
+
+        // Component status
         error: null,
         dates: {
           format: 'YYYY-MM-DD HH:mm:ss',
@@ -152,15 +159,16 @@
           start_time: '',
           end_time: '',
         }
-      }
+      };
     },
     methods: {
       save() {
-        this.$http.post('events', this.event).then(response => {
-          console.log(response);
+        EventService.store(this.event).then(event => {
+          // Success message
+          alert("created");
         }).catch( response => {
           this.error = JSON.parse(response.body).error;
-        })
+        });
       },
       validRegistrationType() {
         let type = this.registrationType.type.trim();
@@ -207,11 +215,11 @@
             let date = moment(`${dates.end_date} ${dates.end_time}`, format);
             this.event.end_at = date.isValid() ? date.format(dates.format) : lastEndDate;
           }
-        }
-      }
+        },
+      },
     },
     components: {
-      Errors
+      Errors,
     },
   };
 </script>

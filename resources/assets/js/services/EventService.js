@@ -29,4 +29,15 @@ export default {
       .catch((error) => Promise.reject(error));
   },
 
+  /**
+   * Store an event.
+   *
+   * @param data
+   */
+  store(data) {
+    return Vue.resource(url).save(data)
+      .then((response) => Promise.resolve(response.json()))
+      .catch((error) => Promise.reject(error));
+  },
+
 }

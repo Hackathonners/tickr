@@ -7,6 +7,7 @@ export default {
   /**
    * Store a registration.
    *
+   * @param eventId
    * @param data
    */
   store(eventId, data) {
