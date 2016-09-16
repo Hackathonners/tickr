@@ -97,10 +97,11 @@
   import EventService from '../services/EventService.js';
   import '../filters/Date';
   import '../filters/Ratio';
+
   export default {
     data() {
       return {
-        // Event data
+        // Results data
         event: {
           stats: {
             income: 0,
@@ -109,28 +110,29 @@
             registration_types: [],
           },
           registration_types: {
-            data: []
-          }
+            data: [],
+          },
         },
-        // Registrations of this event
-        registrations: [],
-      }
+      };
     },
     ready () {
-      this.$loadingRouteData = true;
-      EventService.get(this.$route.params.id, true).then(event => {
-        this.$set('event', event);
-        this.$loadingRouteData = false;
-      })
+      this.loadEvent();
     },
     methods: {
+      loadEvent() {
+        this.$loadingRouteData = true;
+        EventService.get(this.$route.params.id, true).then(event => {
+          this.$set('event', event.data);
+          this.$loadingRouteData = false;
+        });
+      },
       getRegistrationTypeStats (registrationTypeId, statsField) {
         let registrationTypeStats = this.event.stats.registration_types.find(r => r.id == registrationTypeId);
         return registrationTypeStats && statsField in registrationTypeStats ? registrationTypeStats[statsField] : 0;
       },
     },
     components: {
-      CreateRegistration, Loading
+      CreateRegistration, Loading,
     },
   };
 </script>

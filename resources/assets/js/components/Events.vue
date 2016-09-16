@@ -95,12 +95,11 @@
           links: {
             next: null,
             prev: null,
-          }
+          },
         },
-      }
+      };
     },
     created() {
-      // Set visibility tab
       this.tabs.visibility = this.$route.query.filter;
       this.tabs.page = this.$route.query.page;
     },
@@ -139,10 +138,10 @@
       },
     },
     components: {
-      Loading, Paginator
+      Loading, Paginator,
     },
     route: {
-      canReuse: false
+      canReuse: false,
     },
   };
 </script>

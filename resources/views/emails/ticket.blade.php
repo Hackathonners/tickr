@@ -32,7 +32,6 @@
                         <img src="ticket.jpg" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; max-width: 100%;">
                       </div>
                       <!-- src="$message->embedData(QrCode::format('png')->size(500)->generate($activationUrl), 'ticket.png')" -->
-
                     </td>
                   </tr>
                   <tr style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
