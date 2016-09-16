@@ -1,8 +1,12 @@
 <template>
-  <nav aria-label="...">
-    <ul class="pager">
-      <li :class="{ disabled: pagination.current_page == 1 }"><a href="#" @click.prevent="goToPage(pagination.current_page-1)">Previous</a></li>
-      <li :class="{ disabled: pagination.current_page == pagination.total_pages }"><a href="#" @click.prevent="goToPage(pagination.current_page+1)">Next</a></li>
+  <nav>
+    <ul v-show="pagination.total_pages > 1" class="pager">
+      <li :class="{ disabled: pagination.current_page == 1 }">
+        <a v-link="pagination.current_page > 1 ? { query: buildQuery(pagination.current_page - 1) } : null">Previous</a>
+      </li>
+      <li :class="{ disabled: pagination.current_page == pagination.total_pages }">
+        <a v-link="pagination.current_page < pagination.total_pages ? { query: buildQuery(pagination.current_page + 1) } : null">Next</a>
+      </li>
     </ul>
   </nav>
 </template>
@@ -19,6 +23,9 @@
       },
     },
     methods: {
+      buildQuery(page) {
+        return Object.assign(this.$route.query, { page });
+      },
       goToPage(page = 1) {
         this.$set('pagination.current_page', page);
         this.callback(page);

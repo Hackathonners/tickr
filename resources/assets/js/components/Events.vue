@@ -9,16 +9,24 @@
   </div>
   <div class="row">
     <div class="col-md-12">
+
+      <!-- Events Filter -->
       <ul class="nav nav-tabs">
-        <li :class="{ 'active': showActive }"><a href="#" @click.prevent="showActiveEvents()">Eventos ativos</a></li>
-        <li :class="{ 'active': showPast }"><a href="#" @click.prevent="showPastEvents()">Eventos passados</a></li>
-        <li :class="{ 'active': showCanceled }"><a href="#" @click.prevent="showCanceledEvents()">Cancelados</a></li>
+        <li :class="{ 'active': filterActive }">
+          <a v-link="{ name: 'events' }">Eventos ativos</a>
+        </li>
+        <li :class="{ 'active': filterPast }">
+          <a v-link="{ name: 'events', query: { filter: 'past' } }">Eventos passados</a>
+        </li>
       </ul>
+
+      <!-- Events List -->
       <table class="table table--noheading table--events">
         <tbody>
           <tr v-show="!$loadingRouteData" v-for="event in events">
+
+            <!-- Event details -->
             <td class="col-md-6 event-info">
-              <!-- Event details -->
               <div class="event-info__name">
                 <a v-link="{ name: 'events.show', params: { id: event.id }}">{{ event.title }}</a>
               </div>
@@ -27,8 +35,9 @@
                 <span v-show="isEdited(event)"> · Editado {{ event.updated_at | human_diff }}</span>
               </div>
             </td>
+
+            <!-- Event status -->
             <td class="col-md-3 event-info">
-              <!-- Event status -->
               <div v-if="isRunning(event)" class="event-info__status event-info__status--running">
                 <span class="status__title text-primary">A decorrer</span>
                 <div class="status__details text-muted">
@@ -48,14 +57,16 @@
                 </div>
               </div>
             </td>
+
+            <!-- Event ticket status -->
             <td class="col-md-3 event-info">
-              <!-- Event ticket status -->
               <span v-if="event.registrations">{{ event.registrations }}</span>
               <span v-else>Sem bilhetes vendidos</span>
             </td>
           </tr>
         </tbody>
       </table>
+      <paginator v-show="!$loadingRouteData" :pagination.sync="pagination" :callback="loadEvents"></paginator>
       <loading :loading="$loadingRouteData"></loading>
     </div>
   </div>
@@ -64,50 +75,47 @@
 <script>
   import moment from 'moment';
   import Loading from './Util/Loading.vue';
+  import Paginator from './Layout/Paginator.vue';
   import EventService from '../services/EventService.js';
   import '../filters/Date';
 
   export default {
     data() {
       return {
-        visibility: '',
+        // Status data
+        tabs: {
+          visibility: '',
+          page: 1,
+        },
+
+        // Results data
         format: 'YYYY-MM-DD HH:mm:ss',
         events: [],
+        pagination: {
+          links: {
+            next: null,
+            prev: null,
+          }
+        },
       }
     },
+    created() {
+      // Set visibility tab
+      this.tabs.visibility = this.$route.query.filter;
+      this.tabs.page = this.$route.query.page;
+    },
     ready() {
-      this.showActiveEvents();
+      this.loadEvents(this.tabs.page);
     },
     methods: {
-      showActiveEvents () {
-        if(this.showActive) return;
-
-        this.$set('visibility', 'active');
+      loadEvents(page = 1) {
         this.$loadingRouteData = true;
-        EventService.getActive().then(events => {
-          this.$set('events', events);
+        EventService.list(page, this.tabs.visibility).then(events => {
+          this.$set('events', events.data);
+          this.$set('pagination', events.meta.pagination);
+          this.$set('tabs.page', events.meta.pagination.current_page);
           this.$loadingRouteData = false;
-        })
-      },
-      showPastEvents () {
-        if(this.showPast) return;
-
-        this.$set('visibility', 'past')
-        this.$loadingRouteData = true;
-        EventService.getPast().then(events => {
-          this.$set('events', events)
-          this.$loadingRouteData = false;
-        })
-      },
-      showCanceledEvents () {
-        if(this.showCanceled) return;
-
-        this.$set('visibility', 'canceled')
-        this.$loadingRouteData = true;
-        EventService.getActive().then(events => {
-          this.$set('events', events)
-          this.$loadingRouteData = false;
-        })
+        });
       },
       isRunning(event) {
         return moment().isBetween(event.start_at, event.end_at);
@@ -123,18 +131,18 @@
       }
     },
     computed: {
-      showActive() {
-        return this.visibility == 'active'
+      filterActive() {
+        return ['past'].indexOf(this.tabs.visibility) < 0;
       },
-      showPast() {
-        return this.visibility == 'past'
-      },
-      showCanceled() {
-        return this.visibility == 'canceled'
+      filterPast() {
+        return this.tabs.visibility == 'past'
       },
     },
     components: {
-      Loading
-    }
+      Loading, Paginator
+    },
+    route: {
+      canReuse: false
+    },
   };
 </script>
