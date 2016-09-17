@@ -12,7 +12,7 @@ class EventsTest extends ApiTestCase
 {
     use DatabaseTransactions;
 
-    public function testGetUserEvents()
+    public function testGetUserActiveEvents()
     {
         // Prepare data
         $user = factory(User::class)->create();
@@ -31,7 +31,22 @@ class EventsTest extends ApiTestCase
                 'event_id' => $event->id,
             ]);
         });
-        $events = $user->events()->paginate();
+        $startAt = (new DateTime())->modify('-10 day');
+        $endAt = (new DateTime())->modify('-5 day');
+        factory(Event::class)->create([
+            'user_id' => $user->id,
+            'title' => 'Event name',
+            'description' => 'Event description',
+            'place' => 'Place',
+            'start_at' => $startAt->format('Y-m-d H:i:s'),
+            'end_at' => $endAt->format('Y-m-d H:i:s'),
+        ])->each(function ($event) {
+            factory(RegistrationType::class, 2)->create([
+                'event_id' => $event->id,
+            ]);
+        });
+
+        $events = $user->events()->active()->paginate();
 
         // Perform task
         $this->actingAs($user)
@@ -39,6 +54,7 @@ class EventsTest extends ApiTestCase
 
         // Assertions
         $this->assertResponseOk();
+        $this->assertEquals(20, $user->events()->active()->count());
         $this->seeJsonEquals(Fractal::collection($events, new EventTransformer)->toArray());
     }
 
