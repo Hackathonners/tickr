@@ -31,20 +31,15 @@ class EventsTest extends ApiTestCase
                 'event_id' => $event->id,
             ]);
         });
+
+        // Past event
         $startAt = (new DateTime())->modify('-10 day');
         $endAt = (new DateTime())->modify('-5 day');
         factory(Event::class)->create([
             'user_id' => $user->id,
-            'title' => 'Event name',
-            'description' => 'Event description',
-            'place' => 'Place',
             'start_at' => $startAt->format('Y-m-d H:i:s'),
             'end_at' => $endAt->format('Y-m-d H:i:s'),
-        ])->each(function ($event) {
-            factory(RegistrationType::class, 2)->create([
-                'event_id' => $event->id,
-            ]);
-        });
+        ]);
 
         $events = $user->events()->active()->paginate();
 
