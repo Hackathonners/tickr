@@ -29,12 +29,16 @@ Vue.filter('date_range', (dateFrom, dateTo, format = "YYYY-MM-DD HH:mm:ss") => {
       ' às ' +
       to.format('HH:mm');
 
- return from.format('dddd, D MMMM YYYY') +
-      ', ' +
+  let now = moment();
+  let fromFormat = now.isSame(from, 'year') ? 'dddd, D MMMM' : 'dddd, D MMMM \\d\\e YYYY';
+  let toFormat = now.isSame(to, 'year') ? 'dddd, D MMMM' : 'dddd, D MMMM \\d\\e YYYY';
+
+  return from.format(fromFormat) +
+      ' às ' +
       from.format('HH:mm') +
-      ' — ' +
-      to.format('dddd, D MMMM YYYY') +
-      ', ' +
+      ' - ' +
+      to.format(toFormat) +
+      ' às ' +
       to.format('HH:mm');
 
   return moment(date, inFormat).fromNow(suffix);
