@@ -27,7 +27,7 @@ class RegistrationsController extends ApiController
     {
         $limit = $request->get('limit', 0);
 
-       $registrations = DB::transaction(function () use ($eventId, $limit) {
+        $registrations = DB::transaction(function () use ($eventId, $limit) {
             $event = Event::findOrFail($eventId);
             $this->authorize('handle', $event);
 

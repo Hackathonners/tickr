@@ -26,7 +26,7 @@ class RegistrationsTest extends ApiTestCase
         $registrationType = factory(RegistrationType::class)->create([
             'event_id' => $event->id,
         ]);
-        $participants = factory(User::class, 10)->create()->each(function($user) use ($event, $registrationType) {
+        $participants = factory(User::class, 10)->create()->each(function ($user) use ($event, $registrationType) {
             factory(Registration::class)->create([
                 'user_id' => $user->id,
                 'event_id' => $event->id,
