@@ -26,11 +26,13 @@ class EventsController extends ApiController
         $events = DB::transaction(function () use ($filter) {
             $user = Auth::user();
 
-            $events = $user->events();
+            $events = $user->events()->orderBy('start_at', 'desc');
 
             // Apply filter to events if valid
             if (in_array($filter, ['past'], true)) {
                 $events = $events->$filter();
+            } else {
+                $events = $events->active();
             }
 
             return $events->paginate();

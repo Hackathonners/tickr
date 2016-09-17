@@ -122,6 +122,16 @@ class Event extends Model
     }
 
     /**
+     * Scope a query to only include only running or future events.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('end_at', '>=', Carbon::now()->toDateString());
+    }
+
+    /**
      * Get registrations of this event.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
