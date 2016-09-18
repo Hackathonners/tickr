@@ -137,17 +137,15 @@
         return ['past'].indexOf(this.tabs.visibility) < 0;
       },
       filterPast() {
-        return this.tabs.visibility == 'past'
+        return this.tabs.visibility == 'past';
       },
-    },
-    components: {
-      Loading, Paginator,
     },
     watch: {
       '$route.query': function (newValue, oldValue) {
         let visibility = oldValue.filter;
         let page = newValue.page;
 
+        // Reset page on filter change
         if( visibility != newValue.filter) {
           visibility = newValue.filter;
           page = 1;
@@ -155,9 +153,11 @@
 
         this.$set('tabs.visibility', visibility);
         this.$set('tabs.page', page);
-
         this.loadEvents();
       },
+    },
+    components: {
+      Loading, Paginator,
     },
   };
 </script>
