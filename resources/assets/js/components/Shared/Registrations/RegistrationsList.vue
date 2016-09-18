@@ -19,7 +19,7 @@
         </td>
         <td>
           {{ registration.registration_type.data.type }}
-          <span class="label label-warning label-outline">Multa</span>
+          <span v-show="registration.fined" class="label label-warning label-outline">Multa</span>
         </td>
         <td>
           {{ registration.created_at | human_diff }}

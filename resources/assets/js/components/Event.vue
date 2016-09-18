@@ -33,7 +33,7 @@
         <div class="panel panel-default">
           <div class="panel-body">
             <h4>Taxa de participação</h4>
-            <h2 class="text-primary">{{ (event.stats.participations / event.stats.registrations) | ratio }}</h2>
+            <h2 :class="[ participationRatio > 0.5 ? 'text-primary' : 'text-muted' ]">{{ participationRatio | ratio }}</h2>
           </div>
           <ul class="list-group">
             <li class="list-group-item">
@@ -77,7 +77,7 @@
                     {{ getRegistrationTypeStats(registrationType.id, 'income') | currency '€' }}
                   </td>
                   <td class="col-md-2">
-                    {{ (getRegistrationTypeStats(registrationType.id, 'participations') / getRegistrationTypeStats(registrationType.id, 'registrations')) | ratio }}
+                    {{ getRegistrationTypeParticipationRatio(registrationType.id) | ratio }}
 
                     <span class="text-muted">({{ getRegistrationTypeStats(registrationType.id, 'participations')}} participantes)</span>
                   </td>
@@ -152,6 +152,14 @@
         let registrationTypeStats = this.event.stats.registration_types.find(r => r.id == registrationTypeId);
         return registrationTypeStats && statsField in registrationTypeStats ? registrationTypeStats[statsField] : 0;
       },
+      getRegistrationTypeParticipationRatio (registrationTypeId) {
+        return this.getRegistrationTypeStats(this.registrationType.id, 'participations') / this.getRegistrationTypeStats(this.registrationType.id, 'registrations');
+      },
+    },
+    computed: {
+      participationRatio: function () {
+        return (this.event.stats.participations / this.event.stats.registrations);
+      }
     },
     components: {
       Loading, RegistrationsList
