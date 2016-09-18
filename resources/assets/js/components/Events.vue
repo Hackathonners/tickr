@@ -91,10 +91,7 @@
     data() {
       return {
         // Status data
-        tabs: {
-          visibility: '',
-          page: 1,
-        },
+        visibility: '',
 
         // Results data
         format: 'YYYY-MM-DD HH:mm:ss',
@@ -108,12 +105,13 @@
       };
     },
     ready() {
-      this.loadEvents();
+      this.loadEvents(this.$route.query.page, this.$route.query.filter);
     },
     methods: {
-      loadEvents() {
+      loadEvents(page, filter) {
         this.$loadingRouteData = true;
-        EventService.list(this.tabs.page, this.tabs.visibility).then(events => {
+        this.$set('visibility', filter);
+        EventService.list(page, filter).then(events => {
           this.$set('events', events.data);
           this.$set('pagination', events.meta.pagination);
           this.$loadingRouteData = false;
@@ -134,26 +132,24 @@
     },
     computed: {
       filterActive() {
-        return ['past'].indexOf(this.tabs.visibility) < 0;
+        return ['past'].indexOf(this.visibility) < 0;
       },
       filterPast() {
-        return this.tabs.visibility == 'past';
+        return this.visibility == 'past';
       },
     },
     watch: {
       '$route.query': function (newValue, oldValue) {
-        let visibility = oldValue.filter;
+        let filter = oldValue.filter;
         let page = newValue.page;
 
         // Reset page on filter change
-        if( visibility != newValue.filter) {
-          visibility = newValue.filter;
+        if( filter != newValue.filter) {
+          filter = newValue.filter;
           page = 1;
         }
 
-        this.$set('tabs.visibility', visibility);
-        this.$set('tabs.page', page);
-        this.loadEvents();
+        this.loadEvents(page, filter);
       },
     },
     components: {
