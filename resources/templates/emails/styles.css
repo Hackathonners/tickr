@@ -24,7 +24,8 @@ body {
 }
 
 /* Let's make sure all tables have defaults */
-table td {
+table td,
+table th {
   vertical-align: top;
   padding: 8px;
 }
@@ -235,7 +236,7 @@ a {
   padding-top: 20px;
 }
 .invoice td {
-  padding: 5px 0;
+  padding: 8px;
 }
 .invoice .invoice-items {
   width: 100%;
