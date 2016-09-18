@@ -107,20 +107,15 @@
         },
       };
     },
-    created() {
-      this.tabs.visibility = this.$route.query.filter;
-      this.tabs.page = this.$route.query.page;
-    },
     ready() {
-      this.loadEvents(this.tabs.page);
+      this.loadEvents();
     },
     methods: {
-      loadEvents(page = 1) {
+      loadEvents() {
         this.$loadingRouteData = true;
-        EventService.list(page, this.tabs.visibility).then(events => {
+        EventService.list(this.tabs.page, this.tabs.visibility).then(events => {
           this.$set('events', events.data);
           this.$set('pagination', events.meta.pagination);
-          this.$set('tabs.page', events.meta.pagination.current_page);
           this.$loadingRouteData = false;
         });
       },
@@ -148,8 +143,21 @@
     components: {
       Loading, Paginator,
     },
-    route: {
-      canReuse: false,
+    watch: {
+      '$route.query': function (newValue, oldValue) {
+        let visibility = oldValue.filter;
+        let page = newValue.page;
+
+        if( visibility != newValue.filter) {
+          visibility = newValue.filter;
+          page = 1;
+        }
+
+        this.$set('tabs.visibility', visibility);
+        this.$set('tabs.page', page);
+
+        this.loadEvents();
+      },
     },
   };
 </script>
