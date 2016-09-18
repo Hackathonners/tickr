@@ -61,17 +61,17 @@
                                   <tbody>
                                     <tr>
                                       <td>Ticket "{{ $registration->registrationType->type }}"</td>
-                                      <td>€{{ $registration->registrationType->price }}</td>
+                                      <td>€{{ number_format($registration->registrationType->price, 2, '.', ',') }}</td>
                                     </tr>
                                     @if($registration->fined)
                                     <tr>
                                       <td>Fine</td>
-                                      <td>€{{ $registration->registrationType->fine }}</td>
+                                      <td>€{{ number_format($registration->registrationType->fine, 2, '.', ',') }}</td>
                                     </tr>
                                     @endif
                                     <tr>
                                       <td><strong>Total</strong></td>
-                                      <td><strong>€{{ $registration->total }}</strong></td>
+                                      <td><strong>€{{ number_format($registration->total, 2, '.', ',') }}</strong></td>
                                     </tr>
                                   </tbody>
                                 </table>

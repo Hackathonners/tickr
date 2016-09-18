@@ -22,7 +22,10 @@ Route::group(['prefix' => 'api/v1'], function () {
         ]);
 
     Route::post('events/{eventId}/registrations', 'Api\RegistrationsController@store');
-    Route::post('registrations/{id}/activate', 'Api\RegistrationsController@activate');
+    Route::post('registrations/{id}/activate', [
+        'uses' => 'Api\RegistrationsController@activate',
+        'as' => 'registrations.activate',
+    ]);
 
     Route::get('users/{id}/registrations', 'Api\RegistrationsController@registry');
     Route::get('events/{eventId}/registrations', 'Api\RegistrationsController@index');

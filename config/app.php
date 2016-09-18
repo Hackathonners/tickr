@@ -163,6 +163,7 @@ return [
          */
         Spatie\Fractal\FractalServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
     ],
 
@@ -215,6 +216,7 @@ return [
          */
         'Fractal' => Spatie\Fractal\FractalFacade::class,
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
     ],
 
 ];
