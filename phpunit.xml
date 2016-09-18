@@ -27,5 +27,11 @@
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_DRIVER" value="sync"/>
         <env name="MAIL_DRIVER" value="log"/>
+
+        <env name="DB_DATABASE" value="testing"/>
+        <env name="DB_HOST" value="192.168.10.20"/>
+        <env name="DB_PORT" value="3306"/>
+        <env name="DB_USERNAME" value="homestead"/>
+        <env name="DB_PASSWORD" value="secret"/>
     </php>
 </phpunit>
