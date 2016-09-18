@@ -14,33 +14,27 @@
         <a class="page-action btn btn-primary pull-right" v-link="{ name: 'registrations.create', params: { id: event.id } }">Nova inscrição</a>
       </div>
     </div>
-    <registrations-list :registrations="registrations"></registrations-list>
-    <paginator v-show="!$loadingRouteData" :pagination.sync="pagination" :callback="loadRegistrations"></paginator>
+    <registrations-list :event-id.sync="$route.params.id" :action="{ name: 'registrations.create', params: { id: event.id } }"></registrations-list>
   </div>
 </template>
 
 <script>
   import Loading from './Shared/Loading.vue';
-  import Paginator from './Shared/Paginator.vue';
   import RegistrationsList from './Shared/Registrations/RegistrationsList.vue';
   import EventService from '../services/EventService.js';
-  import RegistrationService from '../services/RegistrationService.js';
 
   export default {
     data() {
       return {
         // Results data
         event: {},
-        registrations: [],
-
-        // Component status
-        pagination: {},
       };
     },
+
     ready () {
       this.loadEvent();
-      this.loadRegistrations();
     },
+
     methods: {
       loadEvent() {
         this.$loadingRouteData = true;
@@ -49,17 +43,10 @@
           this.$loadingRouteData = false;
         });
       },
-      loadRegistrations(page = 1) {
-        this.$loadingRouteData = true;
-        RegistrationService.list(this.$route.params.id, page).then(registrations => {
-          this.$set('registrations', registrations.data);
-          this.$set('pagination', registrations.meta.pagination);
-          this.$loadingRouteData = false;
-        });
-      }
     },
+
     components: {
-      Loading, RegistrationsList, Paginator
+      Loading, RegistrationsList
     },
   };
 </script>

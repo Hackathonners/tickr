@@ -94,7 +94,7 @@
         <div class="panel panel-default">
           <div class="panel-body">
             <h4>Últimas inscrições <small class="pull-right"><a v-link="{ name: 'registrations', params: { id: event.id } }">Ver todas as inscrições</a></small></h4>
-            <registrations-list :action="{ name: 'registrations.create', params: { id: event.id } }" :registrations="registrations"></registrations-list>
+            <registrations-list :limit="10" :paginate="false" :event-id.sync="$route.params.id" :action="{ name: 'registrations.create', params: { id: event.id } }"></registrations-list>
           </div>
         </div>
       </div>
@@ -126,12 +126,10 @@
             data: [],
           },
         },
-        registrations: [],
       };
     },
     ready () {
       this.loadEvent();
-      this.loadRegistrations();
     },
     methods: {
       loadEvent() {
@@ -141,19 +139,12 @@
           this.$loadingRouteData = false;
         });
       },
-      loadRegistrations() {
-        this.$loadingRouteData = true;
-        RegistrationService.list(this.$route.params.id, 1, 10).then(registrations => {
-          this.$set('registrations', registrations.data);
-          this.$loadingRouteData = false;
-        });
-      },
       getRegistrationTypeStats (registrationTypeId, statsField) {
         let registrationTypeStats = this.event.stats.registration_types.find(r => r.id == registrationTypeId);
         return registrationTypeStats && statsField in registrationTypeStats ? registrationTypeStats[statsField] : 0;
       },
       getRegistrationTypeParticipationRatio (registrationTypeId) {
-        return this.getRegistrationTypeStats(this.registrationType.id, 'participations') / this.getRegistrationTypeStats(this.registrationType.id, 'registrations');
+        return this.getRegistrationTypeStats(registrationTypeId, 'participations') / this.getRegistrationTypeStats(registrationTypeId, 'registrations');
       },
     },
     computed: {

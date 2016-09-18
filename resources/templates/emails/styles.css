@@ -26,6 +26,7 @@ body {
 /* Let's make sure all tables have defaults */
 table td {
   vertical-align: top;
+  padding: 8px;
 }
 
 /* -------------------------------------

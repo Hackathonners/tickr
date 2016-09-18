@@ -104,9 +104,11 @@
         },
       };
     },
+
     ready() {
       this.loadEvents(this.$route.query.page, this.$route.query.filter);
     },
+
     methods: {
       loadEvents(page, filter) {
         this.$loadingRouteData = true;
@@ -130,6 +132,7 @@
         return !moment(event.updated_at).isSame(event.created_at);
       }
     },
+
     computed: {
       filterActive() {
         return ['past'].indexOf(this.visibility) < 0;
@@ -138,6 +141,7 @@
         return this.visibility == 'past';
       },
     },
+
     watch: {
       '$route.query': function (newValue, oldValue) {
         let filter = oldValue.filter;
@@ -152,6 +156,7 @@
         this.loadEvents(page, filter);
       },
     },
+
     components: {
       Loading, Paginator,
     },
