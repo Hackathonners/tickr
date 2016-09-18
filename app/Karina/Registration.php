@@ -6,6 +6,7 @@ use App\Exceptions\Registration\UserIsAlreadyRegisteredOnEventException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Vinkla\Hashids\Facades\Hashids;
 
 class Registration extends Model
 {
@@ -87,6 +88,16 @@ class Registration extends Model
         $total += $this->fined ? $this->registrationType->fine : 0;
 
         return $total;
+    }
+
+    /**
+     * Get the registrations's hash id.
+     *
+     * @return string
+     */
+    public function getHashidAttribute($value)
+    {
+        return Hashids::encode($this->id);
     }
 
     /**

@@ -23,15 +23,15 @@
                   <tr>
                     <td class="content-block">
                       <h2 class="aligncenter" style="margin-bottom: 10px;">{{ $registration->event->title }}</h2>
+                      <h4 class="aligncenter" style="margin-top: 10px;">{{ $registration->event->place }}</h4>
                       <p class="aligncenter" style="margin-top: 10px;">Starts on {{ $registration->event->start_at->format('l, jS \\of F Y \a\t H:i') }}</p>
                     </td>
                   </tr>
                   <tr>
                     <td class="content-block aligncenter">
                       <div class="ticket-container">
-                        <img src="ticket.jpg">
+                        <img src="{{ $message->embedData(QrCode::format('png')->size(500)->generate(route('registrations.activate', $registration->hashid)), 'ticket.png') }}">
                       </div>
-                      <!-- src="$message->embedData(QrCode::format('png')->size(500)->generate($activationUrl), 'ticket.png')" -->
                     </td>
                   </tr>
                   <tr>
