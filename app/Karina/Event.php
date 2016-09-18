@@ -54,13 +54,13 @@ class Event extends Model
     }
 
     /**
-     * Check if this event is already started.
+     * Check if this event is a past.
      *
      * @return bool
      */
-    public function isStarted()
+    public function isPast()
     {
-        return $this->isPastDate($this->$start_at);
+        return $this->isPastDate($this->end_at);
     }
 
     /**

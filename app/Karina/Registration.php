@@ -3,6 +3,7 @@
 namespace App\Karina;
 
 use App\Exceptions\Registration\UserIsAlreadyRegisteredOnEventException;
+use App\Exceptions\Registration\RegistrationOnPastEventException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -58,6 +59,10 @@ class Registration extends Model
      */
     public function register(Event $event, User $user, RegistrationType $registrationType)
     {
+        if ($event->isPast()) {
+            throw new RegistrationOnPastEventException('Cannot add registrations to past events.');
+        }
+
         $alreadyRegistered = self::where([
             'event_id' => $event->id,
             'user_id' => $user->id,
