@@ -96,11 +96,11 @@
 
 <script>
   import moment from 'moment';
-  import Errors from '../Layout/Errors.vue';
-  import EventService from '../../services/EventService.js';
-  import RegistrationService from '../../services/RegistrationService.js';
-  import Loading from '../Util/Loading.vue';
-  import '../../filters/Price';
+  import Errors from './Shared/Errors.vue';
+  import Loading from './Shared/Loading.vue';
+  import EventService from '../services/EventService.js';
+  import RegistrationService from '../services/RegistrationService.js';
+  import '../filters/Price';
 
   export default {
     data() {

@@ -1,0 +1,8 @@
+@media print {
+  a[href]:after {
+    content: "";
+  },
+  a.btn {
+  	display: none;
+  }
+}

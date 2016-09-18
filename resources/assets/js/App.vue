@@ -13,13 +13,13 @@
     </footer>
 </template>
 <script>
-    import Navbar from './components/Layout/Navbar.vue';
+    import Navbar from './components/Shared/Navbar.vue';
     import Events from './components/Events.vue';
     import Event from './components/Event.vue';
-    import CreateEvent from './components/Forms/CreateEvent.vue';
+    import CreateEvent from './components/CreateEvent.vue';
 
     export default {
-      components: { Navbar, Events, Event, CreateEvent },
+      components: { Navbar },
       replace: false,
     }
 </script>

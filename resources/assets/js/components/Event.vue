@@ -16,7 +16,7 @@
     </div>
 
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-sm-6">
         <div class="panel panel-default">
           <div class="panel-body">
             <h4>Receita total</h4>
@@ -29,7 +29,7 @@
           </ul>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-sm-6">
         <div class="panel panel-default">
           <div class="panel-body">
             <h4>Taxa de participação</h4>
@@ -37,7 +37,7 @@
           </div>
           <ul class="list-group">
             <li class="list-group-item">
-              <span class="pull-right">{{ event.stats.participations }}<span class="text-muted"> / {{ event.stats.registrations }} inscritos</span></span>
+              <span class="pull-right">{{ event.stats.participations }}<span class="text-muted"> / <a class="text-muted" v-link="{ name: 'registrations', params: { id: event.id } }">{{ event.stats.registrations }} inscritos</a></span></span>
               Total de participantes
             </li>
           </ul>
@@ -88,13 +88,26 @@
         </div>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h4>Últimas inscrições <small class="pull-right"><a v-link="{ name: 'registrations', params: { id: event.id } }">Ver todas as inscrições</a></small></h4>
+            <registrations-list :action="{ name: 'registrations.create', params: { id: event.id } }" :registrations="registrations"></registrations-list>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 </template>
 
 <script>
-  import Loading from './Util/Loading.vue';
-  import CreateRegistration from './Forms/CreateRegistration.vue';
+  import Loading from './Shared/Loading.vue';
+  import RegistrationsList from './Shared/Registrations/RegistrationsList.vue';
   import EventService from '../services/EventService.js';
+  import RegistrationService from '../services/RegistrationService.js';
   import '../filters/Date';
   import '../filters/Ratio';
 
@@ -113,10 +126,12 @@
             data: [],
           },
         },
+        registrations: [],
       };
     },
     ready () {
       this.loadEvent();
+      this.loadRegistrations();
     },
     methods: {
       loadEvent() {
@@ -126,13 +141,20 @@
           this.$loadingRouteData = false;
         });
       },
+      loadRegistrations() {
+        this.$loadingRouteData = true;
+        RegistrationService.list(this.$route.params.id, 1, 10).then(registrations => {
+          this.$set('registrations', registrations.data);
+          this.$loadingRouteData = false;
+        });
+      },
       getRegistrationTypeStats (registrationTypeId, statsField) {
         let registrationTypeStats = this.event.stats.registration_types.find(r => r.id == registrationTypeId);
         return registrationTypeStats && statsField in registrationTypeStats ? registrationTypeStats[statsField] : 0;
       },
     },
     components: {
-      CreateRegistration, Loading,
+      Loading, RegistrationsList
     },
   };
 </script>

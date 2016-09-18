@@ -5,6 +5,18 @@ let url = 'events/{eventId}/registrations';
 export default {
 
   /**
+   * Get registrations listing.
+   *
+   * @param page
+   * @param filter Limit
+   */
+  list(eventId, page, limit) {
+    return Vue.resource(url, { eventId, page, limit }).get()
+      .then((response) => Promise.resolve(response.json()))
+      .catch((error) => Promise.reject(error));
+  },
+
+  /**
    * Store a registration.
    *
    * @param eventId

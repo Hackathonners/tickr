@@ -123,10 +123,10 @@
 
 <script>
   import moment from 'moment';
-  import EventService from '../../services/EventService.js';
-  import Errors from '../Layout/Errors.vue';
-  import '../../directives/Datepicker';
-  import '../../filters/Price';
+  import Errors from './Shared/Errors.vue';
+  import EventService from '../services/EventService.js';
+  import '../directives/Datepicker';
+  import '../filters/Price';
 
   export default {
     data() {

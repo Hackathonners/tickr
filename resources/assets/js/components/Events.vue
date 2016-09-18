@@ -23,6 +23,14 @@
       <!-- Events List -->
       <table class="table table--noheading table--events">
         <tbody>
+          <!-- No results -->
+          <tr class="no-results" v-show="!$loadingRouteData && events.length == 0">
+            <td class="col-md-12 event-info text-center" colspan="3">
+              <span v-show="filterActive">Não existem eventos ativos, <a class="text-primary" v-link="{ name: 'events.create' }">crie um evento</a>.</span>
+              <span v-show="filterPast">Não existem eventos passados.</span>
+            </td>
+          </tr>
+
           <tr v-show="!$loadingRouteData" v-for="event in events">
 
             <!-- Event details -->
@@ -74,8 +82,8 @@
 
 <script>
   import moment from 'moment';
-  import Loading from './Util/Loading.vue';
-  import Paginator from './Layout/Paginator.vue';
+  import Loading from './Shared/Loading.vue';
+  import Paginator from './Shared/Paginator.vue';
   import EventService from '../services/EventService.js';
   import '../filters/Date';
 

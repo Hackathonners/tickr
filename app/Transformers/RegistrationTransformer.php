@@ -13,14 +13,14 @@ class RegistrationTransformer extends TransformerAbstract
      *
      * @var  array
      */
-    protected $availableIncludes = ['registration_type'];
+    protected $availableIncludes = ['registration_type, user'];
 
     /**
      * List of resources to automatically include.
      *
      * @var  array
      */
-    protected $defaultIncludes = ['registration_type'];
+    protected $defaultIncludes = ['registration_type', 'user'];
 
     /**
      * Transform a registration into a generic array.
@@ -33,15 +33,20 @@ class RegistrationTransformer extends TransformerAbstract
         return [
             'id' => Hashids::encode($registration->id),
             'event_id' => $registration->event_id,
-            'user_id' => $registration->user_id,
             'fined' => (bool) $registration->fined,
             'activated' => (bool) $registration->activated,
             'notes' => $registration->notes,
+            'created_at' => $registration->created_at->toDateTimeString(),
         ];
     }
 
     public function includeRegistrationType(Registration $registration)
     {
         return $this->item($registration->registrationType, new RegistrationTypeTransformer);
+    }
+
+    public function includeUser(Registration $registration)
+    {
+        return $this->item($registration->user, new UserTransformer);
     }
 }

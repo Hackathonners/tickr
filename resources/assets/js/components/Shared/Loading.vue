@@ -11,6 +11,6 @@
     props: ['loading', 'message'],
     components: {
         ClipLoader
-    }
-  }
+    },
+  };
 </script>

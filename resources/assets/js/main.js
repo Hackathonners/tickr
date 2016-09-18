@@ -9,8 +9,8 @@ import VueRouter from 'vue-router';
 // Set moment language
 moment.locale("pt");
 
-Vue.use(VueRouter)
-Vue.use(VueResource)
+Vue.use(VueRouter);
+Vue.use(VueResource);
 
 /* eslint-disable no-new */
 
@@ -29,7 +29,7 @@ router.map({
     },
     '/events/create': {
         name: 'events.create',
-        component: require('./components/Forms/CreateEvent.vue'),
+        component: require('./components/CreateEvent.vue'),
     },
     '/events/:id': {
         name: 'events.show',
@@ -37,15 +37,19 @@ router.map({
     },
     '/events/:id/registrations/create': {
         name: 'registrations.create',
-        component: require('./components/Forms/CreateRegistration.vue'),
+        component: require('./components/CreateRegistration.vue'),
+    },
+    '/events/:id/registrations': {
+        name: 'registrations',
+        component: require('./components/Registrations.vue'),
     },
     '*' : {
         component: require('./components/Errors/404.vue'),
-    }
+    },
 });
 
 router.alias({
   '/events': '/'
-})
+});
 
-router.start(App, 'body')
+router.start(App, 'body');

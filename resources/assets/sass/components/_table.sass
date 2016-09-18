@@ -1,10 +1,20 @@
 .table
+	&:last-child
+		margin-bottom: 0
 	&.table--noheading
 		tbody, thead
-			& > tr:first-child
+			& > tr:not(.no-results)
 				& > td,
 				& > th
-					border: none
+					border-top: none;
+					border-bottom: 1px solid $table-border-color
+			& > tr:last-child, .no-results
+				& > td,
+				& > th
+					border-top: none
+					border-bottom: 1px solid $table-border-color
+			& > tr.no-results
+				height: 72px
 	& > thead
 		& > tr > th
 			border-color: $brand-primary

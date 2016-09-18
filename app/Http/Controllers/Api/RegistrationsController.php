@@ -31,13 +31,13 @@ class RegistrationsController extends ApiController
             $event = Event::findOrFail($eventId);
             $this->authorize('handle', $event);
 
-            $registrations = $event->registrations();
+            $registrations = $event->registrations()->with('user');
             $limit = $limit > 0 && $limit <= 20 ? $limit : null;
 
             return $registrations->paginate($limit);
         });
 
-        return $this->respondWith($registrations, new RegistrationTransformer);
+        return $this->respondWith($registrations, new RegistrationTransformer, ['user']);
     }
 
     /**
