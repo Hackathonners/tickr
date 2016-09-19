@@ -98,7 +98,6 @@
   import moment from 'moment';
   import Errors from './Shared/Errors.vue';
   import Loading from './Shared/Loading.vue';
-  import Toast from 'vue-toast-mobile';
   import EventService from '../services/EventService.js';
   import RegistrationService from '../services/RegistrationService.js';
   import '../filters/Price';
@@ -127,6 +126,7 @@
     },
     methods: {
       loadEvent() {
+        this.error = null;
         this.$loadingRouteData = true;
         EventService.get(this.$route.params.id, true).then(event => {
           this.$set('event', event.data);
@@ -154,6 +154,7 @@
         };
       },
       save() {
+        this.error = null;
         RegistrationService.store(this.event.id, this.registration).then(registration => {
           // Success message
           this.resetRegistrationState();
