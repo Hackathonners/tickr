@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-let url = 'events/{eventId}/registrations';
+const url = 'events/{eventId}/registrations'
 
 export default {
 
@@ -10,10 +10,10 @@ export default {
    * @param page
    * @param filter Limit
    */
-  list(eventId, page, limit) {
+  list (eventId, page, limit) {
     return Vue.resource(url, { eventId, page, limit }).get()
       .then((response) => Promise.resolve(response.json()))
-      .catch((error) => Promise.reject(error));
+      .catch((error) => Promise.reject(error))
   },
 
   /**
@@ -22,10 +22,10 @@ export default {
    * @param eventId
    * @param data
    */
-  store(eventId, data) {
+  store (eventId, data) {
     return Vue.resource(url, { eventId }).save(data)
       .then((response) => Promise.resolve(response.json()))
-      .catch((error) => Promise.reject(error));
-  },
+      .catch((error) => Promise.reject(error))
+  }
 
 }

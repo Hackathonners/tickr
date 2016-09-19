@@ -1,4 +1,5 @@
-import Vue from 'vue';
+import $ from 'jquery'
+import Vue from 'vue'
 
 Vue.directive('select', {
   twoWay: true,
@@ -20,4 +21,4 @@ Vue.directive('select', {
   unbind: function () {
     $(this.el).off().select2('destroy')
   }
-});
+})

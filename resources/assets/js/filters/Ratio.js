@@ -1,13 +1,15 @@
-import Vue from 'vue';
+import Vue from 'vue'
 
 Vue.filter('ratio', function (value, decimals = 2, percent = true) {
-  let ratio = 0;
+  let ratio = 0
 
-  if(!isNaN(value))
-    ratio = value;
+  if (!isNaN(value)) {
+    ratio = value
+  }
 
-  if(percent)
-    ratio *= 100;
+  if (percent) {
+    ratio *= 100
+  }
 
-  return '' + ratio.toFixed(decimals) + '%';
+  return '' + ratio.toFixed(decimals) + '%'
 })

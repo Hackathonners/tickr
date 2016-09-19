@@ -4,6 +4,7 @@ var elixir = require('laravel-elixir');
 var rename = require('gulp-rename');
 
 require('laravel-elixir-vueify');
+require('laravel-elixir-eslint');
 
 /*
  |--------------------------------------------------------------------------
@@ -31,4 +32,5 @@ elixir(function(mix) {
   mix.browserify('main.js');
 
   mix.task('emailify');
+  mix.eslint('resources/assets/js');
 });

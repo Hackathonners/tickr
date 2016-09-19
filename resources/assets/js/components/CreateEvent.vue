@@ -122,118 +122,112 @@
 </template>
 
 <script>
-  import moment from 'moment';
-  import Errors from './Shared/Errors.vue';
-  import EventService from '../services/EventService.js';
-  import '../directives/Datepicker';
-  import '../filters/Price';
+import moment from 'moment'
+import Errors from './Shared/Errors.vue'
+import EventService from '../services/EventService.js'
+import '../directives/Datepicker'
+import '../filters/Price'
 
-  export default {
-    data() {
-      return {
-        // Form data
-        event: {
-          title: '',
-          description: '',
-          place: '',
-          start_at: '',
-          end_at: '',
-          registration: [
-            {
-              type: 'Normal',
-              price: '',
-              fine: '',
-            }
-          ],
-        },
-
-        // Registration type data
-        registrationType: this.resetRegistrationType(),
-
-        // Component status
-        error: null,
-        dates: {
-          format: 'YYYY-MM-DD HH:mm:ss',
-          start_date: '',
-          end_date: '',
-          start_time: '',
-          end_time: '',
-        }
-      };
-    },
-    methods: {
-      save() {
-        this.error = null;
-        EventService.store(this.event).then(event => {
-          // Success message
-          alert("created");
-        }).catch(response => {
-          switch(response.status) {
-            case 404:
-              Toast({
-                message: 'O evento já não está disponível.',
-                position: 'top',
-                duration: 5000
-              });
-              this.$router.replace({ name: 'events'});
-            break;
-            case 422:
-              window.scrollTo(0, 0); // Scroll to top, to see errors
-              this.error = JSON.parse(response.body).error;
-            break;
-          }
-        });
-      },
-      validRegistrationType() {
-        let type = this.registrationType.type.trim();
-        let price = parseFloat(this.registrationType.price);
-        let fine = parseFloat(this.registrationType.fine);
-
-        if(type && !isNaN(price) && !isNaN(fine)) {
-          return true;
-        }
-
-        return false;
-      },
-      addRegistrationType() {
-        this.event.registration.push(this.registrationType);
-        this.resetRegistrationType();
-      },
-      removeRegistrationType(index) {
-        this.event.registration.splice(index, 1);
-      },
-      resetRegistrationType() {
-        return this.registrationType = {
-          type: '',
+export default {
+  data () {
+    return {
+      // Form data
+      event: {
+        title: '',
+        description: '',
+        place: '',
+        start_at: '',
+        end_at: '',
+        registration: [{
+          type: 'Normal',
           price: '',
-          fine: '',
-        };
+          fine: ''
+        }]
       },
-    },
-    watch: {
-      'dates': {
-        deep: true,
-        handler: function(dates) {
-          let format = 'YYYY-MM-DD HH:mm';
-          let lastStartDate = this.event.start_at;
-          let lastEndDate = this.event.end_at;
 
-          this.event.start_at = this.event.end_at = '';
+      // Registration type data
+      registrationType: this.resetRegistrationType(),
 
-          if(dates.start_date && dates.start_time) {
-            let date = moment(`${dates.start_date} ${dates.start_time}`, format);
-            this.event.start_at = date.isValid() ? date.format(dates.format) : lastStartDate;
-          }
+      // Component status
+      error: null,
+      dates: {
+        format: 'YYYY-MM-DD HH:mm:ss',
+        start_date: '',
+        end_date: '',
+        start_time: '',
+        end_time: ''
+      }
+    }
+  },
+  methods: {
+    save () {
+      this.error = null
+      EventService.store(this.event).then(event => {
 
-          if(dates.end_date && dates.end_time) {
-            let date = moment(`${dates.end_date} ${dates.end_time}`, format);
-            this.event.end_at = date.isValid() ? date.format(dates.format) : lastEndDate;
-          }
-        },
-      },
+      }).catch(response => {
+        switch (response.status) {
+          case 404:
+            this.$router.replace({ name: 'events' })
+            break
+          case 422:
+            window.scrollTo(0, 0) // Scroll to top, to see errors
+            this.error = JSON.parse(response.body).error
+            break
+        }
+      })
     },
-    components: {
-      Errors,
+    validRegistrationType () {
+      const type = this.registrationType.type.trim()
+      const price = parseFloat(this.registrationType.price)
+      const fine = parseFloat(this.registrationType.fine)
+
+      if (type && !isNaN(price) && !isNaN(fine)) {
+        return true
+      }
+
+      return false
     },
-  };
+    addRegistrationType () {
+      this.event.registration.push(this.registrationType)
+      this.resetRegistrationType()
+    },
+    removeRegistrationType (index) {
+      this.event.registration.splice(index, 1)
+    },
+    resetRegistrationType () {
+      this.registrationType = {
+        type: '',
+        price: '',
+        fine: ''
+      }
+
+      return this.registrationType
+    }
+  },
+  watch: {
+    'dates': {
+      deep: true,
+      handler (dates) {
+        const format = 'YYYY-MM-DD HH:mm'
+        const lastStartDate = this.event.start_at
+        const lastEndDate = this.event.end_at
+
+        this.event.start_at = this.event.end_at = ''
+
+        if (dates.start_date && dates.start_time) {
+          const date = moment(`${dates.start_date} ${dates.start_time}`, format)
+          this.event.start_at = date.isValid() ? date.format(dates.format) : lastStartDate
+        }
+
+        if (dates.end_date && dates.end_time) {
+          const date = moment(`${dates.end_date} ${dates.end_time}`, format)
+          this.event.end_at = date.isValid() ? date.format(dates.format) : lastEndDate
+        }
+      }
+    }
+  },
+  components: {
+    Errors
+  }
+}
 </script>

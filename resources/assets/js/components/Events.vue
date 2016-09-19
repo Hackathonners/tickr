@@ -81,84 +81,84 @@
 </template>
 
 <script>
-  import moment from 'moment';
-  import Loading from './Shared/Loading.vue';
-  import Paginator from './Shared/Paginator.vue';
-  import EventService from '../services/EventService.js';
-  import '../filters/Date';
+import moment from 'moment'
+import Loading from './Shared/Loading.vue'
+import Paginator from './Shared/Paginator.vue'
+import EventService from '../services/EventService.js'
+import '../filters/Date'
 
-  export default {
-    data() {
-      return {
-        // Status data
-        visibility: '',
+export default {
+  data () {
+    return {
+      // Status data
+      visibility: '',
 
-        // Results data
-        format: 'YYYY-MM-DD HH:mm:ss',
-        events: [],
-        pagination: {
-          links: {
-            next: null,
-            prev: null,
-          },
-        },
-      };
-    },
-
-    ready() {
-      this.loadEvents(this.$route.query.page, this.$route.query.filter);
-    },
-
-    methods: {
-      loadEvents(page, filter) {
-        this.$loadingRouteData = true;
-        this.$set('visibility', filter);
-        EventService.list(page, filter).then(events => {
-          this.$set('events', events.data);
-          this.$set('pagination', events.meta.pagination);
-          this.$loadingRouteData = false;
-        });
-      },
-      isRunning(event) {
-        return moment().isBetween(event.start_at, event.end_at);
-      },
-      isPast(event) {
-        return moment().isAfter(event.end_at);
-      },
-      isFuture(event) {
-        return moment().isBefore(event.start_at);
-      },
-      isEdited(event) {
-        return !moment(event.updated_at).isSame(event.created_at);
-      }
-    },
-
-    computed: {
-      filterActive() {
-        return ['past'].indexOf(this.visibility) < 0;
-      },
-      filterPast() {
-        return this.visibility == 'past';
-      },
-    },
-
-    watch: {
-      '$route.query': function (newValue, oldValue) {
-        let filter = oldValue.filter;
-        let page = newValue.page;
-
-        // Reset page on filter change
-        if( filter != newValue.filter) {
-          filter = newValue.filter;
-          page = 1;
+      // Results data
+      format: 'YYYY-MM-DD HH:mm:ss',
+      events: [],
+      pagination: {
+        links: {
+          next: null,
+          prev: null
         }
+      }
+    }
+  },
 
-        this.loadEvents(page, filter);
-      },
-    },
+  ready () {
+    this.loadEvents(this.$route.query.page, this.$route.query.filter)
+  },
 
-    components: {
-      Loading, Paginator,
+  methods: {
+    loadEvents (page, filter) {
+      this.$loadingRouteData = true
+      this.$set('visibility', filter)
+      EventService.list(page, filter).then(events => {
+        this.$set('events', events.data)
+        this.$set('pagination', events.meta.pagination)
+        this.$loadingRouteData = false
+      })
     },
-  };
+    isRunning (event) {
+      return moment().isBetween(event.start_at, event.end_at)
+    },
+    isPast (event) {
+      return moment().isAfter(event.end_at)
+    },
+    isFuture (event) {
+      return moment().isBefore(event.start_at)
+    },
+    isEdited (event) {
+      return !moment(event.updated_at).isSame(event.created_at)
+    }
+  },
+
+  computed: {
+    filterActive () {
+      return ['past'].indexOf(this.visibility) < 0
+    },
+    filterPast () {
+      return this.visibility === 'past'
+    }
+  },
+
+  watch: {
+    '$route.query': function (newValue, oldValue) {
+      let filter = oldValue.filter
+      let page = newValue.page
+
+      // Reset page on filter change
+      if (filter !== newValue.filter) {
+        filter = newValue.filter
+        page = 1
+      }
+
+      this.loadEvents(page, filter)
+    }
+  },
+
+  components: {
+    Loading, Paginator
+  }
+}
 </script>

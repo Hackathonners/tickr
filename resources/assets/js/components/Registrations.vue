@@ -19,34 +19,34 @@
 </template>
 
 <script>
-  import Loading from './Shared/Loading.vue';
-  import RegistrationsList from './Shared/Registrations/RegistrationsList.vue';
-  import EventService from '../services/EventService.js';
+import Loading from './Shared/Loading.vue'
+import RegistrationsList from './Shared/Registrations/RegistrationsList.vue'
+import EventService from '../services/EventService.js'
 
-  export default {
-    data() {
-      return {
-        // Results data
-        event: {},
-      };
-    },
+export default {
+  data () {
+    return {
+      // Results data
+      event: {}
+    }
+  },
 
-    ready () {
-      this.loadEvent();
-    },
+  ready () {
+    this.loadEvent()
+  },
 
-    methods: {
-      loadEvent() {
-        this.$loadingRouteData = true;
-        EventService.get(this.$route.params.id).then(event => {
-          this.$set('event', event.data);
-          this.$loadingRouteData = false;
-        });
-      },
-    },
+  methods: {
+    loadEvent () {
+      this.$loadingRouteData = true
+      EventService.get(this.$route.params.id).then(event => {
+        this.$set('event', event.data)
+        this.$loadingRouteData = false
+      })
+    }
+  },
 
-    components: {
-      Loading, RegistrationsList
-    },
-  };
+  components: {
+    Loading, RegistrationsList
+  }
+}
 </script>

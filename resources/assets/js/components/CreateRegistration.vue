@@ -95,106 +95,98 @@
 </template>
 
 <script>
-  import moment from 'moment';
-  import Errors from './Shared/Errors.vue';
-  import Loading from './Shared/Loading.vue';
-  import EventService from '../services/EventService.js';
-  import RegistrationService from '../services/RegistrationService.js';
-  import '../filters/Price';
+import moment from 'moment'
+import Errors from './Shared/Errors.vue'
+import Loading from './Shared/Loading.vue'
+import EventService from '../services/EventService.js'
+import RegistrationService from '../services/RegistrationService.js'
+import '../filters/Price'
 
-  export default {
-    data() {
-      return {
-        // Results data
-        event: {
-          name: '',
-          registration_types: {
-            data: [],
-          },
-        },
-
-        // Form data
-        registration: {},
-
-        // Component status
-        error: null,
-      }
-    },
-    ready () {
-      this.resetRegistrationState();
-      this.loadEvent();
-    },
-    methods: {
-      loadEvent() {
-        this.error = null;
-        this.$loadingRouteData = true;
-        EventService.get(this.$route.params.id, true).then(event => {
-          this.$set('event', event.data);
-          this.$loadingRouteData = false;
-        }).catch(response => {
-          switch(response.status) {
-            case 404:
-              Toast({
-                message: 'O evento já não está disponível.',
-                position: 'top',
-                duration: 5000
-              });
-              this.$router.replace({ name: 'events'});
-            break;
-          }
-        });
-      },
-      resetRegistrationState() {
-        return this.registration = {
-          name: null,
-          email: null,
-          fined: moment().isBetween(this.event.start_at, this.event.end_at, 'day'),
-          registration_type: '',
-          notes: null,
-        };
-      },
-      save() {
-        this.error = null;
-        RegistrationService.store(this.event.id, this.registration).then(registration => {
-          // Success message
-          this.resetRegistrationState();
-        }).catch( response => {
-          switch(response.status) {
-            case 404:
-              Toast({
-                message: 'O evento já não está disponível.',
-                position: 'top',
-                duration: 5000
-              });
-              this.$router.replace({ name: 'events'});
-            break;
-            case 422:
-              window.scrollTo(0, 0); // Scroll to top, to see errors
-              this.error = JSON.parse(response.body).error;
-            break;
-          }
-        });
-      },
-      getRegistrationTypeData (registrationTypeId, field) {
-        let registrationType = this.event.registration_types.data.find(r => r.id == registrationTypeId);
-        return registrationType && field in registrationType ? registrationType[field] : 0;
-      },
-      getPaidValue() {
-        let type = this.registration.registration_type;
-
-        if(typeof type === 'undefined' || !type){
-          return 0;
+export default {
+  data () {
+    return {
+      // Results data
+      event: {
+        name: '',
+        registration_types: {
+          data: []
         }
+      },
 
-        let registrationType = this.event.registration_types.data.find(r => r.id == type);
-        let value = registrationType.price;
-        value += this.registration.fined ? registrationType.fine : 0;
+      // Form data
+      registration: {},
 
-        return value;
+      // Component status
+      error: null
+    }
+  },
+  ready () {
+    this.resetRegistrationState()
+    this.loadEvent()
+  },
+  methods: {
+    loadEvent () {
+      this.error = null
+      this.$loadingRouteData = true
+      EventService.get(this.$route.params.id, true).then(event => {
+        this.$set('event', event.data)
+        this.$loadingRouteData = false
+      }).catch(response => {
+        switch (response.status) {
+          case 404:
+            this.$router.replace({ name: 'events' })
+            break
+        }
+      })
+    },
+    resetRegistrationState () {
+      this.registration = {
+        name: null,
+        email: null,
+        fined: moment().isBetween(this.event.start_at, this.event.end_at, 'day'),
+        registration_type: '',
+        notes: null
       }
+
+      return this.registration
     },
-    components: {
-      Loading, Errors
+    save () {
+      this.error = null
+      RegistrationService.store(this.event.id, this.registration).then(registration => {
+        // Success message
+        this.resetRegistrationState()
+      }).catch(response => {
+        switch (response.status) {
+          case 404:
+            this.$router.replace({ name: 'events' })
+            break
+          case 422:
+            window.scrollTo(0, 0) // Scroll to top, to see errors
+            this.error = JSON.parse(response.body).error
+            break
+        }
+      })
     },
-  };
+    getRegistrationTypeData (registrationTypeId, field) {
+      const registrationType = this.event.registration_types.data.find(r => r.id === registrationTypeId)
+      return registrationType && field in registrationType ? registrationType[field] : 0
+    },
+    getPaidValue () {
+      const type = this.registration.registration_type
+
+      if (typeof type === 'undefined' || !type) {
+        return 0
+      }
+
+      const registrationType = this.event.registration_types.data.find(r => r.id === type)
+      let value = registrationType.price
+      value += this.registration.fined ? registrationType.fine : 0
+
+      return value
+    }
+  },
+  components: {
+    Loading, Errors
+  }
+}
 </script>

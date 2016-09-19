@@ -1,12 +1,13 @@
-import Vue from 'vue';
+import $ from 'jquery'
+import Vue from 'vue'
 
 Vue.directive('datepicker', {
-  bind() {
-    var vm = this.vm;
-    var key = this.expression;
+  bind () {
+    var vm = this.vm
+    var key = this.expression
     $(this.el).datepicker({
-      dateFormat: "yy-mm-dd",
-      altFormat: "DD, d MM yy",
+      dateFormat: 'yy-mm-dd',
+      altFormat: 'DD, d MM yy',
       altField: $(this.el).sibling,
       firstDay: 1,
       defaultDate: +1,
@@ -17,14 +18,14 @@ Vue.directive('datepicker', {
       prevText: '<i class="fa fa-arrow-circle-left" aria-hidden="true"></i>',
       nextText: '<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>',
       onSelect: function (date) {
-        vm.$set(key, date);
+        vm.$set(key, date)
       }
-    });
+    })
   },
-  update(newValue, oldValue) {
-    $(this.el).datepicker('setDate', newValue);
+  update (newValue, oldValue) {
+    $(this.el).datepicker('setDate', newValue)
   },
-  unbind() {
+  unbind () {
     // do clean up work
     // e.g. remove event listeners added in bind()
   }

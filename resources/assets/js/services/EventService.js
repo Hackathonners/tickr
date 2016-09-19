@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-let url = 'events{/id}';
+const url = 'events{/id}'
 
 export default {
 
@@ -10,10 +10,10 @@ export default {
    * @param page
    * @param filter Filter for listing
    */
-  list(page = 1, filter) {
+  list (page = 1, filter) {
     return Vue.resource(url, { page, filter }).get()
       .then((response) => Promise.resolve(response.json()))
-      .catch((error) => Promise.reject(error));
+      .catch((error) => Promise.reject(error))
   },
 
   /**
@@ -22,11 +22,11 @@ export default {
    * @param id
    * @param stats Include event statistics
    */
-  get(id, stats) {
-    stats = !!stats ? 1 : 0;
+  get (id, stats) {
+    stats = stats ? 1 : 0
     return Vue.resource(url, { id, stats }).get()
       .then((response) => Promise.resolve(response.json()))
-      .catch((error) => Promise.reject(error));
+      .catch((error) => Promise.reject(error))
   },
 
   /**
@@ -34,10 +34,10 @@ export default {
    *
    * @param data
    */
-  store(data) {
+  store (data) {
     return Vue.resource(url).save(data)
       .then((response) => Promise.resolve(response.json()))
-      .catch((error) => Promise.reject(error));
-  },
+      .catch((error) => Promise.reject(error))
+  }
 
 }

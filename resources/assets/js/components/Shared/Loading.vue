@@ -6,11 +6,12 @@
 </template>
 
 <script>
-  import { ClipLoader } from 'vue-spinner/dist/vue-spinner.min'
-  export default {
-    props: ['loading', 'message'],
-    components: {
-        ClipLoader
-    },
-  };
+import { ClipLoader } from 'vue-spinner/dist/vue-spinner.min'
+
+export default {
+  props: ['loading', 'message'],
+  components: {
+    ClipLoader
+  }
+}
 </script>

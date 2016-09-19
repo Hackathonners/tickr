@@ -42,64 +42,64 @@
   <paginator v-show="paginate && !loading" :pagination.sync="pagination" :callback="loadRegistrations"></paginator>
 </template>
 <script>
-  import Loading from '../../Shared/Loading.vue';
-  import Paginator from '../../Shared/Paginator.vue';
-  import RegistrationService from '../../../services/RegistrationService.js';
+import Loading from '../../Shared/Loading.vue'
+import Paginator from '../../Shared/Paginator.vue'
+import RegistrationService from '../../../services/RegistrationService.js'
 
-  export default {
-    props: {
-      eventId: {
-        required: true,
-      },
-      paginate: {
-        required: false,
-        default: true,
-      },
-      limit: {
-        required: false,
-        type: Number,
-        default: 20,
-      },
-      action: {
-        required: true,
-        type: Object,
-      },
+export default {
+  props: {
+    eventId: {
+      required: true
     },
-
-    data() {
-      return {
-        // Results data
-        registrations: [],
-
-        // Component status
-        pagination: {},
-        loading: false,
-      };
+    paginate: {
+      required: false,
+      default: true
     },
-
-    ready () {
-      this.loadRegistrations(this.$route.query.page);
+    limit: {
+      required: false,
+      type: Number,
+      default: 20
     },
+    action: {
+      required: true,
+      type: Object
+    }
+  },
 
-    methods: {
-      loadRegistrations(page = 1) {
-        this.loading = true;
-        RegistrationService.list(this.eventId, page, this.limit).then(registrations => {
-          this.$set('registrations', registrations.data);
-          this.$set('pagination', registrations.meta.pagination);
-          this.loading = false;
-        });
-      }
-    },
+  data () {
+    return {
+      // Results data
+      registrations: [],
 
-    watch: {
-      '$route.query.page': function (newValue, oldValue) {
-        this.loadRegistrations(newValue);
-      },
-    },
+      // Component status
+      pagination: {},
+      loading: false
+    }
+  },
 
-    components: {
-      Loading, Paginator
-    },
+  ready () {
+    this.loadRegistrations(this.$route.query.page)
+  },
+
+  methods: {
+    loadRegistrations (page = 1) {
+      this.loading = true
+      RegistrationService.list(this.eventId, page, this.limit).then(registrations => {
+        this.$set('registrations', registrations.data)
+        this.$set('pagination', registrations.meta.pagination)
+        this.loading = false
+      })
+    }
+  },
+
+  watch: {
+    '$route.query.page': function (newValue, oldValue) {
+      this.loadRegistrations(newValue)
+    }
+  },
+
+  components: {
+    Loading, Paginator
   }
+}
 </script>

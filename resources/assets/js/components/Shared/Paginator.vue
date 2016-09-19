@@ -11,25 +11,25 @@
   </nav>
 </template>
 <script>
-  export default {
-    props: {
-      pagination: {
-        type: Object,
-        required: true
-      },
-      callback: {
-        type: Function,
-        required: true
-      },
+export default {
+  props: {
+    pagination: {
+      type: Object,
+      required: true
     },
-    methods: {
-      buildQuery(page) {
-        return Object.assign(this.$route.query, { page });
-      },
-      goToPage(page = 1) {
-        this.$set('pagination.current_page', page);
-        this.callback(page);
-      }
+    callback: {
+      type: Function,
+      required: true
+    }
+  },
+  methods: {
+    buildQuery (page) {
+      return Object.assign(this.$route.query, { page })
+    },
+    goToPage (page = 1) {
+      this.$set('pagination.current_page', page)
+      this.callback(page)
     }
   }
+}
 </script>

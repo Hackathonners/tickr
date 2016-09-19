@@ -104,67 +104,59 @@
 </template>
 
 <script>
-  import Loading from './Shared/Loading.vue';
-  import Toast from 'vue-toast-mobile';
-  import RegistrationsList from './Shared/Registrations/RegistrationsList.vue';
-  import EventService from '../services/EventService.js';
-  import RegistrationService from '../services/RegistrationService.js';
-  import '../filters/Date';
-  import '../filters/Ratio';
+import Loading from './Shared/Loading.vue'
+import RegistrationsList from './Shared/Registrations/RegistrationsList.vue'
+import EventService from '../services/EventService.js'
+import '../filters/Date'
+import '../filters/Ratio'
 
-  export default {
-    data() {
-      return {
-        // Results data
-        event: {
-          stats: {
-            income: 0,
-            participations: 0,
-            registrations: 0,
-            registration_types: [],
-          },
-          registration_types: {
-            data: [],
-          },
+export default {
+  data () {
+    return {
+      // Results data
+      event: {
+        stats: {
+          income: 0,
+          participations: 0,
+          registrations: 0,
+          registration_types: []
         },
-      };
-    },
-    ready () {
-      this.loadEvent();
-    },
-    methods: {
-      loadEvent() {
-        this.$loadingRouteData = true;
-        EventService.get(this.$route.params.id, true).then(event => {
-          this.$set('event', event.data);
-          this.$loadingRouteData = false;
-        }).catch(response => {
-          if(response.status == 404)
-          {
-            Toast({
-              message: 'O evento já não está disponível.',
-              position: 'top',
-              duration: 5000
-            });
-            this.$router.replace({ name: 'events'});
-          }
-        });
-      },
-      getRegistrationTypeStats (registrationTypeId, statsField) {
-        let registrationTypeStats = this.event.stats.registration_types.find(r => r.id == registrationTypeId);
-        return registrationTypeStats && statsField in registrationTypeStats ? registrationTypeStats[statsField] : 0;
-      },
-      getRegistrationTypeParticipationRatio (registrationTypeId) {
-        return this.getRegistrationTypeStats(registrationTypeId, 'participations') / this.getRegistrationTypeStats(registrationTypeId, 'registrations');
-      },
-    },
-    computed: {
-      participationRatio: function () {
-        return (this.event.stats.participations / this.event.stats.registrations);
+        registration_types: {
+          data: []
+        }
       }
+    }
+  },
+  ready () {
+    this.loadEvent()
+  },
+  methods: {
+    loadEvent () {
+      this.$loadingRouteData = true
+      EventService.get(this.$route.params.id, true).then(event => {
+        this.$set('event', event.data)
+        this.$loadingRouteData = false
+      }).catch(response => {
+        if (response.status === 404) {
+          this.$router.replace({ name: 'events' })
+        }
+      })
     },
-    components: {
-      Loading, RegistrationsList
+    getRegistrationTypeStats (registrationTypeId, statsField) {
+      const registrationTypeStats = this.event.stats.registration_types.find(r => r.id === registrationTypeId)
+      return registrationTypeStats && statsField in registrationTypeStats ? registrationTypeStats[statsField] : 0
     },
-  };
+    getRegistrationTypeParticipationRatio (registrationTypeId) {
+      return this.getRegistrationTypeStats(registrationTypeId, 'participations') / this.getRegistrationTypeStats(registrationTypeId, 'registrations')
+    }
+  },
+  computed: {
+    participationRatio: function () {
+      return (this.event.stats.participations / this.event.stats.registrations)
+    }
+  },
+  components: {
+    Loading, RegistrationsList
+  }
+}
 </script>
