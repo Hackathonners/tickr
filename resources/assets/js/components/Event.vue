@@ -105,6 +105,7 @@
 
 <script>
   import Loading from './Shared/Loading.vue';
+  import Toast from 'vue-toast-mobile';
   import RegistrationsList from './Shared/Registrations/RegistrationsList.vue';
   import EventService from '../services/EventService.js';
   import RegistrationService from '../services/RegistrationService.js';
@@ -137,6 +138,16 @@
         EventService.get(this.$route.params.id, true).then(event => {
           this.$set('event', event.data);
           this.$loadingRouteData = false;
+        }).catch(response => {
+          if(response.status == 404)
+          {
+            Toast({
+              message: 'O evento já não está disponível.',
+              position: 'top',
+              duration: 5000
+            });
+            this.$router.replace({ name: 'events'});
+          }
         });
       },
       getRegistrationTypeStats (registrationTypeId, statsField) {

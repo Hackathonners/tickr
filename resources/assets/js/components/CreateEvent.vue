@@ -124,6 +124,7 @@
 <script>
   import moment from 'moment';
   import Errors from './Shared/Errors.vue';
+  import Toast from 'vue-toast-mobile';
   import EventService from '../services/EventService.js';
   import '../directives/Datepicker';
   import '../filters/Price';
@@ -166,8 +167,21 @@
         EventService.store(this.event).then(event => {
           // Success message
           alert("created");
-        }).catch( response => {
-          this.error = JSON.parse(response.body).error;
+        }).catch(response => {
+          switch(response.error) {
+            case 404:
+              Toast({
+                message: 'O evento já não está disponível.',
+                position: 'top',
+                duration: 5000
+              });
+              this.$router.replace({ name: 'events'});
+            break;
+            case 422:
+              window.scrollTo(0, 0); // Scroll to top, to see errors
+              this.error = JSON.parse(response.body).error;
+            break;
+          }
         });
       },
       validRegistrationType() {

@@ -98,6 +98,7 @@
   import moment from 'moment';
   import Errors from './Shared/Errors.vue';
   import Loading from './Shared/Loading.vue';
+  import Toast from 'vue-toast-mobile';
   import EventService from '../services/EventService.js';
   import RegistrationService from '../services/RegistrationService.js';
   import '../filters/Price';
@@ -130,6 +131,17 @@
         EventService.get(this.$route.params.id, true).then(event => {
           this.$set('event', event.data);
           this.$loadingRouteData = false;
+        }).catch(response => {
+          switch(response.status) {
+            case 404:
+              Toast({
+                message: 'O evento já não está disponível.',
+                position: 'top',
+                duration: 5000
+              });
+              this.$router.replace({ name: 'events'});
+            break;
+          }
         });
       },
       resetRegistrationState() {
@@ -146,7 +158,20 @@
           // Success message
           this.resetRegistrationState();
         }).catch( response => {
-          this.error = JSON.parse(response.body).error;
+          switch(response.status) {
+            case 404:
+              Toast({
+                message: 'O evento já não está disponível.',
+                position: 'top',
+                duration: 5000
+              });
+              this.$router.replace({ name: 'events'});
+            break;
+            case 422:
+              window.scrollTo(0, 0); // Scroll to top, to see errors
+              this.error = JSON.parse(response.body).error;
+            break;
+          }
         });
       },
       getRegistrationTypeData (registrationTypeId, field) {
