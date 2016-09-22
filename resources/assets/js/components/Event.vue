@@ -107,6 +107,7 @@
 import Loading from './Shared/Loading.vue'
 import RegistrationsList from './Shared/Registrations/RegistrationsList.vue'
 import EventService from '../services/EventService.js'
+import { NotificationStore } from '../stores/NotificationStore.js'
 import '../filters/Date'
 import '../filters/Ratio'
 
@@ -138,6 +139,12 @@ export default {
         this.$loadingRouteData = false
       }).catch(response => {
         if (response.status === 404) {
+          NotificationStore.addNotification({
+            title: "Erro",
+            text: "O evento solicitado já não existe.",
+            type: "success",
+            timeout: true
+          })
           this.$router.replace({ name: 'events' })
         }
       })

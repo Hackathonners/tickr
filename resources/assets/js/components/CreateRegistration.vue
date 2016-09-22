@@ -100,6 +100,7 @@ import Errors from './Shared/Errors.vue'
 import Loading from './Shared/Loading.vue'
 import EventService from '../services/EventService.js'
 import RegistrationService from '../services/RegistrationService.js'
+import { NotificationStore } from '../stores/NotificationStore.js'
 import '../filters/Price'
 
 export default {
@@ -134,6 +135,12 @@ export default {
       }).catch(response => {
         switch (response.status) {
           case 404:
+            NotificationStore.addNotification({
+              title: "Erro",
+              text: "O evento solicitado já não existe.",
+              type: "success",
+              timeout: true
+            })
             this.$router.replace({ name: 'events' })
             break
         }
@@ -158,6 +165,12 @@ export default {
       }).catch(response => {
         switch (response.status) {
           case 404:
+            NotificationStore.addNotification({
+              title: "Erro",
+              text: "O evento solicitado já não existe.",
+              type: "success",
+              timeout: true
+            })
             this.$router.replace({ name: 'events' })
             break
           case 422:
