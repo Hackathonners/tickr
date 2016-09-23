@@ -22,6 +22,7 @@
 import Loading from './Shared/Loading.vue'
 import RegistrationsList from './Shared/Registrations/RegistrationsList.vue'
 import EventService from '../services/EventService.js'
+import { NotificationStore } from '../stores/NotificationStore.js'
 
 export default {
   data () {
@@ -41,6 +42,17 @@ export default {
       EventService.get(this.$route.params.id).then(event => {
         this.$set('event', event.data)
         this.$loadingRouteData = false
+      }).catch(response => {
+        switch (response.status) {
+          case 404:
+            NotificationStore.addNotification({
+              text: 'O evento solicitado já não existe.',
+              type: 'danger',
+              timeout: true
+            })
+            this.$router.replace({ name: 'events' })
+            break
+        }
       })
     }
   },

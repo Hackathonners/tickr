@@ -140,9 +140,8 @@ export default {
       }).catch(response => {
         if (response.status === 404) {
           NotificationStore.addNotification({
-            title: "Erro",
-            text: "O evento solicitado já não existe.",
-            type: "success",
+            text: 'O evento solicitado já não existe.',
+            type: 'danger',
             timeout: true
           })
           this.$router.replace({ name: 'events' })

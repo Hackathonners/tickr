@@ -85,6 +85,7 @@ import moment from 'moment'
 import Loading from './Shared/Loading.vue'
 import Paginator from './Shared/Paginator.vue'
 import EventService from '../services/EventService.js'
+import { NotificationStore } from '../stores/NotificationStore.js'
 import '../filters/Date'
 
 export default {
@@ -107,6 +108,10 @@ export default {
 
   ready () {
     this.loadEvents(this.$route.query.page, this.$route.query.filter)
+  },
+
+  beforeDestroy () {
+    NotificationStore.removeAllNotifications()
   },
 
   methods: {

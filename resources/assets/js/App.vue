@@ -29,9 +29,6 @@ export default {
       notifications: NotificationStore.state
     }
   },
-  ready() {
-
-  },
   methods: {
     removeNotification: function (notification) {
       NotificationStore.removeNotification(notification)

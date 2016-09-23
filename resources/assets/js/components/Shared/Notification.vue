@@ -1,24 +1,21 @@
 <template>
-  <div class="notification callout animated" :class="notification.type ? notification.type : 'secondary'" transition="fade">
-    <button @click="triggerClose(notification)" class="close-button" aria-label="Close alert" type="button">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    <h5 v-if="notification.title">{{notification.title}}</h5>
-    <p>
-      {{notification.text}}
-    </p>
+  <div class="alert" :class="['alert', notification.type ? 'alert-' + notification.type : 'alert-info']" transition="fade">
+    <button @click="triggerClose(notification)" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    {{notification.text}}
   </div>
 </template>
 <script>
 export default {
   props: ['notification'],
   data: function () {
-    return { timer: null }
+    return {
+      timer: null
+    }
   },
   ready: function () {
     const timeout = this.notification.hasOwnProperty('timeout') ? this.notification.timeout : true
     if (timeout) {
-      const delay = this.notification.delay || 10000
+      const delay = this.notification.delay || 5000
       this.timer = setTimeout(function () {
         this.triggerClose(this.notification)
       }.bind(this), delay)
@@ -34,23 +31,8 @@ export default {
 }
 </script>
 <style>
-.notifications {
-  position: fixed;
-  right: 10px;
-  top: 10px;
-  width: 350px;
-  z-index: 1;
-}
-.notification p {
-  margin-right: 20px;
-}
-
-/* always present */
 .fade-transition {
-  transition: all .5s ease;
-  padding: 10px;
-  background-color: #eee;
-  overflow: hidden;
+  transition: all .3s ease;
 }
 /* .fade-enter defines the starting state for entering */
 /* .fade-leave defines the ending state for leaving */
