@@ -2,7 +2,7 @@
     <main>
         <navbar></navbar>
         <div class="container">
-            <div class="notifications">
+            <div class="notifications-wrapper">
                 <notification v-for="notification in notifications" :notification="notification" @close-notification="removeNotification" transition="fade">
                 </notification>
             </div>
@@ -36,3 +36,12 @@ export default {
   }
 }
 </script>
+<style>
+  .notifications-wrapper {
+    z-index: 10;
+    position: fixed;
+    top: -3px;
+    left: 0;
+    right: 0;
+  }
+</style>

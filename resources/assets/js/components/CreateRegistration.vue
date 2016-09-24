@@ -121,7 +121,7 @@ export default {
       error: null
     }
   },
-  ready () {
+  created () {
     this.resetRegistrationState()
     this.loadEvent()
   },

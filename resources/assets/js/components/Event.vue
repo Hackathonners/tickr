@@ -128,7 +128,7 @@ export default {
       }
     }
   },
-  ready () {
+  created () {
     this.loadEvent()
   },
   methods: {

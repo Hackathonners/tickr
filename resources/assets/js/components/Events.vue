@@ -53,7 +53,7 @@
                 </div>
               </div>
               <div v-if="isPast(event)" class="event-info__status event-info__status--waiting">
-                <span class="status__title">Terminou {{ event.start_at | human_diff }}</span>
+                <span class="status__title">Terminou {{ event.end_at | human_diff }}</span>
                 <div class="status__details text-muted">
                   {{ event.start_at | date 'dddd' }}, {{ event.start_at | date 'D MMMM YYYY, HH:mm' }}
                 </div>
@@ -106,7 +106,7 @@ export default {
     }
   },
 
-  ready () {
+  created () {
     this.loadEvents(this.$route.query.page, this.$route.query.filter)
   },
 

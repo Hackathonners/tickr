@@ -6,6 +6,8 @@ import App from './App.vue'
 import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
 
+import { NotificationStore } from './stores/NotificationStore.js'
+
 // Set moment language
 moment.locale('pt')
 
@@ -23,7 +25,7 @@ var router = new VueRouter({
 })
 
 router.map({
-  '/': {
+  '/events': {
     name: 'events',
     component: require('./components/Events.vue')
   },
@@ -48,8 +50,15 @@ router.map({
   }
 })
 
-router.alias({
-  '/events': '/'
-})
+Vue.http.interceptors.push(function (request, next) {
+  next(function (response) {
+    if(response.status === 500) {
+      NotificationStore.addNotification({
+        text: 'Ocorreu um erro. Por favor, tenta novamente.',
+        type: 'danger'
+      })
+    }
+  });
+});
 
 router.start(App, 'body')
