@@ -104,12 +104,12 @@
 </template>
 
 <script>
-import Loading from './Shared/Loading.vue'
-import RegistrationsList from './Shared/Registrations/RegistrationsList.vue'
-import EventService from '../services/EventService.js'
-import { NotificationStore } from '../stores/NotificationStore.js'
-import '../filters/Date'
-import '../filters/Ratio'
+import Loading from '../Shared/Loading.vue'
+import RegistrationsList from '../Registrations/shared/RegistrationsList.vue'
+import EventService from '../../services/EventService.js'
+import { NotificationStore } from '../../stores/NotificationStore.js'
+import '../../filters/Date'
+import '../../filters/Ratio'
 
 export default {
   data () {

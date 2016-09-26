@@ -1,14 +1,11 @@
-import moment from 'moment'
-import 'moment/locale/pt'
-
 import Vue from 'vue'
 import App from './App.vue'
 import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
+import moment from 'moment'
+import 'moment/locale/pt'
 
-import { NotificationStore } from './stores/NotificationStore.js'
-
-// Set moment language
+// Set moment locale
 moment.locale('pt')
 
 Vue.use(VueRouter)
@@ -27,38 +24,27 @@ var router = new VueRouter({
 router.map({
   '/events': {
     name: 'events',
-    component: require('./components/Events.vue')
+    component: require('./components/Events/Events.vue')
   },
   '/events/create': {
     name: 'events.create',
-    component: require('./components/CreateEvent.vue')
+    component: require('./components/Events/CreateEvent.vue')
   },
   '/events/:id': {
     name: 'events.show',
-    component: require('./components/Event.vue')
+    component: require('./components/Events/Event.vue')
   },
   '/events/:id/registrations/create': {
     name: 'registrations.create',
-    component: require('./components/CreateRegistration.vue')
+    component: require('./components/Registrations/CreateRegistration.vue')
   },
   '/events/:id/registrations': {
     name: 'registrations',
-    component: require('./components/Registrations.vue')
+    component: require('./components/Registrations/Registrations.vue')
   },
   '*': {
     component: require('./components/Errors/404.vue')
   }
 })
-
-Vue.http.interceptors.push(function (request, next) {
-  next(function (response) {
-    if(response.status === 500) {
-      NotificationStore.addNotification({
-        text: 'Ocorreu um erro. Por favor, tenta novamente.',
-        type: 'danger'
-      })
-    }
-  });
-});
 
 router.start(App, 'body')
