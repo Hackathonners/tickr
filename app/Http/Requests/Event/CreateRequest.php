@@ -51,8 +51,8 @@ class CreateRequest extends Request
     {
         return [
             'registration.0.required' => 'The event requires at least one registration type.',
-            'registration.*.type.required' => 'The registration types require a name.',
-            'registration.*.price.required' => 'The registration types require a price.',
+            'registration.*.type.required' => 'The registration type require a name.',
+            'registration.*.price.required' => 'The registration type require a price.',
         ];
     }
 
@@ -66,6 +66,7 @@ class CreateRequest extends Request
         return [
             'registration.*.type' => 'name of registration type',
             'registration.*.price' => 'price',
+            'registration.*.fine' => 'fine',
         ];
     }
 }

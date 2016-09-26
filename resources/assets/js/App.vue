@@ -5,7 +5,6 @@
       <router-view></router-view>
     </div>
   </main>
-
   <footer class="sticky-footer">
     <div class="container">
       <!-- Sticky footer -->
@@ -15,16 +14,14 @@
 
 <script>
 import Navbar from './components/Shared/Navbar.vue'
-import Notification from './components/Shared/Notification.vue'
 
 export default {
   replace: false,
   data () {
-    return {
-    }
+    return {}
   },
   components: {
-    Navbar, Notification
+    Navbar
   }
 }
 </script>

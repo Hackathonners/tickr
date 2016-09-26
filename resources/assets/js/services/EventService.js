@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-const url = 'events{/id}'
+const url = 'events{/eventId}'
 
 export default {
 
@@ -19,12 +19,12 @@ export default {
   /**
    * Get a given event.
    *
-   * @param id
+   * @param eventId
    * @param stats Include event statistics
    */
-  get (id, stats) {
+  get (eventId, stats) {
     stats = stats ? 1 : 0
-    return Vue.resource(url, { id, stats }).get()
+    return Vue.resource(url, { eventId, stats }).get()
       .then((response) => Promise.resolve(response.json()))
       .catch((error) => Promise.reject(error))
   },

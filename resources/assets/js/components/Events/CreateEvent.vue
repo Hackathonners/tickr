@@ -5,9 +5,6 @@
     </div>
   </div>
 
-  <!-- Form Errors -->
-  <errors :error="error"></errors>
-
   <!-- New Event Form -->
   <!-- Event details -->
   <div class="fieldset">
@@ -15,39 +12,46 @@
     <span class="title">Detalhes do evento</span>
   </div>
 
-  <div class="form-group">
+  <div :class="['form-group', error.messages['title'] ? 'has-error' : '']">
     <label for="event-title">Nome do evento</label>
     <input type="text" class="form-control" id="event-title" v-model="event.title">
+    <span v-if="error.messages['title']" class="text-danger small">{{ error.messages['title'] }}</span>
   </div>
-  <div class="form-group">
-    <label for="event-description">Descrição do evento</label>
+
+  <div :class="['form-group', error.messages['description'] ? 'has-error' : '']">
+    <label for="event-description">Descrição do evento (opcional)</label>
     <textarea type="text" class="form-control" id="event-description" v-model="event.description" rows="5"></textarea>
+    <span v-if="error.messages['description']" class="text-danger small">{{ error.messages['description'] }}</span>
   </div>
-  <div class="form-group">
+
+  <div :class="['form-group', error.messages['place'] ? 'has-error' : '']">
     <label for="event-place">Local do evento</label>
     <input type="text" class="form-control" id="event-place" v-model="event.place">
+    <span v-if="error.messages['place']" class="text-danger small">{{ error.messages['place'] }}</span>
   </div>
 
   <!-- Event dates -->
   <div class="row">
     <div class="col-sm-6">
-      <div class="form-group">
+      <div :class="['form-group', error.messages['start_at'] ? 'has-error' : '']">
         <label>Data e hora de início</label>
         <div class="input-group">
           <input type="text" v-datepicker="dates.start_date" class="form-control js-datepicker-input">
           <span class="input-group-addon">às</span>
           <input type="time" v-model="dates.start_time" class="form-control">
         </div>
+        <span v-if="error.messages['start_at']" class="text-danger small">{{ error.messages['start_at'] }}</span>
       </div>
     </div>
     <div class="col-sm-6">
-      <div class="form-group">
+      <div :class="['form-group', error.messages['end_at'] ? 'has-error' : '']">
         <label>Data e hora de fim</label>
         <div class="input-group">
           <input type="text" v-datepicker="dates.end_date" class="form-control js-datepicker-input">
           <span class="input-group-addon">às</span>
           <input type="time" v-model="dates.end_time" class="form-control">
         </div>
+        <span v-if="error.messages['end_at']" class="text-danger small">{{ error.messages['end_at'] }}</span>
       </div>
     </div>
   </div>
@@ -72,7 +76,7 @@
 
   <div class="row" v-for="registration in event.registration" track-by="$index">
     <div class="col-sm-6">
-      <div class="form-group">
+      <div :class="['form-group', error.messages['registration.' + $index + '.type'] ? 'has-error' : '']">
         <div class="input-group">
           <input type="text" v-model="registration.type" class="form-control" placeholder="Nome do bilhete">
           <div class="input-group-btn">
@@ -84,20 +88,25 @@
             </ul>
           </div>
         </div>
+        <span v-if="error.messages['registration.' + $index + '.type']" class="text-danger small">{{ error.messages['registration.' + $index + '.type'] }}</span>
       </div>
     </div>
     <div class="col-sm-3 col-xs-6">
-      <div class="form-group">
+      <div :class="['form-group', error.messages['registration.' + $index + '.price'] ? 'has-error' : '']">
         <div class="input-group">
           <div class="input-group-addon">€</div>
           <input type="number" v-model="registration.price" min="0.00" step="0.01" class="form-control" placeholder="Preço" number>
         </div>
+        <span v-if="error.messages['registration.' + $index + '.price']" class="text-danger small">{{ error.messages['registration.' + $index + '.price'] }}</span>
       </div>
     </div>
     <div class="col-sm-3 col-xs-6">
-      <div class="input-group">
-        <div class="input-group-addon">€</div>
-        <input type="number" v-model="registration.fine" min="0.00" step="0.01" class="form-control" placeholder="Multa" number>
+      <div :class="['form-group', error.messages['registration.' + $index + '.fine'] ? 'has-error' : '']">
+        <div class="input-group">
+          <div class="input-group-addon">€</div>
+          <input type="number" v-model="registration.fine" min="0.00" step="0.01" class="form-control" placeholder="Multa" number>
+        </div>
+        <span v-if="error.messages['registration.' + $index + '.fine']" class="text-danger small">{{ error.messages['registration.' + $index + '.fine'] }}</span>
       </div>
     </div>
   </div>
@@ -116,15 +125,14 @@
     <span class="title">Bom trabalho, está quase.</span>
   </div>
 
-  <div class="form-group">
-    <button class="btn btn-primary" @click.prevent="save">Criar Evento</button>
-  </div>
+  <submit-button :loading="loading" :callback="save" message="A criar...">Criar evento</submit-button>
 </template>
 
 <script>
 import moment from 'moment'
 import Errors from '../Shared/Errors.vue'
 import EventService from '../../services/EventService.js'
+import SubmitButton from '../Shared/SubmitButton.vue'
 import '../../directives/Datepicker'
 import '../../filters/Price'
 
@@ -149,43 +157,34 @@ export default {
       registrationType: this.resetRegistrationType(),
 
       // Component status
-      error: null,
+      error: this.resetErrors(),
       dates: {
         format: 'YYYY-MM-DD HH:mm:ss',
         start_date: '',
         end_date: '',
         start_time: '',
         end_time: ''
-      }
+      },
+      loading: false
     }
   },
   methods: {
     save () {
-      this.error = null
+      this.resetErrors()
+      this.loading = true
       EventService.store(this.event).then(event => {
-
+        // Notify user that event has been created
+        // Redirect to event page
       }).catch(response => {
         switch (response.status) {
-          case 404:
-            this.$router.replace({ name: 'events' })
-            break
           case 422:
             window.scrollTo(0, 0) // Scroll to top, to see errors
             this.error = JSON.parse(response.body).error
             break
         }
+      }).then(() => {
+        this.loading = false
       })
-    },
-    validRegistrationType () {
-      const type = this.registrationType.type.trim()
-      const price = parseFloat(this.registrationType.price)
-      const fine = parseFloat(this.registrationType.fine)
-
-      if (type && !isNaN(price) && !isNaN(fine)) {
-        return true
-      }
-
-      return false
     },
     addRegistrationType () {
       this.event.registration.push(this.registrationType)
@@ -202,6 +201,13 @@ export default {
       }
 
       return this.registrationType
+    },
+    resetErrors () {
+      this.error = {
+        messages: []
+      }
+
+      return this.error
     }
   },
   watch: {
@@ -227,7 +233,7 @@ export default {
     }
   },
   components: {
-    Errors
+    Errors, SubmitButton
   }
 }
 </script>
