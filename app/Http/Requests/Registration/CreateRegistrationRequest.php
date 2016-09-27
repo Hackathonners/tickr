@@ -28,6 +28,7 @@ class CreateRegistrationRequest extends Request
         return [
             'name' => 'required|min:3',
             'email' => 'required|email',
+            'notes' => 'sometimes|min:3',
             'fined' => 'required',
             'registration_type' => 'required',
         ];
