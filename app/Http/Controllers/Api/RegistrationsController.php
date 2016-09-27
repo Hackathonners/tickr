@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use Auth;
 use Illuminate\Http\Request;
 use App\Karina\Event;
-use App\Http\Requests\Registration\CreateRegistrationRequest;
+use App\Http\Requests\Registration\CreateRequest;
 use App\Karina\Registration;
 use App\Karina\RegistrationType;
 use App\Karina\User;
@@ -68,7 +68,7 @@ class RegistrationsController extends ApiController
      * @param $eventId
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateRegistrationRequest $request, $eventId)
+    public function store(CreateRequest $request, $eventId)
     {
         try {
             $registration = DB::transaction(function () use ($request, $eventId) {

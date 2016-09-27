@@ -4,7 +4,7 @@ namespace App\Http\Requests\Registration;
 
 use App\Http\Requests\Request;
 
-class CreateRegistrationRequest extends Request
+class CreateRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
