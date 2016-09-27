@@ -10,9 +10,6 @@
       </div>
     </div>
 
-    <!-- Form Errors -->
-    <errors :error="error"></errors>
-
     <!-- New Registration Form -->
     <!-- Registration details -->
     <div class="fieldset">
@@ -20,18 +17,21 @@
       <span class="title">Dados do participante</span>
     </div>
 
-    <div class="form-group">
+    <div :class="['form-group', error.messages['email'] ? 'has-error' : '']">
       <label for="registration-email">E-mail do participante</label>
       <input type="email" class="form-control" id="registration-email" v-model="registration.email">
-      <span class="help-block small"><strong>Nota:</strong> O bilhete do evento será enviado para este e-mail.</span>
+      <span v-if="error.messages['email']" class="text-danger small">{{ error.messages['email'] }}</span>
+      <span v-else class="help-block small"><strong>Nota:</strong> O bilhete do evento será enviado para este e-mail.</span>
     </div>
-    <div class="form-group">
+    <div :class="['form-group', error.messages['name'] ? 'has-error' : '']">
       <label for="registration-name">Nome do participante</label>
       <input type="text" class="form-control" id="registration-name" v-model="registration.name">
+      <span v-if="error.messages['name']" class="text-danger small">{{ error.messages['name'] }}</span>
     </div>
-    <div class="form-group">
-      <label for="registration-notes">Outras informações</label>
+    <div :class="['form-group', error.messages['notes'] ? 'has-error' : '']">
+      <label for="registration-notes">Outras informações (opcional)</label>
       <textarea class="form-control" id="registration-notes" v-model="registration.notes" rows="5"></textarea>
+      <span v-if="error.messages['notes']" class="text-danger small">{{ error.messages['notes'] }}</span>
     </div>
 
     <!-- Registration Type details -->
@@ -40,7 +40,7 @@
       <span class="title">Bilhete do participante</span>
     </div>
 
-    <div class="form-group">
+    <div :class="['form-group', error.messages['registration_type'] ? 'has-error' : '']">
       <label for="registration-type">Tipo de bilhete</label>
       <select class="form-control" v-model="registration.registration_type">
         <option disabled selected value="">Selecionar o tipo de bilhete</option>
@@ -48,6 +48,7 @@
           {{ registrationType.type }}
         </option>
       </select>
+      <span v-if="error.messages['registration_type']" class="text-danger small">{{ error.messages['registration_type'] }}</span>
     </div>
 
     <div class="checkbox">
@@ -88,9 +89,7 @@
       </tfoof>
     </table>
 
-    <div class="form-group">
-      <button class="btn btn-primary" @click.prevent="save">Inscrever</button>
-    </div>
+    <submit-button :loading="loading" :callback="save" message="A inscrever...">Inscrever</submit-button>
   </div>
 </template>
 
@@ -100,6 +99,7 @@ import Errors from '../Shared/Errors.vue'
 import Loading from '../Shared/Loading.vue'
 import EventService from '../../services/EventService.js'
 import RegistrationService from '../../services/RegistrationService.js'
+import SubmitButton from '../Shared/SubmitButton.vue'
 import { NotificationStore } from '../../stores/NotificationStore.js'
 import '../../filters/Price'
 
@@ -118,7 +118,8 @@ export default {
       registration: {},
 
       // Component status
-      error: null
+      error: this.resetErrors(),
+      loading: false
     }
   },
   created () {
@@ -127,7 +128,6 @@ export default {
   },
   methods: {
     loadEvent () {
-      this.error = null
       this.$loadingRouteData = true
       EventService.get(this.$route.params.id, true).then(event => {
         this.$set('event', event.data)
@@ -157,10 +157,11 @@ export default {
       return this.registration
     },
     save () {
-      this.error = null
+      this.resetErrors()
+      this.loading = true
       RegistrationService.store(this.event.id, this.registration).then(registration => {
-        // Success message
-        this.resetRegistrationState()
+        // Notify registration has been stored
+        // Refresh state
       }).catch(response => {
         switch (response.status) {
           case 404:
@@ -176,6 +177,8 @@ export default {
             this.error = JSON.parse(response.body).error
             break
         }
+      }).then(() => {
+        this.loading = false
       })
     },
     getRegistrationTypeData (registrationTypeId, field) {
@@ -194,10 +197,17 @@ export default {
       value += this.registration.fined ? registrationType.fine : 0
 
       return value
+    },
+    resetErrors () {
+      this.error = {
+        messages: []
+      }
+
+      return this.error
     }
   },
   components: {
-    Loading, Errors
+    Loading, Errors, SubmitButton
   }
 }
 </script>
