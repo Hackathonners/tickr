@@ -1,5 +1,5 @@
 <template>
-  <div @click="triggerClose(notification)" class="alert" :class="['alert-toast', 'alert', notification.type ? 'alert-' + notification.type : 'alert-info']" transition="fade">
+  <div @click="triggerClose(notification)" class="alert" :class="['notification', 'alert', notification.type ? 'alert-' + notification.type : 'alert-info']" transition="fade">
     {{notification.text}}
   </div>
 </template>
@@ -14,7 +14,7 @@ export default {
   ready: function () {
     const timeout = this.notification.hasOwnProperty('timeout') ? this.notification.timeout : true
     if (timeout) {
-      const delay = this.notification.delay || 50000
+      const delay = this.notification.delay || 3000
       this.timer = setTimeout(function () {
         this.triggerClose(this.notification)
       }.bind(this), delay)

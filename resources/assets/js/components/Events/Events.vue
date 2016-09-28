@@ -111,7 +111,7 @@ export default {
   },
 
   beforeDestroy () {
-    NotificationStore.removeAllNotifications()
+    NotificationStore.removeNotification()
   },
 
   methods: {

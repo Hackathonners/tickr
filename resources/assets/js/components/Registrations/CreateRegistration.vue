@@ -133,6 +133,7 @@ export default {
         this.$set('event', event.data)
         this.$loadingRouteData = false
       }).catch(response => {
+        // Change it !
         switch (response.status) {
           case 404:
             NotificationStore.addNotification({

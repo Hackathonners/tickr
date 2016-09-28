@@ -133,6 +133,7 @@ import moment from 'moment'
 import Errors from '../Shared/Errors.vue'
 import EventService from '../../services/EventService.js'
 import SubmitButton from '../Shared/SubmitButton.vue'
+import { NotificationStore } from '../../stores/NotificationStore.js'
 import '../../directives/Datepicker'
 import '../../filters/Price'
 
@@ -173,8 +174,12 @@ export default {
       this.resetErrors()
       this.loading = true
       EventService.store(this.event).then(event => {
-        // Notify user that event has been created
-        // Redirect to event page
+        NotificationStore.setNotification({
+          text: 'O evento foi criado com sucesso.',
+          type: 'success'
+        })
+        console.log(event)
+        this.$router.go({ name: 'events.show', params: { id: event.data.id } })
       }).catch(response => {
         switch (response.status) {
           case 422:
