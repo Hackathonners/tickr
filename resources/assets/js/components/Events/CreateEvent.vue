@@ -178,17 +178,14 @@ export default {
           text: 'O evento foi criado com sucesso.',
           type: 'success'
         })
-        console.log(event)
         this.$router.go({ name: 'events.show', params: { id: event.data.id } })
       }).catch(response => {
-        switch (response.status) {
-          case 422:
-            window.scrollTo(0, 0) // Scroll to top, to see errors
-            this.error = JSON.parse(response.body).error
-            break
+        if (response.status === 422) {
+          this.error = JSON.parse(response.body).error
         }
       }).then(() => {
         this.loading = false
+        window.scrollTo(0, 0)
       })
     },
     addRegistrationType () {

@@ -5,6 +5,10 @@ import VueRouter from 'vue-router'
 import moment from 'moment'
 import 'moment/locale/pt'
 
+// Import interceptos
+import ServerError from './interceptors/ServerErrorInterceptor.js'
+import UnprocessableEntityError from './interceptors/UnprocessableEntityErrorInterceptor.js'
+
 // Set moment locale
 moment.locale('pt')
 
@@ -15,6 +19,9 @@ Vue.use(VueResource)
 
 Vue.http.options.root = '/api/v1'
 Vue.http.options.emulateHTTP = true
+
+Vue.http.interceptors.push(ServerError)
+Vue.http.interceptors.push(UnprocessableEntityError)
 
 var router = new VueRouter({
   history: true,

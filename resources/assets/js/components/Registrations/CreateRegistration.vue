@@ -161,25 +161,19 @@ export default {
       this.resetErrors()
       this.loading = true
       RegistrationService.store(this.event.id, this.registration).then(registration => {
-        // Notify registration has been stored
-        // Refresh state
+        NotificationStore.setNotification({
+          text: 'A inscrição foi adicionada com sucesso.',
+          type: 'success'
+        })
+        this.resetRegistrationState()
       }).catch(response => {
-        switch (response.status) {
-          case 404:
-            NotificationStore.addNotification({
-              text: 'O evento solicitado já não existe.',
-              type: 'danger',
-              timeout: true
-            })
-            this.$router.replace({ name: 'events' })
-            break
-          case 422:
-            window.scrollTo(0, 0) // Scroll to top, to see errors
-            this.error = JSON.parse(response.body).error
-            break
+        window.scrollTo(0, 0) // Scroll to top, to see errors
+        if (response.status === 422) {
+          this.error = JSON.parse(response.body).error
         }
       }).then(() => {
         this.loading = false
+        window.scrollTo(0, 0)
       })
     },
     getRegistrationTypeData (registrationTypeId, field) {

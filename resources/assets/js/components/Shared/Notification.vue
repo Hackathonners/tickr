@@ -14,7 +14,7 @@ export default {
   ready: function () {
     const timeout = this.notification.hasOwnProperty('timeout') ? this.notification.timeout : true
     if (timeout) {
-      const delay = this.notification.delay || 3000
+      const delay = this.notification.delay || 5000
       this.timer = setTimeout(function () {
         this.triggerClose(this.notification)
       }.bind(this), delay)
