@@ -138,13 +138,7 @@ export default {
         this.$set('event', event.data)
         this.$loadingRouteData = false
       }).catch(response => {
-        if (response.status === 404) {
-          NotificationStore.setNotification({
-            text: 'O evento solicitado já não existe.',
-            type: 'danger'
-          })
-          this.$router.replace({ name: 'events' })
-        }
+        // Handle
       })
     },
     getRegistrationTypeStats (registrationTypeId, statsField) {

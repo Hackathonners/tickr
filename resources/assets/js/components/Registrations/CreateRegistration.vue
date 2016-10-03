@@ -133,17 +133,7 @@ export default {
         this.$set('event', event.data)
         this.$loadingRouteData = false
       }).catch(response => {
-        // Change it !
-        switch (response.status) {
-          case 404:
-            NotificationStore.addNotification({
-              text: 'O evento solicitado já não existe.',
-              type: 'danger',
-              timeout: true
-            })
-            this.$router.replace({ name: 'events' })
-            break
-        }
+        // Handle
       })
     },
     resetRegistrationState () {

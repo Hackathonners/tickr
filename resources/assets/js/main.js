@@ -15,15 +15,13 @@ moment.locale('pt')
 Vue.use(VueRouter)
 Vue.use(VueResource)
 
+
 /* eslint-disable no-new */
 
 Vue.http.options.root = '/api/v1'
 Vue.http.options.emulateHTTP = true
 
-Vue.http.interceptors.push(ServerError)
-Vue.http.interceptors.push(UnprocessableEntityError)
-
-var router = new VueRouter({
+const router = new VueRouter({
   history: true,
   root: '/'
 })
@@ -52,6 +50,17 @@ router.map({
   '*': {
     component: require('./components/Errors/404.vue')
   }
+})
+
+Vue.http.interceptors.push(ServerError)
+Vue.http.interceptors.push(UnprocessableEntityError)
+Vue.http.interceptors.push((request, next) => {
+  next((response) => {
+    // Handle unprocessable entity (HTTP 422)
+    if (response.status === 404) {
+      router.replace('/404')
+    }
+  })
 })
 
 router.start(App, 'body')
