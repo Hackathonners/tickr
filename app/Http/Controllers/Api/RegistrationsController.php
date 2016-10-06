@@ -78,7 +78,7 @@ class RegistrationsController extends ApiController
                 $user = User::where(['email' => $request->input('email')])->first();
                 $registrationType = RegistrationType::findOrFail($request->input('registration_type'));
 
-                if (!$user) {
+                if (! $user) {
                     $user = new User;
                     $user->fill($request->all());
                     $user->password = bcrypt(str_random(10));
@@ -115,7 +115,7 @@ class RegistrationsController extends ApiController
     {
         $token = Input::get('token');
 
-        if (!$token) {
+        if (! $token) {
             return $this->errorWrongArgs('Activation code was not provided.');
         }
 

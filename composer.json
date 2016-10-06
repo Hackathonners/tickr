@@ -6,7 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.2.*",
+        "laravel/framework": "5.3.*",
         "league/fractal": "^0.13.0",
         "spatie/laravel-fractal": "^1.9",
         "vinkla/hashids": "^2.4",

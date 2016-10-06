@@ -27,7 +27,7 @@ abstract class Request extends FormRequest
      */
     public function response(array $errors)
     {
-        if (($this->ajax() && !$this->pjax()) || $this->wantsJson()) {
+        if (($this->ajax() && ! $this->pjax()) || $this->wantsJson()) {
             return (new ApiController)->errorWrongArgs($errors);
         }
 

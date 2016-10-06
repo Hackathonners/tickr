@@ -94,7 +94,7 @@ class Event extends Model
      */
     private function isPastDate($date)
     {
-        if (!($date instanceof Carbon)) {
+        if (! ($date instanceof Carbon)) {
             $date = Carbon::parse($date);
         }
 
@@ -152,7 +152,7 @@ class Event extends Model
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @throws \Exception
      */

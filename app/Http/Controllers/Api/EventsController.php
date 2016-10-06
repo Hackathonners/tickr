@@ -78,7 +78,7 @@ class EventsController extends ApiController
      */
     public function show(Request $request, $id)
     {
-        $stats = !!$request->get('stats', false);
+        $stats = ! ! $request->get('stats', false);
 
         $event = DB::transaction(function () use ($id, $stats) {
             $event = Event::findOrFail($id);

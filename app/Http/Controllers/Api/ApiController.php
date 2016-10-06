@@ -81,7 +81,7 @@ class ApiController extends Controller
     public function respondWith($data, $callback, $includes = [])
     {
         //if $data is null throw error
-        if (!$data) {
+        if (! $data) {
             return $this->errorNotFound('Requested response not found.');
         }
         //if $data is a Collection or a Paginated Collection
@@ -143,7 +143,7 @@ class ApiController extends Controller
      */
     public function respondWithError($message, $errorCode)
     {
-        if (!is_array($message)) {
+        if (! is_array($message)) {
             $message = [$message];
         }
 
