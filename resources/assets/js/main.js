@@ -15,7 +15,6 @@ moment.locale('pt')
 Vue.use(VueRouter)
 Vue.use(VueResource)
 
-
 /* eslint-disable no-new */
 
 Vue.http.options.root = '/api/v1'
@@ -52,11 +51,14 @@ router.map({
   }
 })
 
+router.alias({
+  '/': 'events'
+})
+
 Vue.http.interceptors.push(ServerError)
 Vue.http.interceptors.push(UnprocessableEntityError)
 Vue.http.interceptors.push((request, next) => {
   next((response) => {
-    // Handle unprocessable entity (HTTP 422)
     if (response.status === 404) {
       router.replace('/404')
     }
