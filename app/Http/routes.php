@@ -29,6 +29,10 @@ Route::group(['prefix' => 'api/v1'], function () {
 
     Route::get('users/{id}/registrations', 'Api\RegistrationsController@registry');
     Route::get('events/{eventId}/registrations', 'Api\RegistrationsController@index');
+
+    Route::resource('users', 'Api\UsersController', [
+            'only' => ['show'],
+        ]);
 });
 
 Route::get('{all}', function () {
