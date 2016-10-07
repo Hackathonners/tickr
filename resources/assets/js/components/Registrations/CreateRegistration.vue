@@ -10,27 +10,34 @@
       </div>
     </div>
 
-    <!-- New Registration Form -->
-    <!-- Registration details -->
+    <!-- Participants data -->
     <div class="fieldset">
       <span class="label label-primary step">1</span>
       <span class="title">Dados do participante</span>
     </div>
 
+    <!-- Participant email -->
     <div :class="['form-group', error.messages['email'] ? 'has-error' : '']">
       <label for="registration-email">E-mail do participante</label>
-      <input type="email" class="form-control" id="registration-email" v-model="registration.email">
+      <div :class="{ 'input-group': loadingUser }">
+        <input type="email" class="form-control" id="registration-email" v-model="registration.email">
+        <span v-if="loadingUser" class="input-group-addon"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i> A verificar</span>
+      </div>
       <span v-if="error.messages['email']" class="text-danger small">{{ error.messages['email'] }}</span>
       <span v-else class="help-block small"><strong>Nota:</strong> O bilhete do evento será enviado para este e-mail.</span>
     </div>
+
+
+
     <div :class="['form-group', error.messages['name'] ? 'has-error' : '']">
       <label for="registration-name">Nome do participante</label>
-      <input type="text" class="form-control" id="registration-name" v-model="registration.name">
+      <input type="text" class="form-control" id="registration-name" disabled v-model="registration.name">
       <span v-if="error.messages['name']" class="text-danger small">{{ error.messages['name'] }}</span>
     </div>
+
     <div :class="['form-group', error.messages['notes'] ? 'has-error' : '']">
       <label for="registration-notes">Outras informações (opcional)</label>
-      <textarea class="form-control" id="registration-notes" v-model="registration.notes" rows="5"></textarea>
+      <textarea class="form-control" id="registration-notes" disabled v-model="registration.notes" rows="5"></textarea>
       <span v-if="error.messages['notes']" class="text-danger small">{{ error.messages['notes'] }}</span>
     </div>
 
@@ -99,6 +106,7 @@ import Errors from '../Shared/Errors.vue'
 import Loading from '../Shared/Loading.vue'
 import EventService from '../../services/EventService.js'
 import RegistrationService from '../../services/RegistrationService.js'
+import UserService from '../../services/UserService.js'
 import SubmitButton from '../Shared/SubmitButton.vue'
 import { NotificationStore } from '../../stores/NotificationStore.js'
 import '../../filters/Price'
@@ -119,7 +127,9 @@ export default {
 
       // Component status
       error: this.resetErrors(),
-      loading: false
+      loading: false,
+      loadingUser: false,
+      userTimeout: null
     }
   },
   created () {
@@ -189,6 +199,20 @@ export default {
       }
 
       return this.error
+    },
+    findUser () {
+      console.log('searching user...')
+      UserService.find(this.registration.email).then((response) => {
+        console.log(response)
+      })
+    }
+  },
+  watch: {
+    'registration.email': function (newValue, oldValue) {
+      clearTimeout(this.userTimeout)
+      if (newValue) {
+        this.userTimeout = setTimeout(this.findUser, 1000)
+      }
     }
   },
   components: {
