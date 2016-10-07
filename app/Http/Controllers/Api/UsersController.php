@@ -18,7 +18,7 @@ class UsersController extends ApiController
     {
         $user = DB::transaction(function () use ($id) {
             if (filter_var($id, FILTER_VALIDATE_EMAIL) !== false) {
-                $user = User::where(['email' => $id])->first();
+                $user = User::where(['email' => $id])->firstOrFail();
             } else {
                 $user = User::findOrFail($id);
             }
