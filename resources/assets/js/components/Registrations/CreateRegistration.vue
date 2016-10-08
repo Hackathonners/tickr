@@ -31,13 +31,13 @@
 
     <div :class="['form-group', error.messages['name'] ? 'has-error' : '']">
       <label for="registration-name">Nome do participante</label>
-      <input type="text" class="form-control" id="registration-name" disabled v-model="registration.name">
+      <input type="text" class="form-control" id="registration-name" v-model="registration.name">
       <span v-if="error.messages['name']" class="text-danger small">{{ error.messages['name'] }}</span>
     </div>
 
     <div :class="['form-group', error.messages['notes'] ? 'has-error' : '']">
       <label for="registration-notes">Outras informações (opcional)</label>
-      <textarea class="form-control" id="registration-notes" disabled v-model="registration.notes" rows="5"></textarea>
+      <textarea class="form-control" id="registration-notes" v-model="registration.notes" rows="5"></textarea>
       <span v-if="error.messages['notes']" class="text-danger small">{{ error.messages['notes'] }}</span>
     </div>
 
@@ -199,20 +199,6 @@ export default {
       }
 
       return this.error
-    },
-    findUser () {
-      console.log('searching user...')
-      UserService.find(this.registration.email).then((response) => {
-        console.log(response)
-      })
-    }
-  },
-  watch: {
-    'registration.email': function (newValue, oldValue) {
-      clearTimeout(this.userTimeout)
-      if (newValue) {
-        this.userTimeout = setTimeout(this.findUser, 1000)
-      }
     }
   },
   components: {
