@@ -151,19 +151,20 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
+         * Packages Providers...
+         */
+        Spatie\Fractal\FractalServiceProvider::class,
+        Vinkla\Hashids\HashidsServiceProvider::class,
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
+
+        /*
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-        /*
-         * Packages Providers...
-         */
-        Spatie\Fractal\FractalServiceProvider::class,
-        Vinkla\Hashids\HashidsServiceProvider::class,
-        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
     ],
 

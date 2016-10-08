@@ -11,7 +11,8 @@
         "spatie/laravel-fractal": "^1.9",
         "vinkla/hashids": "^2.4",
         "guzzlehttp/guzzle": "^6.2",
-        "simplesoftwareio/simple-qrcode": "^1.4"
+        "simplesoftwareio/simple-qrcode": "^1.4",
+        "laravel/passport": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

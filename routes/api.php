@@ -1,18 +1,19 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
-| Application Routes
+| API Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-//Auth::login(\App\Karina\User::first());
 
-Route::group(['prefix' => 'api/v1'], function () {
+Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function() {
     Route::resource('events', 'Api\EventsController');
     Route::get('events/{eventId}/stats', 'Api\EventsController@showStats');
 
@@ -31,10 +32,15 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::get('events/{eventId}/registrations', 'Api\RegistrationsController@index');
 
     Route::resource('users', 'Api\UsersController', [
-            'only' => ['show'],
-        ]);
-});
+        'only' => ['show'],
+    ]);
 
-Route::get('{all}', function () {
-    return view('welcome');
-})->where('all', '(.*)');
+    Route::get('/me', function (Request $request) {
+        return $request->user();
+    })->middleware('auth:api');
+
+    // 404 on not found routes under API group
+    Route::get('{all}', function () {
+        return (new App\Http\Controllers\Api\ApiController())->errorNotFound('Sorry, the resource you are looking for could not be found.');
+    })->where('all', '(.*)');
+});

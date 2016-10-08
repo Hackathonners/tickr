@@ -3,6 +3,7 @@ import App from './App.vue'
 import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
 import moment from 'moment'
+import Cookies from 'js-cookie'
 import 'moment/locale/pt'
 
 // Import interceptos
@@ -64,5 +65,10 @@ Vue.http.interceptors.push((request, next) => {
     }
   })
 })
+
+Vue.http.interceptors.push(function (request, next) {
+  request.headers['X-CSRF-TOKEN'] = Laravel.csrfToken;
+  next();
+});
 
 router.start(App, 'body')

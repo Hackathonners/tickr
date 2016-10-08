@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Api\ApiController;
 
 class Authenticate
 {
@@ -19,7 +20,7 @@ class Authenticate
     {
         if (Auth::guard($guard)->guest()) {
             if ($request->ajax() || $request->wantsJson()) {
-                return response('Unauthorized.', 401);
+                return (new ApiController())->errorUnauthorized('You are not logged in.');
             } else {
                 return redirect()->guest('login');
             }
