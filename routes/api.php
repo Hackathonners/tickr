@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function() {
+Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
     Route::resource('events', 'Api\EventsController');
     Route::get('events/{eventId}/stats', 'Api\EventsController@showStats');
 

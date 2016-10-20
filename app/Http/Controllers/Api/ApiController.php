@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Auth;
 use App\Http\Controllers\Controller;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Fractal;
@@ -43,6 +44,17 @@ class ApiController extends Controller
      *
      */
     const CODE_FORBIDDEN = 'ERR-FORBIDDEN';
+
+    /**
+     * Create a new Api controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        // Set default guard.
+        Auth::shouldUse('api');
+    }
 
     /**
      * Getter for statusCode.

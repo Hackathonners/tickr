@@ -60,8 +60,8 @@ Vue.http.interceptors.push(ServerError)
 Vue.http.interceptors.push(UnprocessableEntityError)
 Vue.http.interceptors.push((request, next) => {
   next((response) => {
-    if (response.status === 404) {
-      router.replace('/404')
+    if (response.status === 401) {
+      location.href = '/login'
     }
   })
 })
