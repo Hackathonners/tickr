@@ -5,8 +5,6 @@
         <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
         <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
-
-
         <link rel="shortcut icon" type="image/png" href="/images/fav.png"/>
     </head>
     <body class="sticky-footer-wrapper">

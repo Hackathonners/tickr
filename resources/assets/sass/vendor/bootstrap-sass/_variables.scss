@@ -44,7 +44,7 @@ $link-hover-decoration: none;
 // //
 // //## Font, line-height, and color for body text, headings, and more.
 
-$font-family-sans-serif:  sans-serif;
+$font-family-sans-serif:  -apple-system, sans-serif;
 // $font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 // $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
@@ -704,12 +704,12 @@ $progress-border-radius:      $border-radius-small !default;
 // $list-group-link-heading-color: #333 !default;
 
 
-// //== Panels
-// //
-// //##
+//== Panels
+//
+//##
 
 // $panel-bg:                    #fff !default;
-// $panel-body-padding:          15px !default;
+$panel-body-padding:          20px;
 // $panel-heading-padding:       10px 15px !default;
 // $panel-footer-padding:        $panel-heading-padding !default;
 // $panel-border-radius:         $border-radius-base !default;
