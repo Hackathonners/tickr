@@ -31,6 +31,8 @@ elixir(function(mix) {
   mix.sass('app.scss');
   mix.browserify('main.js');
 
+  mix.version(['css/app.css', 'js/main.js'])
+
   mix.task('emailify');
   mix.eslint('resources/assets/js');
 });
