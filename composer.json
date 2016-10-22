@@ -1,8 +1,9 @@
 {
     "name": "hackathonners/tickr",
-    "description": "The Laravel Framework.",
+    "description": "Tickr is a simple platform that allows users to organize events and manage their registrations.",
     "keywords": ["ticket", "event", "manager"],
     "license": "MIT",
+    "version": "1.0.0-dev",
     "type": "project",
     "require": {
         "php": ">=5.5.9",
