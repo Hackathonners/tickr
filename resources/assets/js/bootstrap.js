@@ -29,18 +29,25 @@ Vue.config.debug = process.env.NODE_ENV !== 'production';
  * https://github.com/vuejs/vue-resource/tree/master/docs
  */
 import VueResource from 'vue-resource';
-import authService from './app/services/auth';
 
 Vue.use(VueResource);
 
 Vue.http.headers.common.Accept = 'application/json';
+Vue.http.options.root = '/api/v1';
 Vue.http.interceptors.push((request, next) => {
   next((response) => {
-    // When the token is invalid, log the user out
+    // When the session expires, send to login
     if (response.status === 401) {
-      authService.logout();
+      // location.href = '/login'
     }
   });
+});
+
+// Laravel interceptor
+Vue.http.interceptors.push((request, next) => {
+  request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
+
+  next();
 });
 
 
@@ -53,9 +60,6 @@ Vue.http.interceptors.push((request, next) => {
  * https://github.com/vuejs/vuex-router-sync/blob/master/README.md
  */
 import VuexRouterSync from 'vuex-router-sync';
-import store from './app/store';
-
-store.dispatch('checkAuthentication');
 
 
 /* ============
@@ -69,6 +73,7 @@ store.dispatch('checkAuthentication');
  */
 import VueRouter from 'vue-router';
 import routes from './app/routes';
+import store from './app/store';
 
 Vue.use(VueRouter);
 
@@ -76,27 +81,7 @@ export const router = new VueRouter({
   mode: 'history',
   routes,
 });
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(m => m.meta.auth) && !store.state.auth.authenticated) {
-    /*
-     * If the user is not authenticated and visits
-     * a page that requires authentication, redirect to the login page
-     */
-    next({
-      name: 'login.index',
-    });
-  } else if (to.matched.some(m => m.meta.guest) && store.state.auth.authenticated) {
-    /*
-     * If the user is authenticated and visits
-     * an guest page, redirect to the dashboard page
-     */
-    next({
-      name: 'account.show',
-    });
-  } else {
-    next();
-  }
-});
+
 VuexRouterSync.sync(store, router);
 
 Vue.router = router;

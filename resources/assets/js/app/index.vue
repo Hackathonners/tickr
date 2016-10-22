@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div id="tickr-app">
+    <div v-if="loading">Loading...</div>
     <router-view></router-view>
   </div>
 </template>
@@ -12,9 +13,16 @@
    */
 
   import store from './store';
+  import UserService from './services/account'
   import { router } from './../bootstrap';
 
   export default {
+    data () {
+      return {
+        loading: true,
+      }
+    },
+
     /**
      * The Vuex store
      */
@@ -28,12 +36,17 @@
     /**
      * Fires when the app has been mounted
      */
-    mounted() {
-      // If the user is authenticated,
-      // fetch the data from the API
-      if (this.$store.state.auth.authenticated) {
-        // accountService.find();
-      }
+    mounted () {
+      this.getAccount();
     },
+
+    methods: {
+      getAccount () {
+        UserService.getAccount()
+          .then(() => {
+            this.loading = false;
+          });
+      }
+    }
   };
 </script>

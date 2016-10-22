@@ -35,10 +35,6 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
         'only' => ['show'],
     ]);
 
-    Route::get('/me', function (Request $request) {
-        return $request->user();
-    })->middleware('auth:api');
-
     // 404 on not found routes under API group
     Route::get('{all}', function () {
         return (new App\Http\Controllers\Api\ApiController())->errorNotFound('Sorry, the resource you are looking for could not be found.');

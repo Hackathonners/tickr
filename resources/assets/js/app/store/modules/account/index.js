@@ -1,6 +1,8 @@
 /* ============
- * Auth Module
+ * User Module
  * ============
+ *
+ * todo: add documentation here!
  */
 
 import state from './state';
