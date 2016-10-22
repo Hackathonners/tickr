@@ -1,10 +1,11 @@
+var path = require('path');
 var gulp = require('gulp');
 var inlineCss = require('gulp-inline-css');
 var elixir = require('laravel-elixir');
 var rename = require('gulp-rename');
 
-require('laravel-elixir-vueify');
-require('laravel-elixir-eslint');
+require('laravel-elixir-vue-2');
+require('laravel-elixir-webpack-official');
 
 /*
  |--------------------------------------------------------------------------
@@ -16,6 +17,20 @@ require('laravel-elixir-eslint');
  | file for our application, as well as publishing vendor resources.
  |
  */
+Elixir.webpack.mergeConfig({
+  resolve: {
+    extensions: ['', '.js', '.vue'],
+    alias: {
+      'app': path.resolve(Elixir.config.assetsPath, 'js/app/'),
+    }
+  },
+  module: {
+    loaders: [{
+      test: /\.json$/,
+      loader: 'json'
+    }]
+  }
+});
 
 gulp.task('emailify', function() {
   return gulp.src('resources/templates/emails/*.html')
@@ -28,11 +43,11 @@ gulp.task('emailify', function() {
 });
 
 elixir(function(mix) {
-  mix.sass('app.scss');
-  mix.browserify('main.js');
+  mix.sass('app.scss')
+     .webpack('main.js');
 
   mix.version(['css/app.css', 'js/main.js'])
 
   mix.task('emailify');
-  mix.eslint('resources/assets/js');
+  // mix.eslint('resources/assets/js');
 });
