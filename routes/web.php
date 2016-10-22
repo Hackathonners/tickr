@@ -14,5 +14,5 @@
 Auth::routes();
 
 Route::get('{all}', function () {
-    return view('welcome');
+    return view('app');
 })->where('all', '(.*)')->middleware('auth');
