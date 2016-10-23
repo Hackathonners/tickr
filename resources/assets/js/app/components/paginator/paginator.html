@@ -1,0 +1,12 @@
+<nav class="paginator">
+    <ul v-show="!singlePage" class="pager">
+        <li :class="{ disabled: onFirstPage }">
+            <router-link v-if="!onFirstPage" :to="prevPage()" append>Previous</router-link>
+            <a v-else>Previous</a>
+        </li>
+        <li :class="{ disabled: onLastPage }">
+            <router-link v-if="!onLastPage" :to="nextPage()" append>Next</router-link>
+            <a v-else>Next</a>
+        </li>
+    </ul>
+</nav>
