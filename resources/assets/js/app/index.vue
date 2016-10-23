@@ -1,7 +1,7 @@
 <template>
   <div id="tickr-app">
     <div v-if="loading">Loading...</div>
-    <router-view></router-view>
+    <router-view v-else></router-view>
   </div>
 </template>
 <script>

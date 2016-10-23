@@ -1,64 +1,37 @@
 <div>
-  <nav class="navbar navbar-default">
+  <main>
+    <nav class="navbar">
     <div class="container">
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <router-link
-          class="navbar-brand"
-          :to="{ name: 'home.index' }"
-        >
-          My App
-        </router-link>
+        <router-link class="navbar-brand" to="{ name: 'events' }">
+          <img alt="Brand" height="34" src="/images/logo.svg">
+        </a>
       </div>
-
-      <div class="collapse navbar-collapse" id="navbar">
-        <ul class="nav navbar-nav">
-          <router-link
-            :to="{ name: 'home.index' }"
-            active-class="active"
-            class="nav-item"
-            tag="li"
-          >
-            <a>
-              Home
-            </a>
-          </router-link>
-        </ul>
-        <ul class="nav navbar-nav">
-          <router-link
-            :to="{ name: 'account.index' }"
-            active-class="active"
-            class="nav-item"
-            tag="li"
-          >
-            <a>
-              Account
-            </a>
-          </router-link>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-            <a href="#" @click.prevent="logout">
-              <i class="fa fa-sign-out"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <div class="profile-info">
+              <div class="profile-info-username">{{ $store.state.account.user.name }} <span class="caret"></span></div>
+              <div class="small text-muted profile-info-email">{{ $store.state.account.user.email }}</div>
+            </div>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </nav>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <!-- Content will be placed here -->
-        <slot></slot>
-      </div>
+    <div class="container">
+      <slot></slot>
     </div>
-  </div>
-
+    <!-- <div class="notification-wrapper">
+      <notification v-for="notification in notifications" :notification="notification" @close-notification="removeNotification"></notification>
+    </div> -->
+  </main>
+  <footer class="sticky-footer">
+    <div class="container">
+      <!-- Sticky footer -->
+    </div>
+  </footer>
 </div>

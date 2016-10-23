@@ -12,23 +12,18 @@
  * @type {object} The routes
  */
 export default [
-  // Home
-  // {
-  //   path: '/home',
-  //   name: 'home.index',
-  //   component: require('app/pages/home/index/index.vue'),
+  {
+    path: '/events',
+    name: 'events.index',
+    component: require('app/pages/events/index/index.vue'),
+  },
 
-  //   // If the user needs to be authenticated to view this page
-  //   meta: {
-  //     auth: true,
-  //   },
-  // },
-  // {
-  //   path: '/',
-  //   redirect: '/home',
-  // },
-  // {
-  //   path: '/*',
-  //   redirect: '/home',
-  // },
+  {
+    path: '/',
+    redirect: '/events',
+  },
+  {
+    path: '/*',
+    redirect: '/events',
+  },
 ];
