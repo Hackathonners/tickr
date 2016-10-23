@@ -106,6 +106,15 @@ Object.keys(locale).forEach((lang) => {
   Vue.locale(lang, locale[lang]);
 });
 
+/* ============
+ * Filters
+ * ============
+ *
+ */
+require('app/utils/filters/Date')
+require('app/utils/filters/Price')
+require('app/utils/filters/Ratio')
+
 export default {
   router,
 };
