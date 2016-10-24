@@ -18,6 +18,6 @@ export default {
         }
         return Promise.resolve(response);
       })
-      .catch((error) => Promise.reject(error))
+      .catch((error) => Promise.reject(error.body))
   }
 }

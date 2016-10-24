@@ -12,7 +12,7 @@ export default {
   list (page = 1, filter) {
     return Vue.resource(url, { page, filter }).get()
       .then((response) => Promise.resolve(response.json()))
-      .catch((error) => Promise.reject(error))
+      .catch((error) => Promise.reject(error.body))
   },
 
   /**
@@ -25,7 +25,7 @@ export default {
     stats = stats ? 1 : 0
     return Vue.resource(url, { eventId, stats }).get()
       .then((response) => Promise.resolve(response.json()))
-      .catch((error) => Promise.reject(error))
+      .catch((error) => Promise.reject(error.body))
   },
 
   /**
@@ -36,6 +36,6 @@ export default {
   store (data) {
     return Vue.resource(url).save(data)
       .then((response) => Promise.resolve(response.json()))
-      .catch((error) => Promise.reject(error))
+      .catch((error) => Promise.reject(error.body))
   }
 }
