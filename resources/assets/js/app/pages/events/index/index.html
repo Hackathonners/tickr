@@ -4,7 +4,7 @@
       <span class="page-title">Eventos</span>
     </div>
     <div class="col-xs-4">
-    <router-link class="page-action btn btn-primary pull-right" to="{ name: 'events.create' }">Novo evento</router-link>
+    <router-link class="page-action btn btn-primary pull-right" :to="{ name: 'events.create' }">Novo evento</router-link>
     </div>
   </div>
   <div class="row">
@@ -26,7 +26,7 @@
           <!-- No results -->
           <tr class="no-results" v-show="!state.loading && events.length == 0">
             <td class="col-md-12 event-info text-center" colspan="3">
-              <span v-show="filterActive">Não existem eventos ativos, <router-link class="text-primary" to="{ name: 'events.create' }">crie um evento</router-link>.</span>
+              <span v-show="filterActive">Não existem eventos ativos, <router-link class="text-primary" :to="{ name: 'events.create' }">crie um evento</router-link>.</span>
               <span v-show="filterPast">Não existem eventos passados.</span>
             </td>
           </tr>
@@ -61,7 +61,7 @@
               <div v-if="isFuture(event)" class="event-info__status event-info__status--waiting">
                 <span class="status__title">Inicia em {{ event.start_at | human_diff(true) }}</span>
                 <div class="status__details text-muted">
-                  {{ event.start_at | date ('dddd') }}, {{ event.start_at | date ('D MMMM YYYY, HH:mm') }}
+                  {{ event.start_at | date('dddd') }}, {{ event.start_at | date('D MMMM YYYY, HH:mm') }}
                 </div>
               </div>
             </td>

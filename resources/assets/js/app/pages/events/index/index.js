@@ -1,5 +1,5 @@
 /* ============
- * Account Index Page
+ * Events Index Page
  * ============
  *
  * Page where the user can view the account information

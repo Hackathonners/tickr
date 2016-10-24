@@ -17,6 +17,11 @@ export default [
     name: 'events.index',
     component: require('app/pages/events/index/index.vue'),
   },
+  {
+    path: '/events/create',
+    name: 'events.create',
+    component: require('app/pages/events/create/create.vue'),
+  },
 
   {
     path: '/',
