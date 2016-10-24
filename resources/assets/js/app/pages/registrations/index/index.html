@@ -1,0 +1,19 @@
+<v-layout>
+  <div v-show="state.loading" class="row page-header">
+    <spinner :loading="state.loading" message="A carregar inscrições..."></spinner>
+  </div>
+
+  <div v-show="!state.loading" class="page-content">
+    <div class="row page-header">
+      <div class="col-xs-8">
+        <span class="page-title">Inscrições em {{ event.title }}</span>
+        <div class="text-muted">{{ event.start_at | date_range(event.end_at) }}</div>
+        <div class="text-muted">{{ event.place }}</div>
+      </div>
+      <div class="col-xs-4">
+        <router-link class="page-action btn btn-primary pull-right" :to="{ name: 'registrations.create', params: { id: event.id } }">Nova inscrição</router-link>
+      </div>
+    </div>
+    <registrations :event-id="$route.params.id" :action="{ name: 'registrations.create', params: { id: event.id } }"></registrations>
+  </div>
+</v-layout>

@@ -36,7 +36,7 @@
             <!-- Event details -->
             <td class="col-md-6 event-info">
               <div class="event-info__name">
-                <router-link to="{ name: 'events.show', params: { id: event.id }}">{{ event.title }}</a>
+                <router-link :to="{ name: 'events.show', params: { id: event.id }}">{{ event.title }}</router-link>
               </div>
               <div class="event-info__place text-muted">
                 {{ event.place }} · Criado {{ event.created_at | human_diff }}

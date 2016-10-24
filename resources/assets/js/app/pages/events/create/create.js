@@ -59,7 +59,13 @@ export default {
             text: 'Por favor, verifique os dados introduzidos.',
             type: 'danger'
           });
+          return;
         }
+
+        store.dispatch('notify', {
+          text: 'Ocorreu um erro inesperado. Por favor, tente mais tarde.',
+          type: 'danger'
+        });
       }).then(() => {
         this.$set(this.state, 'busy', false);
         window.scrollTo(0, 0)

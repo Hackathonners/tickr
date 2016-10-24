@@ -35,6 +35,11 @@ export default {
       EventService.list(page, filter).then(events => {
         this.$set(this, 'events', events.data)
         this.$set(this.state, 'pagination', events.meta.pagination)
+      }).catch(() => {
+        store.dispatch('notify', {
+          text: 'Ocorreu um erro inesperado. Por favor, tente mais tarde.',
+          type: 'danger'
+        });
       }).then(() => {
         this.$set(this.state, 'loading', false);
       });

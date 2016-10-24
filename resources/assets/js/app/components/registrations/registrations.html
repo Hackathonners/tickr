@@ -1,0 +1,45 @@
+<div class="registrations">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col-md-4">Nome</th>
+                <th class="col-md-2">Tipo de bilhete</th>
+                <th class="col-md-1">Data</th>
+                <th class="col-md-1 text-center">Ativado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loading results -->
+            <tr v-show="state.loading">
+                <td class="event-info text-center" colspan="4">
+                    <!-- <loading :loading="loading" message="A carregar inscrições..."></loading> -->
+                </td>
+            </tr>
+
+            <!-- No results -->
+            <tr class="no-results" v-show="registrations.length == 0 && !state.loading">
+                <td class="event-info text-center" colspan="4">
+                    Não existem inscrições neste evento, <router-link class="text-primary" :to="action">crie uma inscrição</router-link>.
+                </td>
+            </tr>
+
+            <!-- Results -->
+            <tr v-show="!state.loading" v-for="registration in registrations">
+                <td>
+                    {{ registration.user.data.name }}
+                </td>
+                <td>
+                    {{ registration.registration_type.data.type }}
+                    <span v-show="registration.fined" class="label label-warning label-outline">Multa</span>
+                </td>
+                <td>
+                    {{ registration.created_at | human_diff }}
+                </td>
+                <td class="text-center">
+                    <i :class="['fa', registration.activated ? 'fa-check text-primary' : 'fa-close text-muted']" aria-hidden="true"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- <paginator v-show="paginate && !state.loading" :pagination.sync="pagination" :callback="loadRegistrations"></paginator> -->
+</div>

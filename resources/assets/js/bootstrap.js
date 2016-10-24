@@ -38,7 +38,7 @@ Vue.http.interceptors.push((request, next) => {
   next((response) => {
     // When the session expires, send to login
     if (response.status === 401) {
-      // location.href = '/login'
+      location.href = '/login'
     }
   });
 });
@@ -112,8 +112,7 @@ Object.keys(locale).forEach((lang) => {
  *
  */
 require('app/utils/filters/Date')
-require('app/utils/filters/Price')
-require('app/utils/filters/Ratio')
+require('app/utils/filters/Number')
 
 export default {
   router,

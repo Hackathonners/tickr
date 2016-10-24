@@ -30,7 +30,7 @@
                   <tr style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0;">
                     <td class="content-block aligncenter" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; padding: 0 0 20px; text-align: center; vertical-align: top;">
                       <div class="ticket-container" style="background-color: #f6f6f6; border-radius: 3px; box-sizing: border-box; clear: both !important; display: block !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0 auto !important; max-width: 400px !important; padding: 45px;">
-                        <img src="{{ $message->embedData(QrCode::format('png')->size(500)->generate(route('registrations.activate', $registration->hashid)), 'ticket.png') }}" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; max-width: 100%;">
+                        <img src="{{ $message->embedData(QrCode::format('png')->size(500)->generate(route('registrations.activate', ['id' => $registration->hashid, 'token' => $registration->activation_code])), 'ticket.png') }}" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin: 0; max-width: 100%;">
                       </div>
                     </td>
                   </tr>
