@@ -1,0 +1,4 @@
+<button type="submit" :class="['btn', 'btn-primary', disabled ? 'disabled' : '']" :disabled="disabled">
+    <slot v-if="!busy"></slot>
+    <span v-else><i class="fa fa-circle-o-notch fa-spin fa-fw"></i> {{ message }}</span>
+</button>
