@@ -14,6 +14,7 @@ import * as actions from './actions';
 import * as getters from './getters';
 
 // Modules
+import notification from './modules/notification';
 import account from './modules/account';
 
 Vue.use(Vuex);
@@ -35,6 +36,7 @@ export default new Vuex.Store({
    * Assign the modules to the store
    */
   modules: {
+    notification,
     account,
   },
 
