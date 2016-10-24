@@ -69,19 +69,28 @@ export default {
         });
         this.resetRegistrationState()
       }).catch(response => {
-        if (response.error.http_code === 422) {
-          this.$set(this.state, 'error', response.error);
-          store.dispatch('notify', {
-            text: 'Por favor, verifique os dados introduzidos.',
-            type: 'danger'
-          });
-          return;
+        switch (response.error.http_code) {
+          case 422:
+            this.$set(this.state, 'error', response.error);
+            store.dispatch('notify', {
+              text: 'Por favor, verifique os dados introduzidos.',
+              type: 'danger'
+            });
+          break;
+          case 403:
+            store.dispatch('notify', {
+              text: response.error.messages.pop(),
+              type: 'danger'
+            });
+          break;
+          default:
+            store.dispatch('notify', {
+              text: 'Ocorreu um erro inesperado. Por favor, tente mais tarde.',
+              type: 'danger'
+            });
         }
 
-        store.dispatch('notify', {
-          text: 'Ocorreu um erro inesperado. Por favor, tente mais tarde.',
-          type: 'danger'
-        });
+
       }).then(() => {
         this.$set(this.state, 'busy', false);
         window.scrollTo(0, 0)

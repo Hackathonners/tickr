@@ -20,15 +20,10 @@
       <!-- Participant email -->
       <div :class="['form-group', state.error.messages['email'] ? 'has-error' : '']">
         <label for="registration-email">E-mail do participante</label>
-        <!-- <div :class="{ 'input-group': loadingUser }"> -->
-          <input type="email" class="form-control" id="registration-email" v-model="registration.email">
-          <!-- <span v-if="loadingUser" class="input-group-addon"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i> A verificar</span> -->
-        <!-- </div> -->
+        <input type="email" class="form-control" id="registration-email" v-model="registration.email">
         <span v-if="state.error.messages['email']" class="text-danger small">{{ state.error.messages['email'] }}</span>
         <span v-else class="help-block small"><strong>Nota:</strong> O bilhete do evento será enviado para este e-mail.</span>
       </div>
-
-
 
       <div :class="['form-group', state.error.messages['name'] ? 'has-error' : '']">
         <label for="registration-name">Nome do participante</label>
