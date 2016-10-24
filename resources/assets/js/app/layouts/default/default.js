@@ -16,4 +16,8 @@ export default {
     //   authService.logout();
     // },
   },
+
+  components: {
+    Notification: require('app/components/notification/notification.vue')
+  }
 };
