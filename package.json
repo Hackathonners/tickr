@@ -5,6 +5,7 @@
     "dev": "gulp watch"
   },
   "devDependencies": {
+    "accounting": "^0.4.1",
     "bootstrap-sass": "^3.3.0",
     "gulp": "^3.9.1",
     "gulp-inline-css": "^3.1.0",

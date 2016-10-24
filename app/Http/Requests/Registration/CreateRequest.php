@@ -28,7 +28,7 @@ class CreateRequest extends Request
         return [
             'name' => 'required|min:3',
             'email' => 'required|email',
-            'notes' => 'sometimes|min:3',
+            'notes' => 'sometimes',
             'fined' => 'required',
             'registration_type' => 'required',
         ];
