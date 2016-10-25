@@ -5,7 +5,7 @@
  * All the actions that can be used
  * inside the store
  */
-import * as types from './mutation-types';
+import * as types from './types';
 
 // Notification
 export const notify = ({ commit }, notification) => {

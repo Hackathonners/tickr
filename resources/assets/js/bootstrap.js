@@ -1,10 +1,11 @@
-/* ============
- * Bootstrap File
- * ============
- *
- * Will configure and bootstrap the application
- */
-
+import Vue from 'vue';
+import VueResource from 'vue-resource';
+import VuexRouterSync from 'vuex-router-sync';
+import VueRouter from 'vue-router';
+import VueI18n from 'vue-i18n';
+import routes from './app/routes';
+import store from './app/store';
+import locale from './app/locale';
 
 /* ============
  * Vue
@@ -15,7 +16,6 @@
  *
  * http://rc.vuejs.org/guide/
  */
-import Vue from 'vue';
 
 Vue.config.debug = process.env.NODE_ENV !== 'production';
 
@@ -28,7 +28,6 @@ Vue.config.debug = process.env.NODE_ENV !== 'production';
  *
  * https://github.com/vuejs/vue-resource/tree/master/docs
  */
-import VueResource from 'vue-resource';
 
 Vue.use(VueResource);
 
@@ -38,29 +37,23 @@ Vue.http.interceptors.push((request, next) => {
   next((response) => {
     // When the session expires, send to login
     if (response.status === 401) {
-      location.href = '/login'
+      location.href = '/login';
     }
   });
 });
 
-// Laravel interceptor
+// Laravel CSRF token interceptor
+const metaCsrfToken = document.querySelectorAll('meta[name=csrf-token]');
 Vue.http.interceptors.push((request, next) => {
-  request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
+  if (metaCsrfToken.length > 0) {
+    request.headers.set(
+      'X-CSRF-TOKEN',
+      metaCsrfToken[0].getAttribute('content')
+    );
+  }
 
   next();
 });
-
-
-/* ============
- * Vuex Router Sync
- * ============
- *
- * Effortlessly keep vue-Router and vuex store in sync.
- *
- * https://github.com/vuejs/vuex-router-sync/blob/master/README.md
- */
-import VuexRouterSync from 'vuex-router-sync';
-
 
 /* ============
  * Vue Router
@@ -71,9 +64,6 @@ import VuexRouterSync from 'vuex-router-sync';
  *
  * http://router.vuejs.org/en/index.html
  */
-import VueRouter from 'vue-router';
-import routes from './app/routes';
-import store from './app/store';
 
 Vue.use(VueRouter);
 
@@ -95,9 +85,6 @@ Vue.router = router;
  *
  * https://kazupon.github.io/vue-i18n/
  */
-import VueI18n from 'vue-i18n';
-import locale from './app/locale';
-
 Vue.use(VueI18n);
 
 Vue.config.lang = 'en';
@@ -111,8 +98,8 @@ Object.keys(locale).forEach((lang) => {
  * ============
  *
  */
-require('app/utils/filters/Date')
-require('app/utils/filters/Number')
+require('app/utils/filters/Date');
+require('app/utils/filters/Number');
 
 export default {
   router,

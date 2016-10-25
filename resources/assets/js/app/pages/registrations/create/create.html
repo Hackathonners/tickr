@@ -1,102 +1,92 @@
 <v-layout>
-  <div v-show="state.loading" class="row page-header">
-    <spinner :loading="state.loading" message="A carregar evento..."></spinner>
-  </div>
-
-  <div v-show="!state.loading" class="page-content">
-    <div class="row page-header">
-      <div class="col-md-12">
-        <span class="page-title">Nova inscrição em {{ event.title }}</span>
-      </div>
+    <div v-if="state.loading" class="row page-header">
+        <spinner :loading="state.loading" message="A carregar evento..."></spinner>
     </div>
-
-    <form action="events" method="POST" @submit.prevent="store">
-      <!-- Participants data -->
-      <div class="fieldset">
-        <span class="label label-primary step">1</span>
-        <span class="title">Dados do participante</span>
-      </div>
-
-      <!-- Participant email -->
-      <div :class="['form-group', state.error.messages['email'] ? 'has-error' : '']">
-        <label for="registration-email">E-mail do participante</label>
-        <input type="email" class="form-control" id="registration-email" v-model="registration.email">
-        <span v-if="state.error.messages['email']" class="text-danger small">{{ state.error.messages['email'] }}</span>
-        <span v-else class="help-block small"><strong>Nota:</strong> O bilhete do evento será enviado para este e-mail.</span>
-      </div>
-
-      <div :class="['form-group', state.error.messages['name'] ? 'has-error' : '']">
-        <label for="registration-name">Nome do participante</label>
-        <input type="text" class="form-control" id="registration-name" v-model="registration.name">
-        <span v-if="state.error.messages['name']" class="text-danger small">{{ state.error.messages['name'] }}</span>
-      </div>
-
-      <div :class="['form-group', state.error.messages['notes'] ? 'has-error' : '']">
-        <label for="registration-notes">Outras informações (opcional)</label>
-        <textarea class="form-control" id="registration-notes" v-model="registration.notes" rows="5"></textarea>
-        <span v-if="state.error.messages['notes']" class="text-danger small">{{ state.error.messages['notes'] }}</span>
-      </div>
-
-      <!-- Registration Type details -->
-      <div class="fieldset">
-        <span class="label label-primary step">2</span>
-        <span class="title">Bilhete do participante</span>
-      </div>
-
-      <div :class="['form-group', state.error.messages['registration_type'] ? 'has-error' : '']">
-        <label for="registration-type">Tipo de bilhete</label>
-        <select class="form-control" v-model="registration.registration_type">
-          <option disabled value="">Selecionar o tipo de bilhete</option>
-          <option v-for="registrationType in event.registration_types.data" :value="registrationType.id">
-            {{ registrationType.type }}
-          </option>
-        </select>
-        <span v-if="state.error.messages['registration_type']" class="text-danger small">{{ state.error.messages['registration_type'] }}</span>
-      </div>
-
-      <div class="checkbox">
-        <label><input type="checkbox" value="1" v-model="registration.fined" :checked="registration.fined"> Adicionar valor de multa ao preço do bilhete.</label>
-      </div>
-
-      <div class="fieldset">
-        <span class="label label-primary step">3</span>
-        <span class="title">Bom trabalho, está quase.</span>
-      </div>
-
-      <table v-show="registration.registration_type" class="table">
-        <thead>
-          <tr>
-            <th>Descritivo</th>
-            <th>Valor</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="col-md-4">
-              Bilhete {{ getRegistrationTypeData(registration.registration_type, 'type') }}
-            </td>
-            <td class="col-md-2 ">
-              {{ getRegistrationTypeData(registration.registration_type, 'price') | price }}
-            </td>
-          </tr>
-          <tr v-show="registration.fined">
-            <td class="col-md-4">
-              Multa
-            </td>
-            <td class="col-md-2 ">
-              {{ getRegistrationTypeData(registration.registration_type, 'fine') | price }}
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>Total a pagar</th>
-            <th>{{ getPaidValue() | price }}</th>
-          </tr>
-        </tfoot>
-      </table>
-
-      <submit :busy="state.busy" message="A inscrever...">Inscrever</submit>
-    </form>
-  </div>
+    <div v-else class="page-content">
+        <div class="row page-header">
+            <div class="col-md-12">
+                <span class="page-title">Nova inscrição em {{ event.title }}</span>
+            </div>
+        </div>
+        <form action="events" method="POST" @submit.prevent="store">
+            <!-- Participants data -->
+            <div class="fieldset">
+                <span class="label label-primary step">1</span>
+                <span class="title">Dados do participante</span>
+            </div>
+            <!-- Participant email -->
+            <div :class="['form-group', state.error.messages['email'] ? 'has-error' : '']">
+                <label for="registration-email">E-mail do participante</label>
+                <input type="email" class="form-control" id="registration-email" v-model="registration.email">
+                <span v-if="state.error.messages['email']" class="text-danger small">{{ state.error.messages['email'] }}</span>
+                <span v-else class="help-block small"><strong>Nota:</strong> O bilhete do evento será enviado para este e-mail.</span>
+            </div>
+            <div :class="['form-group', state.error.messages['name'] ? 'has-error' : '']">
+                <label for="registration-name">Nome do participante</label>
+                <input type="text" class="form-control" id="registration-name" v-model="registration.name">
+                <span v-if="state.error.messages['name']" class="text-danger small">{{ state.error.messages['name'] }}</span>
+            </div>
+            <div :class="['form-group', state.error.messages['notes'] ? 'has-error' : '']">
+                <label for="registration-notes">Outras informações (opcional)</label>
+                <textarea class="form-control" id="registration-notes" v-model="registration.notes" rows="5"></textarea>
+                <span v-if="state.error.messages['notes']" class="text-danger small">{{ state.error.messages['notes'] }}</span>
+            </div>
+            <!-- Registration Type details -->
+            <div class="fieldset">
+                <span class="label label-primary step">2</span>
+                <span class="title">Bilhete do participante</span>
+            </div>
+            <div :class="['form-group', state.error.messages['registration_type'] ? 'has-error' : '']">
+                <label for="registration-type">Tipo de bilhete</label>
+                <select class="form-control" v-model="registration.registration_type">
+                    <option disabled value="">Selecionar o tipo de bilhete</option>
+                    <option v-for="registrationType in event.registration_types.data" :value="registrationType.id">
+                        {{ registrationType.type }}
+                    </option>
+                </select>
+                <span v-if="state.error.messages['registration_type']" class="text-danger small">{{ state.error.messages['registration_type'] }}</span>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="1" v-model="registration.fined" :checked="registration.fined"> Adicionar valor de multa ao preço do bilhete.</label>
+            </div>
+            <div class="fieldset">
+                <span class="label label-primary step">3</span>
+                <span class="title">Bom trabalho, está quase.</span>
+            </div>
+            <table v-show="registration.registration_type" class="table">
+                <thead>
+                    <tr>
+                        <th>Descritivo</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            Bilhete {{ getRegistrationTypeData(registration.registration_type, 'type') }}
+                        </td>
+                        <td class="col-md-2 ">
+                            {{ getRegistrationTypeData(registration.registration_type, 'price') | price }}
+                        </td>
+                    </tr>
+                    <tr v-show="registration.fined">
+                        <td class="col-md-4">
+                            Multa
+                        </td>
+                        <td class="col-md-2 ">
+                            {{ getRegistrationTypeData(registration.registration_type, 'fine') | price }}
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total a pagar</th>
+                        <th>{{ getPaidValue() | price }}</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <submit :busy="state.busy" message="A inscrever...">Inscrever</submit>
+        </form>
+    </div>
 </v-layout>

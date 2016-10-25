@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import store from 'app/store'
+import Vue from 'vue';
+import store from 'app/store/index';
 
-const url = 'users{/id}'
+const url = 'users{/id}';
 
 export default {
   /**
@@ -9,15 +9,13 @@ export default {
    *
    * @param id
    */
-  getAccount: (id = 'me') => {
-    return Vue.resource(url, { id }).get()
-      .then((response) => Promise.resolve(response.json()))
-      .then((response) => {
-        if (id === 'me') {
-          store.dispatch('getAccount', response)
-        }
-        return Promise.resolve(response);
-      })
-      .catch((error) => Promise.reject(error.body))
-  }
-}
+  getAccount: (id = 'me') => Vue.resource(url, { id }).get()
+    .then(response => Promise.resolve(response.json()))
+    .then((response) => {
+      if (id === 'me') {
+        store.dispatch('getAccount', response);
+      }
+      return Promise.resolve(response);
+    })
+    .catch(error => Promise.reject(error.body)),
+};

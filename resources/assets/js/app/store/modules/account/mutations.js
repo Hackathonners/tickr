@@ -7,7 +7,7 @@
 
 import {
   GET_ACCOUNT,
-} from 'app/store/mutation-types';
+} from 'app/store/types';
 
 export default {
   [GET_ACCOUNT](state, user) {

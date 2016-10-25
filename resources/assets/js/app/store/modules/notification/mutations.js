@@ -8,7 +8,7 @@
 import {
   NOTIFY,
   CLEAR_NOTIFICATION,
-} from 'app/store/mutation-types';
+} from 'app/store/types';
 
 export default {
   [NOTIFY](state, notification) {

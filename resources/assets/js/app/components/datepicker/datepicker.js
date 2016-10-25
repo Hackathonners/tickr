@@ -1,15 +1,15 @@
 /* ============
- * Paginator Component
+ * Datepicker Component
  * ============
  *
- * Paginates data and set up links to previous and next pages.
+ * Controls a datepicker.
  */
-import Vue from 'vue'
+const $ = require('jquery');
 
 export default {
   props: ['date'],
 
-  mounted: function () {
+  mounted() {
     const vm = this;
     $(this.$el).datepicker({
       dateFormat: 'yy-mm-dd',
@@ -22,19 +22,19 @@ export default {
       dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
       prevText: '<i class="fa fa-arrow-circle-left" aria-hidden="true"></i>',
       nextText: '<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>',
-      onSelect: function (date) {
-        vm.$emit('input', date)
-      }
-    })
+      onSelect: (date) => {
+        vm.$emit('input', date);
+      },
+    });
   },
 
   watch: {
-    date: function (date) {
-      $(this.$el).datepicker('setDate', date)
-    }
+    date(date) {
+      $(this.$el).datepicker('setDate', date);
+    },
   },
 
-  destroyed: function () {
+  destroyed() {
 
-  }
-}
+  },
+};

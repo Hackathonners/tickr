@@ -1,105 +1,100 @@
 <v-layout>
-	<div v-show="state.loading" class="row page-header">
-		<spinner :loading="state.loading" message="A carregar evento..."></loading>
-		</div>
-
-		<div v-show="!state.loading" class="page-content">
-			<div class="row page-header">
-				<div class="col-xs-8">
-					<span class="page-title">{{ event.title }}</span>
-					<div class="text-muted">{{ event.start_at | date_range(event.end_at) }}</div>
-					<div class="text-muted">{{ event.place }}</div>
-				</div>
-				<div class="col-xs-4">
-					<router-link class="page-action btn btn-primary pull-right" :to="{ name: 'registrations.create', params: { id: event.id } }">Nova inscrição</router-link>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<h4>Receita total</h4>
-							<h2 class="text-primary">{{ event.stats.income | price }}</h2>
-						</div>
-						<ul class="list-group">
-							<li class="list-group-item">
-								<span class="pull-right">{{ event.stats.registrations }}</span> Total de bilhetes vendidos
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<h4>Taxa de participação</h4>
-							<h2 :class="[ participationRatio > 0.5 ? 'text-primary' : 'text-muted' ]">{{ participationRatio | ratio }}</h2>
-						</div>
-						<ul class="list-group">
-							<li class="list-group-item">
-								<span class="pull-right">{{ event.stats.participations }}<span class="text-muted"> / <router-link class="text-muted" :to="{ name: 'registrations.index', params: { id: event.id } }">{{ event.stats.registrations }} inscritos</router-link></span></span>
-								Total de participantes
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-md-12">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<h4>Resumo dos bilhetes</h4>
-							<table class="table">
-								<thead>
-									<tr>
-										<th>Tipo de bilhete</th>
-										<th>Preço</th>
-										<th>Multa</th>
-										<th>Vendas</th>
-										<th>Receita</th>
-										<th>Taxa de participação</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr v-for="registrationType in event.registration_types.data">
-										<td class="col-md-3">
-											{{ registrationType.type }}
-										</td>
-										<td class="col-md-1">
-											{{ registrationType.price | price }}
-										</td>
-										<td class="col-md-1">
-											{{ registrationType.fine | price }}
-										</td>
-										<td class="col-md-1">
-											{{ getRegistrationTypeStats(registrationType.id, 'registrations') }}
-										</td>
-										<td class="col-md-1">
-											{{ getRegistrationTypeStats(registrationType.id, 'income') | price }}
-										</td>
-										<td class="col-md-2">
-											{{ getRegistrationTypeParticipationRatio(registrationType.id) | ratio }}
-
-											<span class="text-muted">({{ getRegistrationTypeStats(registrationType.id, 'participations')}} participantes)</span>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-md-12">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<h4>Últimas inscrições <small class="pull-right"><router-link :to="{ name: 'registrations.index', params: { id: event.id } }">Ver todas as inscrições</router-link></small></h4>
-							<registrations :limit="10" :paginate="false" :event-id="$route.params.id" :action="{ name: 'registrations.create', params: { id: event.id } }"></registrations>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</v-layout>
+    <div v-if="state.loading" class="row page-header">
+        <spinner :loading="state.loading" message="A carregar evento..."></spinner>
+    </div>
+    <div v-else class="page-content">
+        <div class="row page-header">
+            <div class="col-xs-8">
+                <span class="page-title">{{ event.title }}</span>
+                <div class="text-muted">{{ event.start_at | date_range(event.end_at) }}</div>
+                <div class="text-muted">{{ event.place }}</div>
+            </div>
+            <div class="col-xs-4">
+                <router-link v-if="!isPast(event)" class="page-action btn btn-primary pull-right" :to="{ name: 'registrations.create', params: { id: event.id } }">Nova inscrição</router-link>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>Receita total</h4>
+                        <h2 class="text-primary">{{ event.stats.income | price }}</h2>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span class="pull-right">{{ event.stats.registrations }}</span> Total de bilhetes vendidos
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>Taxa de participação</h4>
+                        <h2 :class="[ participationRatio > 0.5 ? 'text-primary' : 'text-muted' ]">{{ participationRatio | ratio }}</h2>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span class="pull-right">{{ event.stats.participations }}<span class="text-muted"> / <router-link class="text-muted" :to="{ name: 'registrations.index', params: { id: event.id } }">{{ event.stats.registrations }} inscritos</router-link></span></span>
+                            Total de participantes
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>Resumo dos bilhetes</h4>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo de bilhete</th>
+                                    <th>Preço</th>
+                                    <th>Multa</th>
+                                    <th>Vendas</th>
+                                    <th>Receita</th>
+                                    <th>Taxa de participação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="registrationType in event.registration_types.data">
+                                    <td class="col-md-3">
+                                        {{ registrationType.type }}
+                                    </td>
+                                    <td class="col-md-1">
+                                        {{ registrationType.price | price }}
+                                    </td>
+                                    <td class="col-md-1">
+                                        {{ registrationType.fine | price }}
+                                    </td>
+                                    <td class="col-md-1">
+                                        {{ getRegistrationTypeStats(registrationType.id, 'registrations') }}
+                                    </td>
+                                    <td class="col-md-1">
+                                        {{ getRegistrationTypeStats(registrationType.id, 'income') | price }}
+                                    </td>
+                                    <td class="col-md-2">
+                                        {{ getRegistrationTypeParticipationRatio(registrationType.id) | ratio }}
+                                        <span class="text-muted">({{ getRegistrationTypeStats(registrationType.id, 'participations')}} participantes)</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>Últimas inscrições <small class="pull-right"><router-link :to="{ name: 'registrations.index', params: { id: event.id } }">Ver todas as inscrições</router-link></small></h4>
+                        <registrations :limit="10" :paginate="false" :event-id="$route.params.id"></registrations>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</v-layout>

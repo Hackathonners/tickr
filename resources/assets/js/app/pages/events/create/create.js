@@ -4,12 +4,12 @@
  *
  * Page where the user can view the account information
  */
-import moment from 'moment'
-import store from 'app/store'
-import EventService from 'app/services/event'
+import moment from 'moment';
+import store from 'app/store/index';
+import EventService from 'app/services/event/index';
 
 export default {
-  data () {
+  data() {
     return {
       event: {
         title: '',
@@ -20,8 +20,8 @@ export default {
         registration: [{
           type: 'Normal',
           price: '',
-          fine: ''
-        }]
+          fine: '',
+        }],
       },
 
       state: {
@@ -34,84 +34,86 @@ export default {
           start_date: null,
           end_date: null,
           start_time: null,
-          end_time: null
+          end_time: null,
         },
       },
-    }
+    };
   },
-  mounted () {
+  mounted() {
     this.resetErrors();
   },
   methods: {
-    store () {
+    store() {
       this.$set(this.state, 'busy', true);
-      this.resetErrors()
-      EventService.store(this.event).then(event => {
+      this.resetErrors();
+      EventService.store(this.event).then((event) => {
         store.dispatch('notify', {
           text: 'O evento foi criado com sucesso.',
-          type: 'success'
+          type: 'success',
         });
-        // this.$router.go({ name: 'events.show', params: { id: event.data.id } })
-      }).catch(response => {
+        this.$router.push({ name: 'events.show', params: { id: event.data.id } });
+      }).catch((response) => {
         if (response.error.http_code === 422) {
           this.$set(this.state, 'error', response.error);
           store.dispatch('notify', {
             text: 'Por favor, verifique os dados introduzidos.',
-            type: 'danger'
+            type: 'danger',
           });
           return;
         }
 
         store.dispatch('notify', {
           text: 'Ocorreu um erro inesperado. Por favor, tente mais tarde.',
-          type: 'danger'
+          type: 'danger',
         });
       }).then(() => {
         this.$set(this.state, 'busy', false);
-        window.scrollTo(0, 0)
-      })
+        window.scrollTo(0, 0);
+      });
     },
-    addRegistrationType () {
+    addRegistrationType() {
       const registrationType = {
         type: '',
         price: '',
-        fine: ''
+        fine: '',
       };
 
-      this.event.registration.push(registrationType)
+      this.event.registration.push(registrationType);
     },
-    removeRegistrationType (index) {
-      this.event.registration.splice(index, 1)
+    removeRegistrationType(index) {
+      this.event.registration.splice(index, 1);
     },
-    resetErrors () {
+    resetErrors() {
       this.state.error = {
-        messages: []
-      }
+        messages: [],
+      };
 
-      return this.error
-    }
+      return this.error;
+    },
   },
   watch: {
     'state.dates': {
       deep: true,
-      handler (dates) {
-        const format = 'YYYY-MM-DD HH:mm'
-        const lastStartDate = this.event.start_at
-        const lastEndDate = this.event.end_at
+      handler(dates) {
+        const format = 'YYYY-MM-DD HH:mm';
+        const lastStartDate = this.event.start_at;
+        const lastEndDate = this.event.end_at;
 
-        this.event.start_at = this.event.end_at = ''
+        this.event.start_at = this.event.end_at = '';
 
-        if (this.state.dates.start_date && this.state.dates.start_time) {
-          const date = moment(`${this.state.dates.start_date} ${this.state.dates.start_time}`, format)
-          this.event.start_at = date.isValid() ? date.format(this.state.dates.format) : lastStartDate
+        if (dates.start_date && dates.start_time) {
+          const date = moment(`${dates.start_date} ${dates.start_time}`, format);
+          this.event.start_at = date.isValid() ?
+            date.format(dates.format) : lastStartDate;
         }
 
-        if (this.state.dates.end_date && this.state.dates.end_time) {
-          const date = moment(`${this.state.dates.end_date} ${this.state.dates.end_time}`, format)
-          this.event.end_at = date.isValid() ? date.format(this.state.dates.format) : lastEndDate
+        if (dates.end_date && dates.end_time) {
+          const date = moment(`${dates.end_date} ${dates.end_time}`, format);
+          this.event.end_at = date.isValid() ?
+            date.format(dates.format) : lastEndDate;
         }
-      }
-    }
+      },
+    },
   },
   components: {
     VLayout: require('app/layouts/default/default.vue'),

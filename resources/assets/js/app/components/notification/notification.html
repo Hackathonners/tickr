@@ -1,5 +1,5 @@
 <transition name="fade">
     <div @click="close()" class="alert" :class="['notification', 'alert', notificationType ? 'alert-' + notificationType : 'alert-info']">
-    {{ $store.state.notification.data.text }}
+        {{ $store.state.notification.data.text }}
     </div>
 </transition>

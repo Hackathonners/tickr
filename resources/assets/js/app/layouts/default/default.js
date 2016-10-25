@@ -18,6 +18,6 @@ export default {
   },
 
   components: {
-    Notification: require('app/components/notification/notification.vue')
-  }
+    Notification: require('app/components/notification/notification.vue'),
+  },
 };

@@ -4,29 +4,25 @@
  *
  * Shows registrations
  */
-import RegistrationService from 'app/services/registration'
+import RegistrationService from 'app/services/registration/index';
 
 export default {
   props: {
     eventId: {
-      required: true
+      required: true,
     },
     paginate: {
       required: false,
-      default: true
+      default: true,
     },
     limit: {
       required: false,
       type: Number,
-      default: 20
+      default: 20,
     },
-    action: {
-      required: true,
-      type: Object
-    }
   },
 
-  data () {
+  data() {
     return {
       // Results data
       registrations: [],
@@ -34,33 +30,36 @@ export default {
       // Component status
       state: {
         pagination: {},
-        loading: false
-      }
-    }
+        loading: true,
+      },
+    };
   },
 
-  mounted () {
-    this.loadRegistrations(this.$route.query.page)
+  mounted() {
+    this.loadRegistrations(this.$route.query.page);
   },
 
   methods: {
-    loadRegistrations (page = 1) {
-      this.$set(this.state, 'loading', true)
-      RegistrationService.list(this.eventId, page, this.limit).then(registrations => {
-        this.$set(this, 'registrations', registrations.data)
-        this.$set(this.state, 'pagination', registrations.meta.pagination)
-        this.$set(this.state, 'loading', false)
-      })
-    }
+    loadRegistrations(page = 1) {
+      this.$set(this.state, 'loading', true);
+      RegistrationService.list(this.eventId, page, this.limit).then((registrations) => {
+        this.$set(this, 'registrations', registrations.data);
+        this.$set(this.state, 'pagination', registrations.meta.pagination);
+        this.$set(this.state, 'loading', false);
+      });
+    },
   },
 
   watch: {
-    '$route.query.page': function (newValue, oldValue) {
-      this.loadRegistrations(newValue)
-    }
+    '$route.query.page': {
+      handler(value) {
+        this.loadRegistrations(value);
+      },
+    },
   },
 
   components: {
-    // Loading, Paginator
-  }
-}
+    Paginator: require('app/components/paginator/paginator.vue'),
+    Spinner: require('app/components/spinner/spinner.vue'),
+  },
+};

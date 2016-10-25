@@ -1,37 +1,37 @@
 <div>
-  <main>
-    <nav class="navbar">
-    <div class="container">
-      <div class="navbar-header">
-        <router-link class="navbar-brand" :to="{ name: 'events.index' }">
-          <img alt="Brand" height="34" src="/images/logo.svg">
-        </a>
-      </div>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            <div class="profile-info">
-              <div class="profile-info-username">{{ $store.state.account.user.name }} <span class="caret"></span></div>
-              <div class="small text-muted profile-info-email">{{ $store.state.account.user.email }}</div>
+    <main>
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-header">
+                    <router-link class="navbar-brand" :to="{ name: 'events.index' }">
+                        <img alt="Brand" height="34" src="/images/logo.svg">
+                        </a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <div class="profile-info">
+                                <div class="profile-info-username">{{ $store.state.account.user.name }} <span class="caret"></span></div>
+                                <div class="small text-muted profile-info-email">{{ $store.state.account.user.email }}</div>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Logout</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </nav>
-    <div class="container">
-      <slot></slot>
-    </div>
-    <div class="notification-wrapper" v-if="$store.state.notification.data">
-      <notification></notification>
-    </div>
-  </main>
-  <footer class="sticky-footer">
-    <div class="container">
-      <!-- Sticky footer -->
-    </div>
-  </footer>
+        </nav>
+        <div class="container">
+            <slot></slot>
+        </div>
+        <div class="notification-wrapper" v-if="$store.state.notification.data">
+            <notification></notification>
+        </div>
+    </main>
+    <footer class="sticky-footer">
+        <div class="container">
+            <!-- Sticky footer -->
+        </div>
+    </footer>
 </div>

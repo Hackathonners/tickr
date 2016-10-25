@@ -6,46 +6,48 @@
  */
 
 export default {
-  data () {
+  data() {
     return {
-      timer: null
-    }
+      timer: null,
+    };
   },
 
-  mounted () {
-    this.setTimer()
+  mounted() {
+    this.setTimer();
   },
 
   computed: {
-    notificationType: function() {
+    notificationType() {
       return this.$store.state.notification.data.type;
-    }
+    },
   },
 
   methods: {
     setTimer() {
-      const notification = this.$store.state.notification.data.type
-      const timeout = notification.hasOwnProperty('timeout') ? notification.timeout : true
+      const notification = this.$store.state.notification.data.type;
+      const timeout = notification.timeout ? notification.timeout : true;
 
       if (timeout) {
-        const delay = notification.delay || 5000
+        const delay = notification.delay || 5000;
 
-        this.timer = setTimeout(function () {
-          this.close()
-        }.bind(this), delay)
+        this.timer = setTimeout(() => {
+          this.close();
+        }, delay);
       }
     },
 
-    close () {
-      clearTimeout(this.timer)
-      this.$store.dispatch('clearNotification')
-    }
+    close() {
+      clearTimeout(this.timer);
+      this.$store.dispatch('clearNotification');
+    },
   },
 
   watch: {
-    '$store.state.notification.data': function() {
-      clearTimeout(this.timer)
-      this.setTimer()
-    }
-  }
-}
+    '$store.state.notification.data': {
+      handler() {
+        clearTimeout(this.timer);
+        this.setTimer();
+      },
+    },
+  },
+};

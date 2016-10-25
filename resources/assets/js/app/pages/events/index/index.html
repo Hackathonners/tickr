@@ -1,81 +1,75 @@
 <v-layout>
-  <div class="row page-header">
-    <div class="col-xs-8">
-      <span class="page-title">Eventos</span>
+    <div class="row page-header">
+        <div class="col-xs-8">
+            <span class="page-title">Eventos</span>
+        </div>
+        <div class="col-xs-4">
+            <router-link class="page-action btn btn-primary pull-right" :to="{ name: 'events.create' }">Novo evento</router-link>
+        </div>
     </div>
-    <div class="col-xs-4">
-    <router-link class="page-action btn btn-primary pull-right" :to="{ name: 'events.create' }">Novo evento</router-link>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Events Filter -->
+            <ul class="nav nav-tabs">
+                <li :class="{ 'active': filterActive }">
+                    <router-link :to="{ name: 'events.index' }">Eventos ativos</router-link>
+                </li>
+                <li :class="{ 'active': filterPast }">
+                    <router-link :to="{ name: 'events.index', query: { filter: 'past' } }">Eventos passados</router-link>
+                </li>
+            </ul>
+            <!-- Events List -->
+            <table class="table table--noheading table--events">
+                <tbody>
+                    <!-- No results -->
+                    <tr class="no-results" v-if="!state.loading && events.length == 0">
+                        <td class="col-md-12 event-info text-center" colspan="3">
+                            <span v-show="filterActive">Não existem eventos ativos, <router-link class="text-primary" :to="{ name: 'events.create' }">crie um evento</router-link>.</span>
+                            <span v-show="filterPast">Não existem eventos passados.</span>
+                        </td>
+                    </tr>
+                    <tr v-if="!state.loading" v-for="event in events">
+                        <!-- Event details -->
+                        <td class="col-md-6 event-info">
+                            <div class="event-info__name">
+                                <router-link :to="{ name: 'events.show', params: { id: event.id }}">{{ event.title }}</router-link>
+                            </div>
+                            <div class="event-info__place text-muted">
+                                {{ event.place }} · Criado {{ event.created_at | human_diff }}
+                                <span v-show="isEdited(event)"> · Editado {{ event.updated_at | human_diff }}</span>
+                            </div>
+                        </td>
+                        <!-- Event status -->
+                        <td class="col-md-3 event-info">
+                            <div v-if="isRunning(event)" class="event-info__status event-info__status--running">
+                                <span class="status__title text-primary">A decorrer</span>
+                                <div class="status__details text-muted">
+                                    Termina em {{ event.end_at | human_diff(true) }}
+                                </div>
+                            </div>
+                            <div v-if="isPast(event)" class="event-info__status event-info__status--waiting">
+                                <span class="status__title">Terminou {{ event.end_at | human_diff }}</span>
+                                <div class="status__details text-muted">
+                                    {{ event.start_at | date('dddd') }}, {{ event.start_at | date('D MMMM YYYY, HH:mm') }}
+                                </div>
+                            </div>
+                            <div v-if="isFuture(event)" class="event-info__status event-info__status--waiting">
+                                <span class="status__title">Inicia em {{ event.start_at | human_diff(true) }}</span>
+                                <div class="status__details text-muted">
+                                    {{ event.start_at | date('dddd') }}, {{ event.start_at | date('D MMMM YYYY, HH:mm') }}
+                                </div>
+                            </div>
+                        </td>
+                        <!-- Event ticket status -->
+                        <td class="col-md-3 event-info">
+                            <span v-if="event.registrations">{{ event.registrations }}</span>
+                            <span v-else>Sem bilhetes vendidos</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <paginator v-if="!state.loading" :pagination="state.pagination"></paginator>
+            <spinner :loading="state.loading" message="A carregar eventos..."></spinner>
+        </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-
-      <!-- Events Filter -->
-      <ul class="nav nav-tabs">
-        <li :class="{ 'active': filterActive }">
-          <router-link :to="{ name: 'events.index' }">Eventos ativos</router-link>
-        </li>
-        <li :class="{ 'active': filterPast }">
-          <router-link :to="{ name: 'events.index', query: { filter: 'past' } }">Eventos passados</router-link>
-        </li>
-      </ul>
-
-      <!-- Events List -->
-      <table class="table table--noheading table--events">
-        <tbody>
-          <!-- No results -->
-          <tr class="no-results" v-show="!state.loading && events.length == 0">
-            <td class="col-md-12 event-info text-center" colspan="3">
-              <span v-show="filterActive">Não existem eventos ativos, <router-link class="text-primary" :to="{ name: 'events.create' }">crie um evento</router-link>.</span>
-              <span v-show="filterPast">Não existem eventos passados.</span>
-            </td>
-          </tr>
-
-          <tr v-show="!state.loading" v-for="event in events">
-
-            <!-- Event details -->
-            <td class="col-md-6 event-info">
-              <div class="event-info__name">
-                <router-link :to="{ name: 'events.show', params: { id: event.id }}">{{ event.title }}</router-link>
-              </div>
-              <div class="event-info__place text-muted">
-                {{ event.place }} · Criado {{ event.created_at | human_diff }}
-                <span v-show="isEdited(event)"> · Editado {{ event.updated_at | human_diff }}</span>
-              </div>
-            </td>
-
-            <!-- Event status -->
-            <td class="col-md-3 event-info">
-              <div v-if="isRunning(event)" class="event-info__status event-info__status--running">
-                <span class="status__title text-primary">A decorrer</span>
-                <div class="status__details text-muted">
-                  Termina em {{ event.end_at | human_diff(true) }}
-                </div>
-              </div>
-              <div v-if="isPast(event)" class="event-info__status event-info__status--waiting">
-                <span class="status__title">Terminou {{ event.end_at | human_diff }}</span>
-                <div class="status__details text-muted">
-                  {{ event.start_at | date('dddd') }}, {{ event.start_at | date('D MMMM YYYY, HH:mm') }}
-                </div>
-              </div>
-              <div v-if="isFuture(event)" class="event-info__status event-info__status--waiting">
-                <span class="status__title">Inicia em {{ event.start_at | human_diff(true) }}</span>
-                <div class="status__details text-muted">
-                  {{ event.start_at | date('dddd') }}, {{ event.start_at | date('D MMMM YYYY, HH:mm') }}
-                </div>
-              </div>
-            </td>
-
-            <!-- Event ticket status -->
-            <td class="col-md-3 event-info">
-              <span v-if="event.registrations">{{ event.registrations }}</span>
-              <span v-else>Sem bilhetes vendidos</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <paginator v-show="!state.loading" :pagination="state.pagination"></paginator>
-      <spinner :loading="state.loading" message="A carregar eventos..."></loading>
-    </div>
-  </div>
 </v-layout>

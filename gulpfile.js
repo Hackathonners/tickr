@@ -6,6 +6,7 @@ var rename = require('gulp-rename');
 
 require('laravel-elixir-vue-2');
 require('laravel-elixir-webpack-official');
+require('laravel-elixir-eslint');
 
 /*
  |--------------------------------------------------------------------------
@@ -43,7 +44,9 @@ gulp.task('emailify', function() {
 });
 
 elixir(function(mix) {
-  mix.sass('app.scss')
+  mix.sass('app.scss');
+
+  mix.eslint()
      .webpack('main.js');
 
   mix.version(['css/app.css', 'js/main.js'])

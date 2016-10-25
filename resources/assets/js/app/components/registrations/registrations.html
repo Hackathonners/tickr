@@ -10,21 +10,20 @@
         </thead>
         <tbody>
             <!-- Loading results -->
-            <tr v-show="state.loading">
+            <tr v-if="state.loading">
                 <td class="event-info text-center" colspan="4">
-                    <!-- <loading :loading="loading" message="A carregar inscrições..."></loading> -->
+                    <spinner :loading="state.loading" message="A carregar inscrições..."></spinner>
                 </td>
             </tr>
-
             <!-- No results -->
-            <tr class="no-results" v-show="registrations.length == 0 && !state.loading">
+            <tr v-if="registrations.length == 0 && !state.loading" class="no-results">
                 <td class="event-info text-center" colspan="4">
-                    Não existem inscrições neste evento, <router-link class="text-primary" :to="action">crie uma inscrição</router-link>.
+                    Não existem inscrições neste evento,
+                    <router-link class="text-primary" :to="{ name: 'registrations.create', params: { id: eventId } }">crie uma inscrição</router-link>.
                 </td>
             </tr>
-
             <!-- Results -->
-            <tr v-show="!state.loading" v-for="registration in registrations">
+            <tr v-if="!state.loading" v-for="registration in registrations">
                 <td>
                     {{ registration.user.data.name }}
                 </td>
@@ -41,5 +40,5 @@
             </tr>
         </tbody>
     </table>
-    <!-- <paginator v-show="paginate && !state.loading" :pagination.sync="pagination" :callback="loadRegistrations"></paginator> -->
+    <paginator v-if="!state.loading" :pagination="state.pagination"></paginator>
 </div>

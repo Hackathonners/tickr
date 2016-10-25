@@ -19,12 +19,12 @@ export default {
     disable: {
       type: Boolean,
       default: false,
-    }
+    },
   },
 
   computed: {
-    disabled: function () {
-      return this.busy || this.disable
-    }
-  }
+    disabled() {
+      return this.busy || this.disable;
+    },
+  },
 };
