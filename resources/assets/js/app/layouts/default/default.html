@@ -5,7 +5,7 @@
                 <div class="navbar-header">
                     <router-link class="navbar-brand" :to="{ name: 'events.index' }">
                         <img alt="Brand" height="34" src="/images/logo.svg">
-                        </a>
+                    </router-link>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
@@ -16,8 +16,12 @@
                             </div>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Logout</a></li>
+                            <li><a href="#" @click.prevent="logout">Logout</a></li>
                         </ul>
+                        <form id="logout" action="/logout" method="POST">
+                            <input type="hidden" name="_token" value=""/>
+                            <button v-show="false" type="submit"></button>
+                        </form>
                     </li>
                 </ul>
             </div>

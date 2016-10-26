@@ -8,13 +8,18 @@
  * This way the app stays clean.
  */
 
-// import authService from 'app/services/auth';
+import { csrfToken } from 'app/utils/functions';
 
 export default {
+  mounted() {
+    document.querySelector('form#logout input[name=_token]')
+      .value = csrfToken();
+  },
+
   methods: {
-    // logout() {
-    //   authService.logout();
-    // },
+    logout() {
+      document.querySelector('form#logout').submit();
+    },
   },
 
   components: {

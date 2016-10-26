@@ -3,9 +3,10 @@ import VueResource from 'vue-resource';
 import VuexRouterSync from 'vuex-router-sync';
 import VueRouter from 'vue-router';
 import VueI18n from 'vue-i18n';
-import routes from './app/routes';
-import store from './app/store';
-import locale from './app/locale';
+import routes from 'app/routes';
+import store from 'app/store/index';
+import locale from 'app/locale/index';
+import { csrfToken } from 'app/utils/functions';
 
 /* ============
  * Vue
@@ -43,13 +44,10 @@ Vue.http.interceptors.push((request, next) => {
 });
 
 // Laravel CSRF token interceptor
-const metaCsrfToken = document.querySelectorAll('meta[name=csrf-token]');
 Vue.http.interceptors.push((request, next) => {
-  if (metaCsrfToken.length > 0) {
-    request.headers.set(
-      'X-CSRF-TOKEN',
-      metaCsrfToken[0].getAttribute('content')
-    );
+  const token = csrfToken();
+  if (token) {
+    request.headers.set('X-CSRF-TOKEN', token);
   }
 
   next();
