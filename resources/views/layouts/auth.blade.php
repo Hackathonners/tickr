@@ -22,6 +22,12 @@
             </div>
             @endif
 
+            @if (session('status'))
+                <div class="alert alert-success">
+                    {{ session('status') }}
+                </div>
+            @endif
+
             @yield('auth.content')
 
             <div class="auth-footer text-center text-muted small">
