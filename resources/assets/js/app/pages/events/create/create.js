@@ -47,11 +47,11 @@ export default {
       this.$set(this.state, 'busy', true);
       this.resetErrors();
       EventService.store(this.event).then((event) => {
+        this.$router.push({ name: 'events.show', params: { id: event.data.id } });
         store.dispatch('notify', {
           text: 'O evento foi criado com sucesso.',
           type: 'success',
         });
-        this.$router.push({ name: 'events.show', params: { id: event.data.id } });
       }).catch((response) => {
         if (response.error.http_code === 422) {
           this.$set(this.state, 'error', response.error);

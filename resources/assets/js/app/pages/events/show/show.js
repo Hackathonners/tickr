@@ -35,11 +35,22 @@ export default {
       this.$set(this.state, 'loading', true);
       EventService.get(this.$route.params.id, true).then((event) => {
         this.$set(this, 'event', event.data);
-      }).catch(() => {
-        this.$store.dispatch('notify', {
-          text: 'Ocorreu um erro inesperado. Por favor, tente mais tarde.',
-          type: 'danger',
-        });
+      }).catch((response) => {
+        if (response.error.http_code === 404) {
+          this.$store.dispatch('notify', {
+            text: 'O evento pretendido não existe ou não está disponível.',
+            type: 'danger',
+          });
+          this.$router.push({ name: 'events.index' });
+        } else {
+          this.$store.dispatch('notify', {
+            text: 'Ocorreu um erro inesperado. Por favor, tente mais tarde.',
+            type: 'danger',
+          });
+        }
+
+        // Prevent loading to be hidden
+        return Promise.reject();
       }).then(() => {
         this.$set(this.state, 'loading', false);
       });
