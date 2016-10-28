@@ -73,7 +73,7 @@ class Registration extends Model
         }
 
         $this->activated = false;
-        $this->activation_code = str_random(10);
+        $this->activation_code = str_random(32);
         $this->event()->associate($event);
         $this->registrationType()->associate($registrationType);
         $this->user()->associate($user);
