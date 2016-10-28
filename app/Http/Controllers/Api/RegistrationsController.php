@@ -116,17 +116,21 @@ class RegistrationsController extends ApiController
         $id = Hashids::decode($hashId);
         $id = count($id) > 0 ? $id[0] : $id;
 
-        DB::transaction(function () use ($id, $token) {
-            $registration = Registration::where(['activation_code' => $token])
-                                ->with('event')
-                                ->findOrFail($id);
-            $this->authorize('handle', $registration->event);
-            $registration->activate();
-        });
+        try {
+            DB::transaction(function () use ($id, $token) {
+                $registration = Registration::where(['activation_code' => $token])
+                                    ->with('event')
+                                    ->findOrFail($id);
+                $this->authorize('handle', $registration->event);
+                $registration->activate();
+            });
 
-        return $this->respondWithArray([
-            'success' => true,
-            'message' => 'Successfully activated registration.',
-        ]);
+            return $this->respondWithArray([
+                'success' => true,
+                'message' => 'Successfully activated registration.',
+            ]);
+        } catch (\LogicException $e) {
+            return $this->errorForbidden($e->getMessage());
+        }
     }
 }

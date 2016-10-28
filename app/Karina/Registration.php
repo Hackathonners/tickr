@@ -3,6 +3,7 @@
 namespace App\Karina;
 
 use App\Exceptions\Registration\UserIsAlreadyRegisteredOnEventException;
+use App\Exceptions\Registration\RegistrationIsAlreadyActivatedException;
 use App\Exceptions\Registration\RegistrationOnPastEventException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -113,7 +114,7 @@ class Registration extends Model
     public function activate()
     {
         if ($this->activated) {
-            return $this;
+            throw new RegistrationIsAlreadyActivatedException('This ticket is already activated');
         }
 
         $this->activated = true;

@@ -325,11 +325,13 @@ class RegistrationsTest extends ApiTestCase
             ->json('POST', '/registrations/'.Hashids::encode($registration->id).'/activate/'.$token);
 
         // Assertions
-        $this->assertResponseOk();
         $this->assertEquals(1, Registration::where(['activated' => true])->count(), 'Registration was not activated.');
         $this->assertNotNull(Registration::first()->activated_at, 'Activation timestamp was not stored.');
-        $this->seeJson([
-            'success' => true,
+        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
+        $this->seeJsonStructure([
+            'error' => [
+                'code', 'http_code', 'messages',
+            ],
         ]);
     }
 
