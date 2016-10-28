@@ -281,13 +281,11 @@ class RegistrationsTest extends ApiTestCase
             'user_id' => $participant->id,
         ]);
 
-        $data = [
-            'token' => $registration->activation_code,
-        ];
+        $token = $registration->activation_code;
 
         // Perform task
         $this->actingAs($user)
-            ->json('POST', '/registrations/'.Hashids::encode($registration->id).'/activate', $data);
+            ->json('POST', '/registrations/'.Hashids::encode($registration->id).'/activate/'.$token);
 
         // Assertions
         $this->assertResponseOk();
@@ -320,13 +318,11 @@ class RegistrationsTest extends ApiTestCase
             'activated_at' => Carbon::now(),
         ]);
 
-        $data = [
-            'token' => $registration->activation_code,
-        ];
+        $token = $registration->activation_code;
 
         // Perform task
         $this->actingAs($user)
-            ->json('POST', '/registrations/'.Hashids::encode($registration->id).'/activate', $data);
+            ->json('POST', '/registrations/'.Hashids::encode($registration->id).'/activate/'.$token);
 
         // Assertions
         $this->assertResponseOk();
@@ -357,13 +353,11 @@ class RegistrationsTest extends ApiTestCase
             'user_id' => $participant->id,
         ]);
 
-        $data = [
-            'token' => 'invalidcode',
-        ];
+        $token = 'invalidcode';
 
         // Perform task
         $this->actingAs($user)
-            ->json('POST', '/registrations/'.Hashids::encode($registration->id).'/activate', $data);
+            ->json('POST', '/registrations/'.Hashids::encode($registration->id).'/activate/'.$token);
 
         // Assertions
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);

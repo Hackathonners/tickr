@@ -23,7 +23,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
         ]);
 
     Route::post('events/{eventId}/registrations', 'Api\RegistrationsController@store');
-    Route::post('registrations/{id}/activate', [
+    Route::post('registrations/{hashId}/activate/{token}', [
         'uses' => 'Api\RegistrationsController@activate',
         'as' => 'registrations.activate',
     ]);
