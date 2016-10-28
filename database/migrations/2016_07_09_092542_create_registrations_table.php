@@ -20,7 +20,7 @@ class CreateRegistrationsTable extends Migration
             $table->boolean('fined')->default(false);
             $table->text('notes')->nullable();
             $table->boolean('activated')->default(false);
-            $table->string('activation_code', 10)->nullable();
+            $table->string('activation_code', 32)->nullable();
             $table->timestamp('activated_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
