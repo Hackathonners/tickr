@@ -90,13 +90,13 @@ class RegistrationsController extends ApiController
                 $registration->fill($request->all());
                 $registration->save();
 
-                return Registration::with(['user', 'event', 'registrationType'])->find($registration->id);
-            });
+                Mail::send('emails.ticket', compact('registration'), function ($m) use ($registration) {
+                    $m->from(config('mail.from.address'), config('mail.from.name'))
+                      ->to($registration->user->email, $registration->user->name)
+                      ->subject('Ticket for '.$registration->event->title);
+                });
 
-            Mail::send('emails.ticket', compact('registration'), function ($m) use ($registration) {
-                $m->from(config('mail.from.address'), config('mail.from.name'))
-                  ->to($registration->user->email, $registration->user->name)
-                  ->subject('Ticket for '.$registration->event->title);
+                return Registration::with(['user', 'event', 'registrationType'])->find($registration->id);
             });
 
             return $this->respondWith($registration, new RegistrationTransformer);
