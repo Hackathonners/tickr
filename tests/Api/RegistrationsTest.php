@@ -130,8 +130,8 @@ class RegistrationsTest extends ApiTestCase
     {
         // Prepare data
         $user = factory(User::class)->create([
-                'email' => 'test@test.com',
-            ]);
+            'email' => 'test@test.com',
+        ]);
 
         $startAt = (new DateTime())->modify('+1 day');
         $endAt = (new DateTime())->modify('+5 day');
@@ -214,6 +214,61 @@ class RegistrationsTest extends ApiTestCase
         $this->seeJson([
             'fined' => true,
             'activated' => false,
+        ]);
+    }
+
+    public function testCreateRegistrationWithPreviousDeletedData()
+    {
+        // Prepare data
+        $user = factory(User::class)->create([
+            'email' => 'test@test.com',
+        ]);
+        $participant = factory(User::class)->create();
+
+        $startAt = (new DateTime())->modify('+1 day');
+        $endAt = (new DateTime())->modify('+5 day');
+        $event = factory(Event::class)->create([
+            'user_id' => $user->id,
+            'title' => 'Event name',
+            'description' => 'Event description',
+            'place' => 'Place',
+            'start_at' => $startAt->format('Y-m-d H:i:s'),
+            'end_at' => $endAt->format('Y-m-d H:i:s'),
+        ]);
+
+        $registrationType = factory(RegistrationType::class)->create([
+            'event_id' => $event->id,
+        ]);
+
+        $registration = factory(Registration::class)->create([
+            'event_id' => $event->id,
+            'registration_type_id' => $registrationType->id,
+            'user_id' => $participant->id,
+        ]);
+
+        // Delete registration
+        $registration->delete();
+
+        $data = [
+            'name' => $participant->name,
+            'email' => $participant->email,
+            'registration_type' => $event->registrationTypes()->first()->id,
+            'fined' => false,
+            'notes' => 'Dummy User',
+        ];
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('POST', '/events/'.$event->id.'/registrations', $data);
+
+        // Assertions
+        $this->assertResponseOk();
+        $this->assertEquals(1, Registration::count(), 'Registration was not stored in database');
+        $this->seeJson(Fractal::item(Registration::first(), new RegistrationTransformer)->toArray());
+        $this->seeJson([
+            'fined' => false,
+            'activated' => false,
+            'notes' => 'Dummy User',
         ]);
     }
 

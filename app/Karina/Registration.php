@@ -7,13 +7,10 @@ use App\Exceptions\Registration\RegistrationIsAlreadyActivatedException;
 use App\Exceptions\Registration\RegistrationOnPastEventException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Vinkla\Hashids\Facades\Hashids;
 
 class Registration extends Model
 {
-    use SoftDeletes;
-
     /**
      * The attributes that are mass assignable.
      *
