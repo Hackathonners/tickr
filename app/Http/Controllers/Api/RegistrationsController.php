@@ -72,6 +72,7 @@ class RegistrationsController extends ApiController
     {
         try {
             $registration = DB::transaction(function () use ($request, $eventId) {
+                $owner = Auth::user();
                 $event = Event::findOrFail($eventId);
                 $this->authorize('handle', $event);
 
@@ -90,10 +91,10 @@ class RegistrationsController extends ApiController
                 $registration->fill($request->all());
                 $registration->save();
 
-                Mail::send('emails.ticket', compact('registration'), function ($m) use ($registration) {
-                    $m->from(config('mail.from.address'), config('mail.from.name'))
+                Mail::send('emails.ticket', compact('registration'), function ($m) use ($owner, $registration) {
+                    $m->from(config('mail.from.address'), $owner->name)
                       ->to($registration->user->email, $registration->user->name)
-                      ->subject('Ticket for '.$registration->event->title);
+                      ->subject('Your ticket for '.$registration->event->title);
                 });
 
                 return Registration::with(['user', 'event', 'registrationType'])->find($registration->id);

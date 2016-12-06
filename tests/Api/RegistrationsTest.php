@@ -158,7 +158,7 @@ class RegistrationsTest extends ApiTestCase
         ];
 
         // Assert Emails
-        $this->assertTicketEmail($event, $data);
+        $this->assertTicketEmail($event, $data, $user->name);
 
         // Perform task
         $this->actingAs($user)
@@ -200,7 +200,7 @@ class RegistrationsTest extends ApiTestCase
         ];
 
         // Assert Emails
-        $this->assertTicketEmail($event, $data);
+        $this->assertTicketEmail($event, $data, $user->name);
 
         // Perform task
         $this->actingAs($user)
@@ -366,23 +366,23 @@ class RegistrationsTest extends ApiTestCase
         $this->assertEquals(0, Registration::where(['activated' => true])->count(), 'Registration was activated unexpectedly.');
     }
 
-    private function assertTicketEmail($event, $data)
+    private function assertTicketEmail($event, $data, $fromName)
     {
         Mail::shouldReceive('send')->once()
             ->with('emails.ticket', Mockery::on(function ($data) {
                 $this->assertArrayHasKey('registration', $data);
 
                 return true;
-            }), Mockery::on(function ($closure) use ($data, $event) {
+            }), Mockery::on(function ($closure) use ($data, $event, $fromName) {
                 $message = Mockery::mock(\Illuminate\Mailer\Message::class);
                 $message->shouldReceive('from')
-                    ->with(config('mail.from.address'), config('mail.from.name'))
+                    ->with(config('mail.from.address'), $fromName)
                     ->andReturn(Mockery::self())
                     ->shouldReceive('to')
                     ->with($data['email'], $data['name'])
                     ->andReturn(Mockery::self())
                     ->shouldReceive('subject')
-                    ->with('Ticket for '.$event->title)
+                    ->with('Your ticket for '.$event->title)
                     ->andReturn(Mockery::self());
                 $closure($message);
 
