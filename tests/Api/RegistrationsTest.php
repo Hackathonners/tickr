@@ -179,10 +179,7 @@ class RegistrationsTest extends ApiTestCase
         ]);
 
         // Assert email
-        Mail::assertSent(TicketMail::class, function ($mail) use ($registration) {
-            return $mail->registration->id === $registration->id;
-        });
-        Mail::assertSentTo($registration->user, TicketMail::class);
+        $this->assertTicketEmail($registration);
     }
 
     public function testCreateRegistrationForExistingUser()
@@ -228,10 +225,7 @@ class RegistrationsTest extends ApiTestCase
         ]);
 
         // Assert email
-        Mail::assertSent(TicketMail::class, function ($mail) use ($registration) {
-            return $mail->registration->id === $registration->id;
-        });
-        Mail::assertSentTo($registration->user, TicketMail::class);
+        $this->assertTicketEmail($registration);
     }
 
     public function testCreateRegistrationWithPreviousDeletedData()
@@ -294,10 +288,7 @@ class RegistrationsTest extends ApiTestCase
         ]);
 
         // Assert email
-        Mail::assertSent(TicketMail::class, function ($mail) use ($registration) {
-            return $mail->registration->id === $registration->id;
-        });
-        Mail::assertSentTo($registration->user, TicketMail::class);
+        $this->assertTicketEmail($registration);
     }
 
     public function testCreateRegistrationForPastEvent()
@@ -453,5 +444,84 @@ class RegistrationsTest extends ApiTestCase
         // Assertions
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
         $this->assertEquals(0, Registration::where(['activated' => true])->count(), 'Registration was activated unexpectedly.');
+    }
+
+    public function testResendTicketEmail()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+        $participant = factory(User::class)->create();
+        $event = factory(Event::class)->create([
+            'user_id' => $user->id,
+        ]);
+        $registrationType = factory(RegistrationType::class, 1)->create([
+            'event_id' => $event->id,
+        ]);
+        $registration = factory(Registration::class)->create([
+            'event_id' => $event->id,
+            'registration_type_id' => $registrationType->id,
+            'user_id' => $participant->id,
+        ]);
+
+        // Pretend emails
+        Mail::fake();
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('POST', '/registrations/'.Hashids::encode($registration->id).'/resend');
+
+        // Assertions
+        $this->assertResponseOk();
+        $this->seeJson([
+            'success' => true,
+        ]);
+
+        // Assert email
+        $this->assertTicketEmail($registration);
+    }
+
+    public function testResendTicketEmailOfActivatedRegistration()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+        $participant = factory(User::class)->create();
+        $event = factory(Event::class)->create([
+            'user_id' => $user->id,
+        ]);
+        $registrationType = factory(RegistrationType::class, 1)->create([
+            'event_id' => $event->id,
+        ]);
+        $registration = factory(Registration::class)->create([
+            'event_id' => $event->id,
+            'registration_type_id' => $registrationType->id,
+            'user_id' => $participant->id,
+            'activated' => true,
+        ]);
+
+        // Pretend emails
+        Mail::fake();
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('POST', '/registrations/'.Hashids::encode($registration->id).'/resend');
+
+        // Assertions
+        $this->assertResponseStatus(Response::HTTP_FORBIDDEN);
+        $this->seeJsonStructure([
+            'error' => [
+                'code', 'http_code', 'messages',
+            ],
+        ]);
+
+        // Assert email
+        Mail::assertNotSent(TicketMail::class);
+    }
+
+    private function assertTicketEmail($registration)
+    {
+        Mail::assertSent(TicketMail::class, function ($mail) use ($registration) {
+            return $mail->registration->id === $registration->id;
+        });
+        Mail::assertSentTo($registration->user, TicketMail::class);
     }
 }

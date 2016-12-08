@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use Vinkla\Hashids\Facades\Hashids;
 use App\Mail\TicketMail;
+use App\Exceptions\Registration\RegistrationIsAlreadyActivatedException;
 
 class RegistrationsController extends ApiController
 {
@@ -42,7 +43,7 @@ class RegistrationsController extends ApiController
     }
 
     /**
-     * Display history of the registration of user in events of authenticated owner.
+     * Display history of a given user in events of the authenticated owner.
      *
      * @return \Illuminate\Http\Response
      */
@@ -93,8 +94,7 @@ class RegistrationsController extends ApiController
                 $registration->fill($request->all());
                 $registration->save();
 
-                Mail::to($registration->user->email, $registration->user->name)
-                      ->send(new TicketMail($registration));
+                $this->sendTicketEmail($registration);
 
                 return Registration::with(['user', 'event', 'registrationType'])->find($registration->id);
             });
@@ -108,7 +108,7 @@ class RegistrationsController extends ApiController
     /**
      * Activate a registration.
      *
-     * @param $id
+     * @param $hashId
      * @return \Illuminate\Http\Response
      */
     public function activate($hashId, $token)
@@ -132,5 +132,44 @@ class RegistrationsController extends ApiController
         } catch (\LogicException $e) {
             return $this->errorForbidden($e->getMessage());
         }
+    }
+
+    /**
+     * Resend the email of the given registration.
+     *
+     * @param $hashId
+     * @return \Illuminate\Http\Response
+     */
+    public function resendEmail($hashId)
+    {
+        $id = Hashids::decode($hashId);
+        $id = count($id) > 0 ? $id[0] : $id;
+
+        try {
+            DB::transaction(function () use ($id) {
+                $registration = Registration::with(['event', 'user'])
+                                    ->findOrFail($id);
+                $this->authorize('handle', $registration->event);
+
+                if ($registration->activated) {
+                    throw new RegistrationIsAlreadyActivatedException('Cannot resend email because this ticket is already activated');
+                }
+
+                $this->sendTicketEmail($registration);
+            });
+
+            return $this->respondWithArray([
+                'success' => true,
+                'message' => 'Successfully sent the ticket email.',
+            ]);
+        } catch (\LogicException $e) {
+            return $this->errorForbidden($e->getMessage());
+        }
+    }
+
+    private function sendTicketEmail(Registration $registration)
+    {
+        Mail::to($registration->user->email, $registration->user->name)
+              ->send(new TicketMail($registration));
     }
 }

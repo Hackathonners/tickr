@@ -26,6 +26,10 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
         'uses' => 'Api\RegistrationsController@activate',
         'as' => 'registrations.activate',
     ]);
+    Route::post('registrations/{hashId}/resend', [
+        'uses' => 'Api\RegistrationsController@resendEmail',
+        'as' => 'registrations.resendEmail',
+    ]);
 
     Route::get('users/{id}/registrations', 'Api\RegistrationsController@registry');
     Route::get('events/{eventId}/registrations', 'Api\RegistrationsController@index');
