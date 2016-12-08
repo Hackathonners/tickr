@@ -2,10 +2,11 @@
     <table class="table">
         <thead>
             <tr>
-                <th class="col-md-4">Nome</th>
+                <th class="col-md-5">Nome</th>
                 <th class="col-md-2">Tipo de bilhete</th>
-                <th class="col-md-1">Data</th>
+                <th class="col-md-2">Data</th>
                 <th class="col-md-1 text-center">Ativado</th>
+                <th class="col-md-1 text-center"></th>
             </tr>
         </thead>
         <tbody>
@@ -25,7 +26,9 @@
             <!-- Results -->
             <tr v-if="!state.loading" v-for="registration in registrations">
                 <td>
-                    {{ registration.user.data.name }}
+                    <span>{{ registration.user.data.name }}</span>
+                    <div class="small text-muted"><strong>E-mail:</strong> {{ registration.user.data.email }}</div>
+                    <div class="small text-muted"><strong>Informações:</strong> {{ registration.notes }}</div>
                 </td>
                 <td>
                     {{ registration.registration_type.data.type }}
@@ -37,8 +40,48 @@
                 <td class="text-center">
                     <i :class="['fa', registration.activated ? 'fa-check text-primary' : 'fa-close text-muted']" aria-hidden="true"></i>
                 </td>
+                <td class="text-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-gear"></i>
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="#" @click="destroy(registration)">Apagar inscrição</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>
     <paginator v-if="!state.loading" :pagination="state.pagination"></paginator>
+
+    <div class="modal fade" id="delete-registration" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Apagar inscrição</h4>
+                </div>
+                <div v-if="state.deleteRegistration" class="modal-body">
+                    <p class="h5"><strong>Tem a certeza que pretende apagar a seguinte inscrição?</strong></p>
+                    <ul>
+                        <li><strong>Nome:</strong> {{ state.deleteRegistration.user.data.name }}</li>
+                        <li><strong>E-mail:</strong> {{ state.deleteRegistration.user.data.email }}</li>
+                        <li v-show="state.deleteRegistration.notes"><strong>Informações:</strong> {{ state.deleteRegistration.notes }}</li>
+                    </ul>
+                    <span class="text-danger">O bilhete enviado será anulado.</span>
+                </div>
+                <div class="modal-footer">
+                    <form action="registrations" method="POST" @submit.prevent="destroyRegistration(state.deleteRegistration)">
+                        <button type="button" class="btn btn-default" :disabled="state.busy" data-dismiss="modal">Cancelar</button>
+                        <submit class="btn btn-danger" :busy="state.busy" message="A apagar...">Apagar inscrição</submit>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

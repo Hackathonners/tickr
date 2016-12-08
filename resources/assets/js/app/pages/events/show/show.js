@@ -95,7 +95,6 @@ export default {
         });
       }).then(() => {
         this.$set(this.state, 'busy', false);
-        window.scrollTo(0, 0);
       });
     },
   },

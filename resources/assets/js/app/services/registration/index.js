@@ -1,6 +1,7 @@
 import Vue from 'vue';
 
 const url = 'events/{eventId}/registrations';
+const registrationUrl = 'registrations/{registrationId}';
 
 export default {
   /**
@@ -23,6 +24,17 @@ export default {
    */
   store(eventId, data) {
     return Vue.resource(url, { eventId }).save(data)
+      .then(response => Promise.resolve(response.json()))
+      .catch(error => Promise.reject(error.body));
+  },
+
+  /**
+   * Delete a registration.
+   *
+   * @param registrationId
+   */
+  destroy(registrationId) {
+    return Vue.resource(registrationUrl).delete({ registrationId })
       .then(response => Promise.resolve(response.json()))
       .catch(error => Promise.reject(error.body));
   },
