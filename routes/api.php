@@ -34,6 +34,10 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
     Route::get('users/{id}/registrations', 'Api\RegistrationsController@registry');
     Route::get('events/{eventId}/registrations', 'Api\RegistrationsController@index');
 
+    Route::resource('registrations', 'Api\RegistrationsController', [
+        'only' => ['destroy'],
+    ]);
+
     Route::resource('users', 'Api\UsersController', [
         'only' => ['show'],
     ]);

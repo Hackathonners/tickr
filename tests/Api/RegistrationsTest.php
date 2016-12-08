@@ -517,6 +517,35 @@ class RegistrationsTest extends ApiTestCase
         Mail::assertNotSent(TicketMail::class);
     }
 
+    public function testDeleteRegistration()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+        $participant = factory(User::class)->create();
+        $event = factory(Event::class)->create([
+            'user_id' => $user->id,
+        ]);
+        $registrationType = factory(RegistrationType::class, 1)->create([
+            'event_id' => $event->id,
+        ]);
+        $registration = factory(Registration::class)->create([
+            'event_id' => $event->id,
+            'registration_type_id' => $registrationType->id,
+            'user_id' => $participant->id,
+        ]);
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('DELETE', '/registrations/'.Hashids::encode($registration->id));
+
+        // Assertions
+        $this->assertResponseOk();
+        $this->assertEquals(0, Registration::count(), 'Registration was not deleted from database');
+        $this->seeJsonStructure([
+            'success',
+        ]);
+    }
+
     private function assertTicketEmail($registration)
     {
         Mail::assertSent(TicketMail::class, function ($mail) use ($registration) {

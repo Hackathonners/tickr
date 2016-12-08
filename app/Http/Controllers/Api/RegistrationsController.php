@@ -167,6 +167,34 @@ class RegistrationsController extends ApiController
         }
     }
 
+    /**
+     * Remove the specified registration from storage.
+     *
+     * @param $hashId
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($hashId)
+    {
+        $id = Hashids::decode($hashId);
+        $id = count($id) > 0 ? $id[0] : $id;
+
+        try {
+            DB::transaction(function () use ($id) {
+                $registration = Registration::with('event')->findOrFail($id);
+                $this->authorize('handle', $registration->event);
+
+                return $registration->delete();
+            });
+
+            return $this->respondWithArray([
+                'success' => true,
+                'message' => 'Successfully deleted the registration.',
+            ]);
+        } catch (\LogicException $e) {
+            return $this->errorForbidden($e->getMessage());
+        }
+    }
+
     private function sendTicketEmail(Registration $registration)
     {
         Mail::to($registration->user->email, $registration->user->name)
