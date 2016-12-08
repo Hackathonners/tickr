@@ -10,10 +10,12 @@ use App\Karina\Registration;
 use App\Karina\RegistrationType;
 use App\Karina\User;
 use App\Transformers\RegistrationTransformer;
+use App\Exceptions\Registration\RegistrationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use Vinkla\Hashids\Facades\Hashids;
+use App\Mail\TicketMail;
 
 class RegistrationsController extends ApiController
 {
@@ -91,17 +93,14 @@ class RegistrationsController extends ApiController
                 $registration->fill($request->all());
                 $registration->save();
 
-                Mail::send('emails.ticket', compact('registration'), function ($m) use ($owner, $registration) {
-                    $m->from(config('mail.from.address'), $owner->name)
-                      ->to($registration->user->email, $registration->user->name)
-                      ->subject('Your ticket for '.$registration->event->title);
-                });
+                Mail::to($registration->user->email, $registration->user->name)
+                      ->send(new TicketMail($registration));
 
                 return Registration::with(['user', 'event', 'registrationType'])->find($registration->id);
             });
 
             return $this->respondWith($registration, new RegistrationTransformer);
-        } catch (\LogicException $e) {
+        } catch (RegistrationException $e) {
             return $this->errorForbidden($e->getMessage());
         }
     }

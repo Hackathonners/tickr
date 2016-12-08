@@ -2,7 +2,7 @@
 
 namespace App\Exceptions\Registration;
 
-class RegistrationIsAlreadyActivatedException extends \LogicException
+class RegistrationIsAlreadyActivatedException extends RegistrationException
 {
     const CODE = '2003';
 

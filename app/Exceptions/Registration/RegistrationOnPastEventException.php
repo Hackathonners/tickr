@@ -2,7 +2,7 @@
 
 namespace App\Exceptions\Registration;
 
-class RegistrationOnPastEventException extends \LogicException
+class RegistrationOnPastEventException extends RegistrationException
 {
     const CODE = '2002';
 

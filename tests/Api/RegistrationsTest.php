@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
 use Vinkla\Hashids\Facades\Hashids;
+use App\Mail\TicketMail;
 
 class RegistrationsTest extends ApiTestCase
 {
@@ -157,8 +158,8 @@ class RegistrationsTest extends ApiTestCase
             'notes' => 'Dummy User',
         ];
 
-        // Assert Emails
-        $this->assertTicketEmail($event, $data, $user->name);
+        // Pretend emails
+        Mail::fake();
 
         // Perform task
         $this->actingAs($user)
@@ -168,12 +169,20 @@ class RegistrationsTest extends ApiTestCase
         $this->assertResponseOk();
         $this->assertEquals(2, User::count(), 'Participant was not stored in database');
         $this->assertEquals(1, Registration::count(), 'Registration was not stored in database');
+
+        $registration = Registration::first();
         $this->seeJson(Fractal::item(Registration::first(), new RegistrationTransformer)->toArray());
         $this->seeJson([
             'fined' => false,
             'activated' => false,
             'notes' => 'Dummy User',
         ]);
+
+        // Assert email
+        Mail::assertSent(TicketMail::class, function ($mail) use ($registration) {
+            return $mail->registration->id === $registration->id;
+        });
+        Mail::assertSentTo($registration->user, TicketMail::class);
     }
 
     public function testCreateRegistrationForExistingUser()
@@ -199,8 +208,8 @@ class RegistrationsTest extends ApiTestCase
             'fined' => true,
         ];
 
-        // Assert Emails
-        $this->assertTicketEmail($event, $data, $user->name);
+        // Pretend emails
+        Mail::fake();
 
         // Perform task
         $this->actingAs($user)
@@ -210,11 +219,19 @@ class RegistrationsTest extends ApiTestCase
         $this->assertResponseOk();
         $this->assertEquals(2, User::count(), 'Users are not strict to owner and participant.');
         $this->assertEquals(1, Registration::count(), 'Registration was not stored in database');
-        $this->seeJson(Fractal::item(Registration::first(), new RegistrationTransformer)->toArray());
+
+        $registration = Registration::first();
+        $this->seeJson(Fractal::item($registration, new RegistrationTransformer)->toArray());
         $this->seeJson([
             'fined' => true,
             'activated' => false,
         ]);
+
+        // Assert email
+        Mail::assertSent(TicketMail::class, function ($mail) use ($registration) {
+            return $mail->registration->id === $registration->id;
+        });
+        Mail::assertSentTo($registration->user, TicketMail::class);
     }
 
     public function testCreateRegistrationWithPreviousDeletedData()
@@ -257,6 +274,9 @@ class RegistrationsTest extends ApiTestCase
             'notes' => 'Dummy User',
         ];
 
+        // Pretend emails
+        Mail::fake();
+
         // Perform task
         $this->actingAs($user)
             ->json('POST', '/events/'.$event->id.'/registrations', $data);
@@ -264,12 +284,20 @@ class RegistrationsTest extends ApiTestCase
         // Assertions
         $this->assertResponseOk();
         $this->assertEquals(1, Registration::count(), 'Registration was not stored in database');
-        $this->seeJson(Fractal::item(Registration::first(), new RegistrationTransformer)->toArray());
+
+        $registration = Registration::first();
+        $this->seeJson(Fractal::item($registration, new RegistrationTransformer)->toArray());
         $this->seeJson([
             'fined' => false,
             'activated' => false,
             'notes' => 'Dummy User',
         ]);
+
+        // Assert email
+        Mail::assertSent(TicketMail::class, function ($mail) use ($registration) {
+            return $mail->registration->id === $registration->id;
+        });
+        Mail::assertSentTo($registration->user, TicketMail::class);
     }
 
     public function testCreateRegistrationForPastEvent()
@@ -302,6 +330,9 @@ class RegistrationsTest extends ApiTestCase
             'fined' => true,
         ];
 
+        // Pretend emails
+        Mail::fake();
+
         // Perform task
         $this->actingAs($user)
             ->json('POST', '/events/'.$event->id.'/registrations', $data);
@@ -314,6 +345,9 @@ class RegistrationsTest extends ApiTestCase
                 'code', 'http_code', 'messages',
             ],
         ]);
+
+        // Assert email
+        Mail::assertNotSent(TicketMail::class);
     }
 
     public function testActivateRegistration()
@@ -419,29 +453,5 @@ class RegistrationsTest extends ApiTestCase
         // Assertions
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
         $this->assertEquals(0, Registration::where(['activated' => true])->count(), 'Registration was activated unexpectedly.');
-    }
-
-    private function assertTicketEmail($event, $data, $fromName)
-    {
-        Mail::shouldReceive('send')->once()
-            ->with('emails.ticket', Mockery::on(function ($data) {
-                $this->assertArrayHasKey('registration', $data);
-
-                return true;
-            }), Mockery::on(function ($closure) use ($data, $event, $fromName) {
-                $message = Mockery::mock(\Illuminate\Mailer\Message::class);
-                $message->shouldReceive('from')
-                    ->with(config('mail.from.address'), $fromName)
-                    ->andReturn(Mockery::self())
-                    ->shouldReceive('to')
-                    ->with($data['email'], $data['name'])
-                    ->andReturn(Mockery::self())
-                    ->shouldReceive('subject')
-                    ->with('Your ticket for '.$event->title)
-                    ->andReturn(Mockery::self());
-                $closure($message);
-
-                return true;
-            }));
     }
 }

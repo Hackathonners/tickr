@@ -2,7 +2,7 @@
 
 namespace App\Exceptions\Registration;
 
-class UserIsAlreadyRegisteredOnEventException extends \LogicException
+class UserIsAlreadyRegisteredOnEventException extends RegistrationException
 {
     const CODE = '2001';
 
