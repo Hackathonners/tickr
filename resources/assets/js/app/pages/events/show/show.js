@@ -4,7 +4,9 @@
  *
  * Page where the user can view the account information
  */
+import $ from 'jquery';
 import moment from 'moment';
+import store from 'app/store/index';
 import EventService from 'app/services/event/index';
 
 export default {
@@ -77,6 +79,25 @@ export default {
     isPast(event) {
       return moment().isAfter(event.end_at);
     },
+    destroy() {
+      this.$set(this.state, 'busy', true);
+      EventService.destroy(this.event.id).then(() => {
+        $('#delete-event').modal('hide');
+        this.$router.push({ name: 'events.index' });
+        store.dispatch('notify', {
+          text: 'O evento foi apagado com sucesso.',
+          type: 'success',
+        });
+      }).catch(() => {
+        store.dispatch('notify', {
+          text: 'Ocorreu um erro inesperado. Por favor, tente mais tarde.',
+          type: 'danger',
+        });
+      }).then(() => {
+        this.$set(this.state, 'busy', false);
+        window.scrollTo(0, 0);
+      });
+    },
   },
   computed: {
     participationRatio() {
@@ -85,6 +106,7 @@ export default {
   },
   components: {
     VLayout: require('app/layouts/default/default.vue'),
+    Submit: require('app/components/submit/submit.vue'),
     Paginator: require('app/components/paginator/paginator.vue'),
     Spinner: require('app/components/spinner/spinner.vue'),
     Registrations: require('app/components/registrations/registrations.vue'),

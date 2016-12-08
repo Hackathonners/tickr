@@ -38,4 +38,15 @@ export default {
       .then(response => Promise.resolve(response.json()))
       .catch(error => Promise.reject(error.body));
   },
+
+  /**
+   * Delete an event.
+   *
+   * @param eventId
+   */
+  destroy(eventId) {
+    return Vue.resource(url).delete({ eventId })
+      .then(response => Promise.resolve(response.json()))
+      .catch(error => Promise.reject(error.body));
+  },
 };

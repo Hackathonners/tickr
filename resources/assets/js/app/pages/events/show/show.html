@@ -10,7 +10,19 @@
                 <div class="text-muted">{{ event.place }}</div>
             </div>
             <div class="col-xs-4">
-                <router-link v-if="!isPast(event)" class="page-action btn btn-primary pull-right" :to="{ name: 'registrations.create', params: { id: event.id } }">Nova inscrição</router-link>
+                <div class="page-action btn-group pull-right">
+                    <router-link v-if="!isPast(event)" class="page-action btn btn-primary" :to="{ name: 'registrations.create', params: { id: event.id } }">Nova inscrição</router-link>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-gear"></i>
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#delete-event">Apagar evento</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -93,6 +105,27 @@
                         <h4>Últimas inscrições <small class="pull-right"><router-link :to="{ name: 'registrations.index', params: { id: event.id } }">Ver todas as inscrições</router-link></small></h4>
                         <registrations :limit="10" :paginate="false" :event-id="$route.params.id"></registrations>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="delete-event" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Apagar evento {{ event.title }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="h5"><strong>Tem a certeza que pretende apagar o evento "{{ event.title }}"?</strong></p>
+                    <span class="text-danger">Os dados associados ao evento, como inscrições, serão perdidos.</span>
+                </div>
+                <div class="modal-footer">
+                    <form action="registrations" method="POST" @submit.prevent="destroy">
+                        <button type="button" class="btn btn-default" :disabled="state.busy" data-dismiss="modal">Cancelar</button>
+                        <submit @click="destroy()" class="btn btn-danger" :busy="state.busy" message="A apagar...">Apagar evento</submit>
+                    </form>
                 </div>
             </div>
         </div>
