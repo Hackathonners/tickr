@@ -33,7 +33,10 @@ class RegistrationsController extends ApiController
             $event = Event::findOrFail($eventId);
             $this->authorize('handle', $event);
 
-            $registrations = $event->registrations()->with('user');
+            $registrations = $event->registrations()
+                                   ->with('user')
+                                   ->orderBy('created_at', 'desc');
+
             $limit = $limit > 0 && $limit <= 20 ? $limit : null;
 
             return $registrations->paginate($limit);
