@@ -74,6 +74,27 @@ export default {
       });
     },
 
+    resendEmail(registration) {
+      this.$set(this.state, 'busy', true);
+      store.dispatch('notify', {
+        text: `A reenviar bilhete para ${registration.user.data.email}...`,
+        type: 'info',
+      });
+      RegistrationService.resendEmail(registration.id).then(() => {
+        store.dispatch('notify', {
+          text: `O bilhete foi reenviado para o email ${registration.user.data.email}.`,
+          type: 'success',
+        });
+      }).catch(() => {
+        store.dispatch('notify', {
+          text: 'Ocorreu um erro inesperado. Por favor, tente mais tarde.',
+          type: 'danger',
+        });
+      }).then(() => {
+        this.$set(this.state, 'busy', false);
+      });
+    },
+
     destroy(registration) {
       this.state.deleteRegistration = registration;
       $('#delete-registration').modal('show');

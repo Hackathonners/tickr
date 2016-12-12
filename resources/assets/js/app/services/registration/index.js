@@ -29,6 +29,18 @@ export default {
   },
 
   /**
+   * Resend an email of a given registration.
+   *
+   * @param registrationId
+   */
+  resendEmail(registrationId) {
+    const resendUrl = `registrations/${registrationId}/resend`;
+    return Vue.http.post(resendUrl, { registrationId })
+      .then(response => Promise.resolve(response.json()))
+      .catch(error => Promise.reject(error.body));
+  },
+
+  /**
    * Delete a registration.
    *
    * @param registrationId
