@@ -4,13 +4,10 @@ use App\Karina\GuestList;
 use App\Karina\User;
 use App\Karina\Guest;
 use App\Transformers\GuestTransformer;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
 
 class GuestTest extends ApiTestCase
 {
-    use DatabaseTransactions;
-
     public function testGuestsSearchByName()
     {
         // Prepare data

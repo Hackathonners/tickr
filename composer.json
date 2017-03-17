@@ -7,22 +7,24 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.3.*",
+        "laravel/framework": "5.4.*",
         "league/fractal": "^0.13.0",
         "spatie/laravel-fractal": "^1.9",
-        "vinkla/hashids": "^2.4",
+        "vinkla/hashids": "^3.1",
         "guzzlehttp/guzzle": "^6.2",
         "simplesoftwareio/simple-qrcode": "^1.4",
-        "laravel/passport": "^1.0"
+        "laravel/passport": "^2.0",
+        "laravel/tinker": "^1.0",
+        "laravel/browser-kit-testing": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~4.0",
+        "phpunit/phpunit": "~5.7",
         "symfony/css-selector": "2.8.*|3.0.*",
         "symfony/dom-crawler": "2.8.*|3.0.*",
         "laravel/homestead": "^3.0",
-        "laracasts/generators": "^1.1",
+        "laracasts/generators": "dev-master",
         "friendsofphp/php-cs-fixer": "^1.12"
     },
     "autoload": {
@@ -30,13 +32,15 @@
             "database"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Tests\\": "tests/"
         }
     },
     "autoload-dev": {
         "classmap": [
             "tests/TestCase.php",
-            "tests/Api/ApiTestCase.php"
+            "tests/Api/ApiTestCase.php",
+            "tests/BrowserKitTestCase.php"
         ]
     },
     "scripts": {

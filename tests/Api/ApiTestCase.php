@@ -1,11 +1,13 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Laravel\BrowserKitTesting\WithoutMiddleware;
+use Laravel\BrowserKitTesting\DatabaseTransactions;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 
-abstract class ApiTestCase extends TestCase
+abstract class ApiTestCase extends BrowserKitTestCase
 {
     use WithoutMiddleware;
+    use DatabaseTransactions;
 
     /**
      * The base URL to use while testing the application.

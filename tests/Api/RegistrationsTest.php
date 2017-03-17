@@ -6,15 +6,12 @@ use App\Karina\RegistrationType;
 use App\Karina\User;
 use App\Transformers\RegistrationTransformer;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
 use Vinkla\Hashids\Facades\Hashids;
 use App\Mail\TicketMail;
 
 class RegistrationsTest extends ApiTestCase
 {
-    use DatabaseTransactions;
-
     public function testShowRegistrationsOfEvent()
     {
         // Prepare data
@@ -351,7 +348,7 @@ class RegistrationsTest extends ApiTestCase
             'user_id' => $user->id,
         ]);
 
-        $registrationType = factory(RegistrationType::class, 1)->create([
+        $registrationType = factory(RegistrationType::class)->create([
             'event_id' => $event->id,
         ]);
 
@@ -386,7 +383,7 @@ class RegistrationsTest extends ApiTestCase
             'user_id' => $user->id,
         ]);
 
-        $registrationType = factory(RegistrationType::class, 1)->create([
+        $registrationType = factory(RegistrationType::class)->create([
             'event_id' => $event->id,
         ]);
 
@@ -425,7 +422,7 @@ class RegistrationsTest extends ApiTestCase
             'user_id' => $user->id,
         ]);
 
-        $registrationType = factory(RegistrationType::class, 1)->create([
+        $registrationType = factory(RegistrationType::class)->create([
             'event_id' => $event->id,
         ]);
 
@@ -454,7 +451,7 @@ class RegistrationsTest extends ApiTestCase
         $event = factory(Event::class)->create([
             'user_id' => $user->id,
         ]);
-        $registrationType = factory(RegistrationType::class, 1)->create([
+        $registrationType = factory(RegistrationType::class)->create([
             'event_id' => $event->id,
         ]);
         $registration = factory(Registration::class)->create([
@@ -488,7 +485,7 @@ class RegistrationsTest extends ApiTestCase
         $event = factory(Event::class)->create([
             'user_id' => $user->id,
         ]);
-        $registrationType = factory(RegistrationType::class, 1)->create([
+        $registrationType = factory(RegistrationType::class)->create([
             'event_id' => $event->id,
         ]);
         $registration = factory(Registration::class)->create([
@@ -525,7 +522,7 @@ class RegistrationsTest extends ApiTestCase
         $event = factory(Event::class)->create([
             'user_id' => $user->id,
         ]);
-        $registrationType = factory(RegistrationType::class, 1)->create([
+        $registrationType = factory(RegistrationType::class)->create([
             'event_id' => $event->id,
         ]);
         $registration = factory(Registration::class)->create([
@@ -549,8 +546,8 @@ class RegistrationsTest extends ApiTestCase
     private function assertTicketEmail($registration)
     {
         Mail::assertSent(TicketMail::class, function ($mail) use ($registration) {
-            return $mail->registration->id === $registration->id;
+            return $mail->registration->id === $registration->id &&
+                   $mail->hasTo($registration->user->email);
         });
-        Mail::assertSentTo($registration->user, TicketMail::class);
     }
 }

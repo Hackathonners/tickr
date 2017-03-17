@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
 use App\Karina\User;
 use App\Karina\Event;
@@ -10,8 +9,6 @@ use App\Transformers\EventTransformer;
 
 class EventsTest extends ApiTestCase
 {
-    use DatabaseTransactions;
-
     public function testGetUserActiveEvents()
     {
         // Prepare data
@@ -191,7 +188,7 @@ class EventsTest extends ApiTestCase
 
         $startAt = (new DateTime())->modify('+5 day');
         $endAt = (new DateTime())->modify('+8 day');
-        $event = factory(Event::class, 1)->create([
+        $event = factory(Event::class)->create([
             'user_id' => $user->id,
             'title' => 'Event name',
             'description' => 'Event description',
@@ -221,7 +218,7 @@ class EventsTest extends ApiTestCase
 
         $startAt = (new DateTime())->modify('+5 day');
         $endAt = (new DateTime())->modify('+8 day');
-        $event = factory(Event::class, 1)->create([
+        $event = factory(Event::class)->create([
             'user_id' => $user->id,
             'title' => 'Event name',
             'description' => 'Event description',
@@ -248,7 +245,7 @@ class EventsTest extends ApiTestCase
         $participant2 = factory(User::class)->create();
         $participant3 = factory(User::class)->create();
 
-        $event = factory(Event::class, 1)->create([
+        $event = factory(Event::class)->create([
             'user_id' => $owner->id,
         ]);
         $registrationTypes = [];
@@ -317,7 +314,7 @@ class EventsTest extends ApiTestCase
 
         $startAt = (new DateTime())->modify('-1 year');
         $endAt = (new DateTime())->modify('+8 day');
-        $event = factory(Event::class, 1)->create([
+        $event = factory(Event::class)->create([
             'user_id' => $user->id,
             'title' => 'Event name',
             'description' => 'Event description',
@@ -351,7 +348,7 @@ class EventsTest extends ApiTestCase
 
         $startAt = (new DateTime())->modify('+1 day');
         $endAt = (new DateTime())->modify('+5 day');
-        $event = factory(Event::class, 1)->create([
+        $event = factory(Event::class)->create([
             'user_id' => $user->id,
             'title' => 'Event name',
             'description' => 'Event description',
@@ -385,7 +382,7 @@ class EventsTest extends ApiTestCase
 
         $startAt = (new DateTime())->modify('+1 day');
         $endAt = (new DateTime())->modify('+5 day');
-        $event = factory(Event::class, 1)->create([
+        $event = factory(Event::class)->create([
             'user_id' => $dummy->id,
             'title' => 'Event name',
             'description' => 'Event description',

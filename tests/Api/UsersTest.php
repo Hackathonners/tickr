@@ -2,13 +2,10 @@
 
 use App\Karina\User;
 use App\Transformers\UserTransformer;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Symfony\Component\HttpFoundation\Response;
 
 class UsersTest extends ApiTestCase
 {
-    use DatabaseTransactions;
-
     public function testGetUserByEmail()
     {
 
