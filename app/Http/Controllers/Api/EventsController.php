@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use App\Exceptions\Event\CannotUpdateEventException;
-use App\Http\Requests\Event\UpdateRequest;
 use DB;
 use Auth;
-use App\Http\Requests\Event\CreateRequest;
 use App\Karina\Event;
+use Illuminate\Http\Request;
 use App\Karina\RegistrationType;
 use App\Transformers\EventTransformer;
+use App\Http\Requests\Event\CreateRequest;
+use App\Http\Requests\Event\UpdateRequest;
+use App\Exceptions\Event\CannotUpdateEventException;
 
 class EventsController extends ApiController
 {
@@ -78,7 +78,7 @@ class EventsController extends ApiController
      */
     public function show(Request $request, $id)
     {
-        $stats = ! ! $request->get('stats', false);
+        $stats = (bool) $request->get('stats', false);
 
         $event = DB::transaction(function () use ($id, $stats) {
             $event = Event::findOrFail($id);

@@ -2,8 +2,8 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\Karina\Guest;
+use League\Fractal\TransformerAbstract;
 
 class GuestTransformer extends TransformerAbstract
 {

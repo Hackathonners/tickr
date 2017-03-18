@@ -2,8 +2,8 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\Karina\User;
+use League\Fractal\TransformerAbstract;
 
 class UserTransformer extends TransformerAbstract
 {

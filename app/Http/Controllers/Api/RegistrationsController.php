@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use Auth;
-use Illuminate\Http\Request;
-use App\Karina\Event;
-use App\Http\Requests\Registration\CreateRequest;
-use App\Karina\Registration;
-use App\Karina\RegistrationType;
 use App\Karina\User;
-use App\Transformers\RegistrationTransformer;
-use App\Exceptions\Registration\RegistrationException;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Mail;
-use Vinkla\Hashids\Facades\Hashids;
+use App\Karina\Event;
 use App\Mail\TicketMail;
+use App\Karina\Registration;
+use Illuminate\Http\Request;
+use App\Karina\RegistrationType;
+use Illuminate\Support\Facades\DB;
+use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Input;
+use App\Transformers\RegistrationTransformer;
+use App\Http\Requests\Registration\CreateRequest;
+use App\Exceptions\Registration\RegistrationException;
 use App\Exceptions\Registration\RegistrationIsAlreadyActivatedException;
 
 class RegistrationsController extends ApiController

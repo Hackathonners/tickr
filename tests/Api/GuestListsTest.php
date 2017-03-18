@@ -1,8 +1,8 @@
 <?php
 
-use App\Karina\GuestList;
 use App\Karina\User;
 use App\Karina\Guest;
+use App\Karina\GuestList;
 use App\Transformers\GuestListTransformer;
 use Symfony\Component\HttpFoundation\Response;
 

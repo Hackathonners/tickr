@@ -2,8 +2,8 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\Karina\Event;
+use League\Fractal\TransformerAbstract;
 
 class EventTransformer extends TransformerAbstract
 {

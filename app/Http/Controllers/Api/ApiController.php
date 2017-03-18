@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use Auth;
-use App\Http\Controllers\Controller;
-use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Fractal;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -24,15 +24,14 @@ class ApiController extends Controller
      */
     protected $statusCode = HttpResponse::HTTP_OK;
 
-    
     const CODE_WRONG_ARGS = 'ERR-WRONGARGS';
-    
+
     const CODE_NOT_FOUND = 'ERR-NOTFOUND';
-    
+
     const CODE_INTERNAL_ERROR = 'ERR-WHOOPS';
-    
+
     const CODE_UNAUTHORIZED = 'ERR-UNAUTHORIZED';
-    
+
     const CODE_FORBIDDEN = 'ERR-FORBIDDEN';
 
     /**

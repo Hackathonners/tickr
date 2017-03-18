@@ -2,10 +2,10 @@
 
 namespace App\Mail;
 
+use App\Karina\Registration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Karina\Registration;
 
 class TicketMail extends Mailable
 {

@@ -1,11 +1,11 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Response;
 use App\Karina\User;
 use App\Karina\Event;
 use App\Karina\Registration;
 use App\Karina\RegistrationType;
 use App\Transformers\EventTransformer;
+use Symfony\Component\HttpFoundation\Response;
 
 class EventsTest extends ApiTestCase
 {

@@ -2,8 +2,8 @@
 
 namespace App\Exceptions;
 
-use App\Http\Controllers\Api\ApiController;
 use Exception;
+use App\Http\Controllers\Api\ApiController;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

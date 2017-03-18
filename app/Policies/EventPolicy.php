@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Karina\Event;
 use App\Karina\User;
+use App\Karina\Event;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class EventPolicy
