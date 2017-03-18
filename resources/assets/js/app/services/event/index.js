@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import http from 'axios';
 
-const url = '/api/v1/events';
+const url = '/events';
 
 export default {
   /**

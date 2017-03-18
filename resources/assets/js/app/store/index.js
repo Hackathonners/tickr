@@ -14,6 +14,7 @@ import * as actions from './actions';
 import * as getters from './getters';
 
 // Modules
+import status from './modules/status';
 import notification from './modules/notification';
 import account from './modules/account';
 
@@ -36,6 +37,7 @@ export default new Vuex.Store({
    * Assign the modules to the store
    */
   modules: {
+    status,
     notification,
     account,
   },

@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import http from 'axios';
 
-const eventsUrl = '/api/v1/events';
-const registrationUrl = '/api/v1/registrations';
+const eventsUrl = '/events';
+const registrationUrl = '/registrations';
 
 export default {
   /**
@@ -35,7 +35,7 @@ export default {
    * @param registrationId
    */
   resendEmail(registrationId) {
-    const resendUrl = `/api/v1/registrations/${registrationId}/resend`;
+    const resendUrl = `/registrations/${registrationId}/resend`;
     return http.post(resendUrl)
     .then(response => Promise.resolve(response.data))
     .catch(error => Promise.reject(error.response.data));

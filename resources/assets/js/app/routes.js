@@ -1,16 +1,8 @@
-/* ============
- * Routes File
- * ============
- *
- * The routes and redirects are defined in this file
- */
-
-
 /**
- * The routes
- *
- * @type {object} The routes
+ * These are the entrypoints of the application, where each path is related
+ * to each existent component. In this file, add every route.
  */
+
 export default [
   {
     path: '/events',

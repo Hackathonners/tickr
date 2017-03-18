@@ -2,7 +2,7 @@ import Vue from 'vue';
 import http from 'axios';
 import store from 'app/store/index';
 
-const url = '/api/v1/users';
+const url = '/users';
 
 export default {
   /**
