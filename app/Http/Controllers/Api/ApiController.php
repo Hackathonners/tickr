@@ -24,25 +24,15 @@ class ApiController extends Controller
      */
     protected $statusCode = HttpResponse::HTTP_OK;
 
-    /**
-     *
-     */
+    
     const CODE_WRONG_ARGS = 'ERR-WRONGARGS';
-    /**
-     *
-     */
+    
     const CODE_NOT_FOUND = 'ERR-NOTFOUND';
-    /**
-     *
-     */
+    
     const CODE_INTERNAL_ERROR = 'ERR-WHOOPS';
-    /**
-     *
-     */
+    
     const CODE_UNAUTHORIZED = 'ERR-UNAUTHORIZED';
-    /**
-     *
-     */
+    
     const CODE_FORBIDDEN = 'ERR-FORBIDDEN';
 
     /**
