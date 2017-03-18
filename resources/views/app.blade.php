@@ -1,6 +1,5 @@
 @extends('layouts.master')
 
 @section('content')
-<div id="tickr-app"></div>
+<div id="app"></div>
 @endsection
-

@@ -1,6 +1,7 @@
 import Vue from 'vue';
+import http from 'axios';
 
-const url = 'events{/eventId}';
+const url = '/api/v1/events';
 
 export default {
   /**
@@ -10,9 +11,9 @@ export default {
    * @param filter Filter for listing
    */
   list(page = 1, filter) {
-    return Vue.resource(url, { page, filter }).get()
-      .then(response => Promise.resolve(response.json()))
-      .catch(error => Promise.reject(error.body));
+    return http.get(url, { params: { page, filter } })
+      .then(response => Promise.resolve(response.data))
+      .catch(error => Promise.reject(error.response.data));
   },
 
   /**
@@ -23,9 +24,9 @@ export default {
    */
   get(eventId, stats) {
     stats = stats ? 1 : 0;
-    return Vue.resource(url, { eventId, stats }).get()
-      .then(response => Promise.resolve(response.json()))
-      .catch(error => Promise.reject(error.body));
+    return http.get(url + '/' + eventId, { params: { stats } })
+      .then(response => Promise.resolve(response.data))
+      .catch(error => Promise.reject(error.response.data));
   },
 
   /**
@@ -34,9 +35,9 @@ export default {
    * @param data
    */
   store(data) {
-    return Vue.resource(url).save(data)
-      .then(response => Promise.resolve(response.json()))
-      .catch(error => Promise.reject(error.body));
+    return http.post(url, data)
+      .then(response => Promise.resolve(response.data))
+      .catch(error => Promise.reject(error.response.data));
   },
 
   /**
@@ -45,8 +46,8 @@ export default {
    * @param eventId
    */
   destroy(eventId) {
-    return Vue.resource(url).delete({ eventId })
-      .then(response => Promise.resolve(response.json()))
-      .catch(error => Promise.reject(error.body));
+    return http.delete(url + '/' + eventId)
+      .then(response => Promise.resolve(response.data))
+      .catch(error => Promise.reject(error.response.data));
   },
 };

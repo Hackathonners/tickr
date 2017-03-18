@@ -1,7 +1,8 @@
 import Vue from 'vue';
+import http from 'axios';
 
-const url = 'events/{eventId}/registrations';
-const registrationUrl = 'registrations/{registrationId}';
+const eventsUrl = '/api/v1/events';
+const registrationUrl = '/api/v1/registrations';
 
 export default {
   /**
@@ -11,9 +12,9 @@ export default {
    * @param filter Limit
    */
   list(eventId, page, limit) {
-    return Vue.resource(url, { eventId, page, limit }).get()
-      .then(response => Promise.resolve(response.json()))
-      .catch(error => Promise.reject(error.body));
+    return http.get(eventsUrl + '/' + eventId + '/registrations', { params: { page, limit } })
+    .then(response => Promise.resolve(response.data))
+    .catch(error => Promise.reject(error.response.data));
   },
 
   /**
@@ -23,9 +24,9 @@ export default {
    * @param data
    */
   store(eventId, data) {
-    return Vue.resource(url, { eventId }).save(data)
-      .then(response => Promise.resolve(response.json()))
-      .catch(error => Promise.reject(error.body));
+    return http.post(eventsUrl + '/' + eventId + '/registrations', data)
+    .then(response => Promise.resolve(response.data))
+    .catch(error => Promise.reject(error.response.data));
   },
 
   /**
@@ -34,10 +35,10 @@ export default {
    * @param registrationId
    */
   resendEmail(registrationId) {
-    const resendUrl = `registrations/${registrationId}/resend`;
-    return Vue.http.post(resendUrl, { registrationId })
-      .then(response => Promise.resolve(response.json()))
-      .catch(error => Promise.reject(error.body));
+    const resendUrl = `/api/v1/registrations/${registrationId}/resend`;
+    return http.post(resendUrl)
+    .then(response => Promise.resolve(response.data))
+    .catch(error => Promise.reject(error.response.data));
   },
 
   /**
@@ -46,8 +47,8 @@ export default {
    * @param registrationId
    */
   destroy(registrationId) {
-    return Vue.resource(registrationUrl).delete({ registrationId })
-      .then(response => Promise.resolve(response.json()))
-      .catch(error => Promise.reject(error.body));
+    return http.delete(registrationUrl + '/' + registrationId)
+    .then(response => Promise.resolve(response.data))
+    .catch(error => Promise.reject(error.response.data));
   },
 };

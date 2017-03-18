@@ -6,7 +6,7 @@
         <div class="col-md-4 col-md-offset-4 auth-signin">
             <div class="auth-header text-center">
                 <a class="logo" href="{{ url('/') }}" tabindex="-1">
-                    <img alt="Brand" height="48" src="/images/logo.svg">
+                    <img alt="Brand" height="84" src="/images/logo.svg">
                 </a>
                 <h3>@yield('auth.title')</h3>
             </div>

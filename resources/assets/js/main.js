@@ -17,7 +17,7 @@ require('jquery-ui/ui/widgets/datepicker');
 require('bootstrap-sass/assets/javascripts/bootstrap');
 
 // Start app if element exists
-if (document.getElementById('tickr-app')) {
+if (document.getElementById('app')) {
   require('./bootstrap');
-  new Vue(App).$mount('#tickr-app');
+  new Vue(App).$mount('#app');
 }

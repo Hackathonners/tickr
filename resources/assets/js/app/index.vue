@@ -14,7 +14,7 @@
 
   import store from './store';
   import UserService from './services/account'
-  import { router } from './../bootstrap';
+  import { router } from './../app-bootstrap';
 
   export default {
     data () {

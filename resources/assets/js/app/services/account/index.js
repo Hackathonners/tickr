@@ -1,7 +1,8 @@
 import Vue from 'vue';
+import http from 'axios';
 import store from 'app/store/index';
 
-const url = 'users{/id}';
+const url = '/api/v1/users';
 
 export default {
   /**
@@ -9,8 +10,8 @@ export default {
    *
    * @param id
    */
-  getAccount: (id = 'me') => Vue.resource(url, { id }).get()
-    .then(response => Promise.resolve(response.json()))
+  getAccount: (id = 'me') => http.get(url + '/me')
+    .then(response => Promise.resolve(response.data))
     .then((response) => {
       if (id === 'me') {
         store.dispatch('getAccount', response);
