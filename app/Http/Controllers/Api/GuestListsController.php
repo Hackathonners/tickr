@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\GuestList\CreateRequest;
-use App\Http\Requests\GuestList\UpdateRequest;
-use App\Karina\GuestList;
 use App\Karina\User;
 use App\Karina\Guest;
+use App\Karina\GuestList;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Transformers\GuestListTransformer;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Http\Requests\GuestList\CreateRequest;
+use App\Http\Requests\GuestList\UpdateRequest;
 
 class GuestListsController extends ApiController
 {

@@ -3,8 +3,8 @@
 namespace App\Transformers;
 
 use App\Karina\Registration;
-use League\Fractal\TransformerAbstract;
 use Vinkla\Hashids\Facades\Hashids;
+use League\Fractal\TransformerAbstract;
 
 class RegistrationTransformer extends TransformerAbstract
 {

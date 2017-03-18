@@ -2,10 +2,10 @@
 
 namespace App\Karina;
 
-use App\Exceptions\Event\CannotUpdateEventException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Exceptions\Event\CannotUpdateEventException;
 
 class Event extends Model
 {

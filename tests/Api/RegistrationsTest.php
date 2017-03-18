@@ -1,14 +1,14 @@
 <?php
 
+use Carbon\Carbon;
+use App\Karina\User;
 use App\Karina\Event;
+use App\Mail\TicketMail;
 use App\Karina\Registration;
 use App\Karina\RegistrationType;
-use App\Karina\User;
-use App\Transformers\RegistrationTransformer;
-use Carbon\Carbon;
-use Symfony\Component\HttpFoundation\Response;
 use Vinkla\Hashids\Facades\Hashids;
-use App\Mail\TicketMail;
+use App\Transformers\RegistrationTransformer;
+use Symfony\Component\HttpFoundation\Response;
 
 class RegistrationsTest extends ApiTestCase
 {

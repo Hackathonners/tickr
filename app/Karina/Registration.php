@@ -2,12 +2,12 @@
 
 namespace App\Karina;
 
-use App\Exceptions\Registration\UserIsAlreadyRegisteredOnEventException;
-use App\Exceptions\Registration\RegistrationIsAlreadyActivatedException;
-use App\Exceptions\Registration\RegistrationOnPastEventException;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Database\Eloquent\Model;
+use App\Exceptions\Registration\RegistrationOnPastEventException;
+use App\Exceptions\Registration\RegistrationIsAlreadyActivatedException;
+use App\Exceptions\Registration\UserIsAlreadyRegisteredOnEventException;
 
 class Registration extends Model
 {

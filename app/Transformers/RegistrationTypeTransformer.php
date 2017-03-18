@@ -2,8 +2,8 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\Karina\RegistrationType;
+use League\Fractal\TransformerAbstract;
 
 class RegistrationTypeTransformer extends TransformerAbstract
 {

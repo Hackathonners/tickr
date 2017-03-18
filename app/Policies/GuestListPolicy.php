@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Karina\GuestList;
 use App\Karina\User;
+use App\Karina\GuestList;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class GuestListPolicy

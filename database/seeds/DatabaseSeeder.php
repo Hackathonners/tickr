@@ -1,9 +1,9 @@
 <?php
 
-use App\Karina\Event;
-use App\Karina\RegistrationType;
 use App\Karina\User;
+use App\Karina\Event;
 use Illuminate\Database\Seeder;
+use App\Karina\RegistrationType;
 
 class DatabaseSeeder extends Seeder
 {

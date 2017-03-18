@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use DB;
 use Auth;
 use App\Support\Str;
+use Illuminate\Http\Request;
 use App\Transformers\GuestTransformer;
 
 class GuestsController extends ApiController

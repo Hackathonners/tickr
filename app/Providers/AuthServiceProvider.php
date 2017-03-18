@@ -5,8 +5,8 @@ namespace App\Providers;
 use App\Karina\Event;
 use App\Karina\GuestList;
 use App\Policies\EventPolicy;
-use App\Policies\GuestListPolicy;
 use Laravel\Passport\Passport;
+use App\Policies\GuestListPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
