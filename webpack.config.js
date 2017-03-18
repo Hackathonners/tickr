@@ -214,7 +214,7 @@ module.exports.module = { rules }
  | load the Vue common library. You may delete this, if needed.
  |
  */
- console.log(Mix.options.resourceRoot + '/assets/js/app/');
+
 module.exports.resolve = {
     extensions: ['*', '.js', '.jsx', '.vue'],
 
