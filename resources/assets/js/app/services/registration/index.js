@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import http from 'axios';
 
 const eventsUrl = '/events';
@@ -12,7 +11,7 @@ export default {
    * @param filter Limit
    */
   list(eventId, page, limit) {
-    return http.get(eventsUrl + '/' + eventId + '/registrations', { params: { page, limit } })
+    return http.get(`${eventsUrl}/${eventId}/registrations`, { params: { page, limit } })
     .then(response => Promise.resolve(response.data))
     .catch(error => Promise.reject(error.response.data));
   },
@@ -24,7 +23,7 @@ export default {
    * @param data
    */
   store(eventId, data) {
-    return http.post(eventsUrl + '/' + eventId + '/registrations', data)
+    return http.post(`${eventsUrl}/${eventId}/registrations`, data)
     .then(response => Promise.resolve(response.data))
     .catch(error => Promise.reject(error.response.data));
   },
@@ -47,7 +46,7 @@ export default {
    * @param registrationId
    */
   destroy(registrationId) {
-    return http.delete(registrationUrl + '/' + registrationId)
+    return http.delete(`${registrationUrl}/${registrationId}`)
     .then(response => Promise.resolve(response.data))
     .catch(error => Promise.reject(error.response.data));
   },

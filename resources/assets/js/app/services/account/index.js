@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import http from 'axios';
 import store from 'app/store/index';
 
@@ -10,7 +9,7 @@ export default {
    *
    * @param id
    */
-  getAccount: (id = 'me') => http.get(url + '/me')
+  getAccount: (id = 'me') => http.get(`${url}/me`)
     .then(response => Promise.resolve(response.data))
     .then((response) => {
       if (id === 'me') {

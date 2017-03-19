@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import http from 'axios';
 
 const url = '/events';
@@ -24,7 +23,7 @@ export default {
    */
   get(eventId, stats) {
     stats = stats ? 1 : 0;
-    return http.get(url + '/' + eventId, { params: { stats } })
+    return http.get(`${url}/${eventId}`, { params: { stats } })
       .then(response => Promise.resolve(response.data))
       .catch(error => Promise.reject(error.response.data));
   },
@@ -46,7 +45,7 @@ export default {
    * @param eventId
    */
   destroy(eventId) {
-    return http.delete(url + '/' + eventId)
+    return http.delete(`${url}/${eventId}`)
       .then(response => Promise.resolve(response.data))
       .catch(error => Promise.reject(error.response.data));
   },
