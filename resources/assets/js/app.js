@@ -23,30 +23,41 @@ import VuexRouterSync from 'vuex-router-sync';
 import routes from 'app/routes';
 import store from 'app/store';
 
-Vue.use(VueRouter);
-Vue.use(VuexRouterSync);
+// Only starts app if target element exists
+if (document.getElementById('app')) {
+    Vue.use(VueRouter);
+    Vue.use(VuexRouterSync);
 
-const router = new VueRouter({
-  mode: 'history',
-  routes,
-});
+    const router = new VueRouter({
+      mode: 'history',
+      routes,
+    });
 
-VuexRouterSync.sync(store, router);
+    VuexRouterSync.sync(store, router);
 
-Vue.component('app', require('./app/components/App.vue'));
+    Vue.component('app', require('./app/components/App.vue'));
 
-window.axios.defaults.baseURL = 'http://karina.dev/api/v1';
-window.axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-window.axios.defaults.headers.common = {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-    'X-Requested-With': 'XMLHttpRequest'
-};
+    window.axios.defaults.baseURL = 'http://karina.dev/api/v1';
+    window.axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+    window.axios.defaults.headers.common = {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+        'X-Requested-With': 'XMLHttpRequest'
+    };
+    window.axios.interceptors.request.use(response => {
+        return response;
+    }, error => {
+        if (error.response.status === 401) {
+            window.location.href = '/login';
+        }
+        return Promise.reject(error);
+    });
 
-require('app/utils/filters/Date');
-require('app/utils/filters/Number');
+    require('app/utils/filters/Date');
+    require('app/utils/filters/Number');
 
-const app = new Vue({
-    el: '#app',
-    router,
-    store,
-});
+    const app = new Vue({
+        el: '#app',
+        router,
+        store,
+    });
+}

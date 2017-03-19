@@ -8,12 +8,10 @@
  * This way the app stays clean.
  */
 
-import { csrfToken } from 'app/utils/functions';
-
 export default {
   mounted() {
     document.querySelector('form#logout input[name=_token]')
-      .value = csrfToken();
+      .value = $('meta[name="csrf-token"]').attr('content');
   },
 
   methods: {
