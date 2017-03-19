@@ -189,7 +189,17 @@ let rules = [
             name: '[name].[ext]?[hash]',
             publicPath: Mix.options.resourceRoot
         }
-    }
+    },
+
+    {
+        enforce: "pre",
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "eslint-loader",
+        options: {
+            fix: true,
+        }
+    },
 ];
 
 if (Mix.preprocessors) {

@@ -7,6 +7,11 @@ module.exports = {
   plugins: [
     'html',
   ],
+  globals: {
+    "$": 1,
+    "axios": 1,
+    "Vue": 1,
+},
   rules: {
     'global-require': 0,
 
