@@ -12,7 +12,6 @@ use App\Karina\RegistrationType;
 use Illuminate\Support\Facades\DB;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Input;
 use App\Transformers\RegistrationTransformer;
 use App\Http\Requests\Registration\CreateRequest;
 use App\Exceptions\Registration\RegistrationException;
