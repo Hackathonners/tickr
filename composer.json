@@ -25,7 +25,7 @@
         "symfony/dom-crawler": "2.8.*|3.0.*",
         "laravel/homestead": "^3.0",
         "laracasts/generators": "dev-master",
-        "friendsofphp/php-cs-fixer": "^1.12"
+        "friendsofphp/php-cs-fixer": "^2.0"
     },
     "autoload": {
         "classmap": [
@@ -57,7 +57,9 @@
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan optimize"
-        ]
+        ],
+        "test": "phpunit",
+        "lint": "php-cs-fixer --config=.php_cs fix . -vvv"
     },
     "config": {
         "preferred-install": "dist"
