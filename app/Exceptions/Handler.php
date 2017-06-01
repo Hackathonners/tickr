@@ -47,12 +47,12 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         if ($e instanceof ModelNotFoundException) {
-            if ($request->segment(1) == 'api') {
+            if ($request->segment(1) === 'api') {
                 return (new ApiController())->errorNotFound();
             }
         }
         if ($e instanceof AuthorizationException) {
-            if ($request->segment(1) == 'api') {
+            if ($request->segment(1) === 'api') {
                 if ($request->user()) {
                     return (new ApiController())->errorForbidden('You need permission to perform this action.');
                 }

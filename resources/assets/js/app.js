@@ -39,7 +39,7 @@ if (document.getElementById('app')) {
 
   Vue.component('app', require('./app/components/App.vue'));
 
-  window.axios.defaults.baseURL = 'http://karina.dev/api/v1';
+  window.axios.defaults.baseURL = '/api/v1';
   window.axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
   window.axios.defaults.headers.common = {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
