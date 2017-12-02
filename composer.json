@@ -3,7 +3,7 @@
     "description": "Tickr is a simple platform that allows users to organize events and manage their registrations.",
     "keywords": ["ticket", "event", "manager"],
     "license": "MIT",
-    "version": "0.1.0",
+    "version": "0.2.0-dev",
     "type": "project",
     "require": {
         "php": ">=5.5.9",
@@ -63,5 +63,6 @@
     },
     "config": {
         "preferred-install": "dist"
-    }
+    },
+    "prefer-stable": true
 }
