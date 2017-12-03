@@ -34,6 +34,7 @@ export default {
         pagination: {},
         loading: true,
         deleteRegistration: null,
+        activateRegistration: null,
       },
     };
   },
@@ -49,6 +50,28 @@ export default {
         this.$set(this, 'registrations', registrations.data);
         this.$set(this.state, 'pagination', registrations.meta.pagination);
         this.$set(this.state, 'loading', false);
+      });
+    },
+
+    activateRegistration(registration) {
+      this.$set(this.state, 'busy', true);
+      RegistrationService.activateRegistration(
+        registration.id,
+        registration.activation_code
+      ).then(() => {
+        $('#activate-registration').modal('hide');
+        registration.activated = true;
+        store.dispatch('notify', {
+          text: 'A entrada foi registada com sucesso.',
+          type: 'success',
+        });
+      }).catch(() => {
+        store.dispatch('notify', {
+          text: 'Ocorreu um erro inesperado. Por favor, tente mais tarde.',
+          type: 'danger',
+        });
+      }).then(() => {
+        this.$set(this.state, 'busy', false);
       });
     },
 
@@ -98,6 +121,11 @@ export default {
     destroy(registration) {
       this.state.deleteRegistration = registration;
       $('#delete-registration').modal('show');
+    },
+
+    activate(registration) {
+      this.state.activateRegistration = registration;
+      $('#activate-registration').modal('show');
     },
   },
 

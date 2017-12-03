@@ -41,6 +41,18 @@ export default {
   },
 
   /**
+    * Activate the given registration.
+    *
+    * @param registrationId
+    */
+  activateRegistration(registrationId, token) {
+    const resendUrl = `/registrations/${registrationId}/activate/${token}`;
+    return http.post(resendUrl)
+      .then(response => Promise.resolve(response.data))
+      .catch(error => Promise.reject(error.response.data));
+  },
+
+  /**
    * Delete a registration.
    *
    * @param registrationId

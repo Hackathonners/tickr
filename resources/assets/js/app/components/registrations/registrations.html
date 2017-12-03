@@ -49,9 +49,12 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
-                                <a href="#" @click="resendEmail(registration)">Reenviar bilhete</a>
+                                <a href="#" v-if="!registration.activated" @click="resendEmail(registration)">Reenviar bilhete</a>
                             </li>
-                            <li class="divider" role="separator"></li>
+                            <li>
+                                <a href="#" v-if="!registration.activated" @click="activate(registration)">Registar entrada</a>
+                            </li>
+                            <li class="divider" role="separator" v-if="!registration.activated"></li>
                             <li>
                                 <a href="#" @click="destroy(registration)">Apagar inscrição</a>
                             </li>
@@ -83,6 +86,38 @@
                     <form action="registrations" method="POST" @submit.prevent="destroyRegistration(state.deleteRegistration)">
                         <button type="button" class="btn btn-default" :disabled="state.busy" data-dismiss="modal">Cancelar</button>
                         <submit class="btn btn-danger" :busy="state.busy" message="A apagar...">Apagar inscrição</submit>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="activate-registration" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Registrar entrada</h4>
+                </div>
+                <div v-if="state.activateRegistration" class="modal-body">
+                    <p class="h5">
+                        <strong>Tem a certeza que pretende registar a entrada da seguinte inscrição?</strong>
+                    </p>
+                    <ul>
+                        <li>
+                            <strong>Nome:</strong> {{ state.activateRegistration.user.data.name }}</li>
+                        <li>
+                            <strong>E-mail:</strong> {{ state.activateRegistration.user.data.email }}</li>
+                        <li v-show="state.activateRegistration.notes">
+                            <strong>Informações:</strong> {{ state.activateRegistration.notes }}</li>
+                    </ul>
+                    <span class="text-danger">Esta operação é irreversível.</span>
+                </div>
+                <div class="modal-footer">
+                    <form action="registrations" method="POST" @submit.prevent="activateRegistration(state.activateRegistration)">
+                        <button type="button" class="btn btn-default" :disabled="state.busy" data-dismiss="modal">Cancelar</button>
+                        <submit class="btn btn-primary" :busy="state.busy" message="A registar entrada...">Registar entrada</submit>
                     </form>
                 </div>
             </div>

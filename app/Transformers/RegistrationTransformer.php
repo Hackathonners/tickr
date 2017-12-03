@@ -37,6 +37,7 @@ class RegistrationTransformer extends TransformerAbstract
             'activated' => (bool) $registration->activated,
             'notes' => $registration->notes,
             'created_at' => $registration->created_at->toDateTimeString(),
+            'activation_code' => $registration->activation_code,
         ];
     }
 
