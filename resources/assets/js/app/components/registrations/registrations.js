@@ -20,7 +20,7 @@ export default {
     },
     searchable: {
       required: false,
-      default: false,
+      default: true,
     },
     limit: {
       required: false,
