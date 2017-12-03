@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Karina\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -39,7 +40,11 @@ class GenerateSearchableNames extends Command
     public function handle()
     {
         DB::transaction(function () {
-            DB::table('users')->update(['name_search' => DB::raw('LOWER(name)')]);
+            $users = User::all();
+            foreach($users as $user) {
+                $user->name = $user->name;
+                $user->save();
+            }
         });
     }
 }
