@@ -10,8 +10,8 @@ export default {
    * @param page
    * @param filter Limit
    */
-  list(eventId, page, limit) {
-    return http.get(`${eventsUrl}/${eventId}/registrations`, { params: { page, limit } })
+  list(eventId, page, limit, search) {
+    return http.get(`${eventsUrl}/${eventId}/registrations`, { params: { page, limit, search } })
     .then(response => Promise.resolve(response.data))
     .catch(error => Promise.reject(error.response.data));
   },

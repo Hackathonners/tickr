@@ -22,6 +22,8 @@ abstract class BrowserKitTestCase extends BaseTestCase
 
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
+        \Artisan::call('migrate');
+
         return $app;
     }
 }

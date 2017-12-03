@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Auth;
 use App\Karina\User;
+use App\Support\Str;
 use App\Karina\Event;
 use App\Mail\TicketMail;
 use App\Karina\Registration;
@@ -28,11 +29,18 @@ class RegistrationsController extends ApiController
     {
         $limit = $request->get('limit', 0);
 
-        $registrations = DB::transaction(function () use ($eventId, $limit) {
+        $request->replace([
+            'search' => Str::searchable($request->get('search', '')),
+        ]);
+
+        $search = $request->get('search');
+
+        $registrations = DB::transaction(function () use ($eventId, $limit, $search) {
             $event = Event::findOrFail($eventId);
             $this->authorize('handle', $event);
 
             $registrations = $event->registrations()
+                                   ->filterByNameEmailAndNotes($search)
                                    ->with('user')
                                    ->orderBy('created_at', 'desc');
 

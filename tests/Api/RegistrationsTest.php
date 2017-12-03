@@ -49,6 +49,63 @@ class RegistrationsTest extends ApiTestCase
         ]);
     }
 
+    public function testSearchRegistrations()
+    {
+        // Prepare data
+        $user = factory(User::class)->create();
+        $participant1 = factory(User::class)->create([
+            'name' => 'Francisco Neves',
+            'email' => 'seven@mail.com',
+        ]);
+        $participant2 = factory(User::class)->create([
+            'name' => 'Mariana Esteves',
+            'email' => 'neves@mail.com',
+        ]);
+        $participant3 = factory(User::class)->create([
+            'name' => 'João Maria',
+            'email' => 'noname@unmail.com',
+        ]);
+        $participant4 = factory(User::class)->create([
+            'name' => 'No name',
+            'email' => 'unless@iscool.com',
+        ]);
+        $event = factory(Event::class)->create(['user_id' => $user->id]);
+        $registrationType = factory(RegistrationType::class)->create([
+            'event_id' => $event->id,
+        ]);
+        $registrations = [];
+        $registrations[] = factory(Registration::class)->create([
+            'user_id' => $participant1->id,
+            'event_id' => $event->id,
+            'registration_type_id' => $registrationType->id,
+        ]);
+        $registrations[] = factory(Registration::class)->create([
+            'user_id' => $participant2->id,
+            'event_id' => $event->id,
+            'registration_type_id' => $registrationType->id,
+        ]);
+        $registrations[] = factory(Registration::class)->create([
+            'user_id' => $participant3->id,
+            'event_id' => $event->id,
+            'registration_type_id' => $registrationType->id,
+        ]);
+        $registrations[] = factory(Registration::class)->create([
+            'user_id' => $participant4->id,
+            'event_id' => $event->id,
+            'notes' => 'amigo do Neves',
+            'registration_type_id' => $registrationType->id,
+        ]);
+
+        // Perform task
+        $this->actingAs($user)
+            ->json('GET', '/events/'.$event->id.'/registrations/?search=neves');
+
+        // Assertions
+        $this->assertResponseOk();
+        // Only see match associated to my guestlist
+        $this->seeJsonEquals(Fractal::collection([$registrations[0], $registrations[1], $registrations[3]], new RegistrationTransformer)->toArray());
+    }
+
     public function testShowUserRegistrationsInEventsOfAuthenticatedOwner()
     {
         // Prepare data

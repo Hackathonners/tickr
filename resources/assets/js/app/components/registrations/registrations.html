@@ -1,4 +1,5 @@
 <div class="registrations">
+    <input v-if="searchable" type="text" class="form-control" v-model="searchQuery" placeholder="Procurar inscrições por nome, e-mail e informações..."/>
     <table class="table">
         <thead>
             <tr>

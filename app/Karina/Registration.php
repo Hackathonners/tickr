@@ -3,6 +3,7 @@
 namespace App\Karina;
 
 use Carbon\Carbon;
+use App\Support\Str;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\Registration\RegistrationOnPastEventException;
@@ -118,6 +119,23 @@ class Registration extends Model
         $this->activated_at = Carbon::now(config('app.timezone'));
 
         return $this->save();
+    }
+
+    /**
+     * Scope a query to only include registrations that match given search.
+     *
+     * @param $search
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFilterByNameEmailAndNotes($query, $search)
+    {
+        $search = Str::searchable($search, true);
+
+        return $query->where('notes', 'ILIKE', '%'.$search.'%')
+            ->orWhereHas('user', function ($query) use ($search) {
+                $query->where('name', 'ILIKE', '%'.$search.'%')
+                    ->orWhere('email', 'ILIKE', '%'.$search.'%');
+            });
     }
 
     /**

@@ -103,7 +103,7 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h4>Últimas inscrições <small class="pull-right"><router-link :to="{ name: 'registrations.index', params: { id: event.id } }">Ver todas as inscrições</router-link></small></h4>
-                        <registrations :limit="10" :paginate="false" :event-id="$route.params.id"></registrations>
+                        <registrations :limit="10" :paginate="false" :searchable="false" :event-id="$route.params.id"></registrations>
                     </div>
                 </div>
             </div>

@@ -4,6 +4,7 @@
  *
  * Shows registrations
  */
+import { debounce } from 'lodash';
 import $ from 'jquery';
 import store from 'app/store/index';
 import RegistrationService from 'app/services/registration/index';
@@ -17,6 +18,10 @@ export default {
       required: false,
       default: true,
     },
+    searchable: {
+      required: false,
+      default: false,
+    },
     limit: {
       required: false,
       type: Number,
@@ -28,6 +33,7 @@ export default {
     return {
       // Results data
       registrations: [],
+      searchQuery: null,
 
       // Component status
       state: {
@@ -44,9 +50,14 @@ export default {
   },
 
   methods: {
+    searchRegistrations: debounce(function () {
+      this.loadRegistrations();
+    }, 750),
+
     loadRegistrations(page = 1) {
       this.$set(this.state, 'loading', true);
-      RegistrationService.list(this.eventId, page, this.limit).then((registrations) => {
+      RegistrationService.list(this.eventId, page, this.limit, this.searchQuery)
+      .then((registrations) => {
         this.$set(this, 'registrations', registrations.data);
         this.$set(this.state, 'pagination', registrations.meta.pagination);
         this.$set(this.state, 'loading', false);
@@ -134,6 +145,10 @@ export default {
       handler(value) {
         this.loadRegistrations(value);
       },
+    },
+    searchQuery() {
+      console.log('cenas');
+      this.searchRegistrations();
     },
   },
 

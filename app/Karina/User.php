@@ -2,6 +2,7 @@
 
 namespace App\Karina;
 
+use App\Support\Str;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -25,8 +26,20 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'name_search',
     ];
+
+    /**
+     * Set the guest's name.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name_search'] = Str::lower(Str::ascii($value));
+        $this->attributes['name'] = $value;
+    }
 
     /**
      * Get registrations in events that is owned by given user.
