@@ -47,7 +47,7 @@ class User extends Authenticatable
      * @param \App\Karina\User $owner
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function registrationsWithEventOwner(User $owner)
+    public function registrationsWithEventOwner(self $owner)
     {
         return $this->registrations()
                 ->leftJoin(
