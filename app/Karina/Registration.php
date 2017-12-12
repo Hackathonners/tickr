@@ -133,7 +133,7 @@ class Registration extends Model
 
         return $query->where('notes', 'ILIKE', '%'.$search.'%')
             ->orWhereHas('user', function ($query) use ($search) {
-                $query->where('name', 'ILIKE', '%'.$search.'%')
+                $query->where('name_search', 'ILIKE', '%'.$search.'%')
                     ->orWhere('email', 'ILIKE', '%'.$search.'%');
             });
     }

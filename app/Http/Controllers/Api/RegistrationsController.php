@@ -28,12 +28,7 @@ class RegistrationsController extends ApiController
     public function index($eventId, Request $request)
     {
         $limit = $request->get('limit', 0);
-
-        $request->replace([
-            'search' => Str::searchable($request->get('search', '')),
-        ]);
-
-        $search = $request->get('search');
+        $search = Str::searchable($request->get('search', ''));
 
         $registrations = DB::transaction(function () use ($eventId, $limit, $search) {
             $event = Event::findOrFail($eventId);

@@ -41,7 +41,7 @@ class GenerateSearchableNames extends Command
     {
         DB::transaction(function () {
             $users = User::all();
-            foreach($users as $user) {
+            foreach ($users as $user) {
                 $user->name = $user->name;
                 $user->save();
             }

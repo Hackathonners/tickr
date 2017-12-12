@@ -65,7 +65,7 @@
             </tr>
         </tbody>
     </table>
-    <paginator v-if="!state.loading" :pagination="state.pagination"></paginator>
+    <paginator v-if="!state.loading && paginate" :pagination="state.pagination"></paginator>
 
     <div class="modal fade" id="delete-registration" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
