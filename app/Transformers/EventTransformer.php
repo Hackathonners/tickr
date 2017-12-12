@@ -38,6 +38,7 @@ class EventTransformer extends TransformerAbstract
             'end_at' => $event->end_at->toDateTimeString(),
             'created_at' => $event->created_at->toDateTimeString(),
             'updated_at' => $event->updated_at->toDateTimeString(),
+            'registrations_count' => $event->registrations()->count(),
         ];
 
         if ($event->stats) {

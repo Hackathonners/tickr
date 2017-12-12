@@ -62,7 +62,7 @@
                         </td>
                         <!-- Event ticket status -->
                         <td class="col-md-3 event-info">
-                            <span v-if="event.registrations">{{ event.registrations }}</span>
+                            <span v-if="event.registrations_count > 0">{{ event.registrations_count }} bilhetes vendidos</span>
                             <span v-else>Sem bilhetes vendidos</span>
                         </td>
                     </tr>
